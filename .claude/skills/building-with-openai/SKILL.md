@@ -1,6 +1,8 @@
 ---
 name: building-with-openai
-description: "Type-safe OpenAI Responses API usage. Triggers: responses.create, AsyncOpenAI, input, tools, web_search, extra_body. For general type workflows, load exploring-types-with-ty first."
+description: 'Type-safe OpenAI Responses API usage. Triggers: responses.create, AsyncOpenAI, input, tools, web_search, extra_body. For general type workflows, load exploring-types-with-ty first.'
+metadata:
+  version: '1'
 ---
 
 # Building with OpenAI (Python)

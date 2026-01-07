@@ -1,6 +1,8 @@
 ---
 name: opening-pr
-description: "Create or update GitHub PRs with proper title and summary. Triggers: open PR, update PR description, write change summary."
+description: 'Create or update GitHub PRs with proper title and summary. Triggers: open PR, update PR description, write change summary.'
+metadata:
+  version: '1'
 ---
 
 # Open / Update PR

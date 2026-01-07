@@ -1,6 +1,8 @@
 ---
 name: using-linear-cli
-description: "Reference for linearis CLI commands. Triggers: Linear management via CLI."
+description: 'Reference for linearis CLI commands. Triggers: Linear management via CLI.'
+metadata:
+  version: '1'
 ---
 
 # Using Linear CLI

@@ -1,6 +1,8 @@
 ---
 name: setting-up-environment
-description: "`Linux` Initialize development environment with mise and uv. Triggers: first-time setup, CI/CD init, missing mise/uv."
+description: '`Linux` Initialize development environment with mise and uv. Triggers: first-time setup, CI/CD init, missing mise/uv.'
+metadata:
+  version: '1'
 ---
 
 # Setup 环境初始化
