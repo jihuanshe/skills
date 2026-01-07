@@ -1,6 +1,8 @@
 ---
 name: exploring-types-with-ty
-description: "Explore SDK types and fix ty diagnostics. Triggers: new SDK/API, TypedDict/Literal construction, ty errors (Unknown, no-matching-overload), `dict[str, Any]` in PRs. Load BEFORE writing code."
+description: 'Explore SDK types and fix ty diagnostics. Triggers: new SDK/API, TypedDict/Literal construction, ty errors (Unknown, no-matching-overload), `dict[str, Any]` in PRs. Load BEFORE writing code.'
+metadata:
+  version: '1'
 ---
 
 # Exploring Python Types with ty

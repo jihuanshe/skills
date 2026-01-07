@@ -1,6 +1,8 @@
 ---
 name: working-on-linear-issue
-description: "Fetch Linear issue and generate structured implementation plan. Triggers: Linear issue ID or URL to start working on."
+description: 'Fetch Linear issue and generate structured implementation plan. Triggers: Linear issue ID or URL to start working on.'
+metadata:
+  version: '1'
 ---
 
 # Work on Linear Issue

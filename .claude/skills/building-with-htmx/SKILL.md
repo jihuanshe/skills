@@ -1,6 +1,8 @@
 ---
 name: building-with-htmx
-description: "FastHTML + MonsterUI development guide. Triggers: building server-rendered Python web apps with HTMX/Starlette."
+description: 'FastHTML + MonsterUI development guide. Triggers: building server-rendered Python web apps with HTMX/Starlette.'
+metadata:
+  version: '1'
 ---
 
 # FastHTML + MonsterUI 开发指南

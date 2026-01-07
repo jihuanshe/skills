@@ -1,6 +1,8 @@
 ---
 name: working-on-logfire-issue
-description: "Debug and fix issues using Logfire traces. Triggers: Logfire trace ID or URL provided for debugging."
+description: 'Debug and fix issues using Logfire traces. Triggers: Logfire trace ID or URL provided for debugging.'
+metadata:
+  version: '1'
 ---
 
 # Work on Logfire Issue

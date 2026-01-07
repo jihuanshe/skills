@@ -1,6 +1,8 @@
 ---
 name: scanning-ampdo
-description: "Find and process AMPDO (agent TODO) comments in code. Triggers: 'scan AMPDO', 'find AMPDO', 'process code TODOs'."
+description: Searches for AMPDO comments in the codebase to gather feedback and execute requested changes.
+metadata:
+  version: '1'
 ---
 
 # AMPDO 注释处理

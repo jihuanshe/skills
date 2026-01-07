@@ -1,6 +1,8 @@
 ---
 name: resolving-pr-comments
-description: "Turn PR review feedback into actionable resolution plans. Triggers: PR link/number provided to address comments."
+description: 'Turn PR review feedback into actionable resolution plans. Triggers: PR link/number provided to address comments.'
+metadata:
+  version: '1'
 ---
 
 # Resolve PR Comments
