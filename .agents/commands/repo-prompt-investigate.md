@@ -5,6 +5,10 @@ description: Deep codebase investigation and architecture research with RepoProm
 > [!IMPORTANT]
 > Read Repo Prompt SKILL first.
 
+<user_instructions>
+$ARGUMENTS
+</user_instructions>
+
 # Deep Investigation Mode
 
 ## Investigation Protocol
