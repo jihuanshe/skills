@@ -36,7 +36,7 @@ mise trust --yes
 
 echo "INFO: Running init task..."
 mise install --yes
-mise use -g prek
+mise use -g prek@latest
 mise exec -- prek install --overwrite
 mise exec -- uv sync --frozen
 

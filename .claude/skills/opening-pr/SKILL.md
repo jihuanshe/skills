@@ -5,7 +5,7 @@ metadata:
   version: '1'
 ---
 
-# Open / Update PR
+# Opening OR Updating PR
 
 ## Step 1: Check PR Status
 
@@ -29,10 +29,8 @@ git diff --stat origin/main..HEAD
 git diff origin/main..HEAD  # full diff if needed
 
 # Linear (optional): get issue context if branch is linked
-linearis issues read $(linear issue id) | yq -p json -o yaml
+linear issue view --help
 ```
-
-If `linear issue id` fails, the branch has no Linear issue—proceed with Git info only.
 
 ## Step 3: Write Title & Change Summary
 
