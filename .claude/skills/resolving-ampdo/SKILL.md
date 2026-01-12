@@ -1,11 +1,11 @@
 ---
-name: scanning-ampdo
-description: Searches for AMPDO comments in the codebase to gather feedback and execute requested changes.
+name: resolving-ampdo
+description: 'Searches for AMPDO comments in the codebase to gather feedback and execute requested changes.'
 metadata:
   version: '1'
 ---
 
-# AMPDO 注释处理
+# Resolving AMPDO
 
 搜索代码库中的 AMPDO: 注释来收集反馈和执行指令。
 
