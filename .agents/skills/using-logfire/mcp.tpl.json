@@ -1,0 +1,15 @@
+{
+    "logfire": {
+        "command": "uvx",
+        "args": ["logfire-mcp"],
+        "env": {
+            "LOGFIRE_READ_TOKEN": "YOUR CAN GET FROM: uvx logfire read-tokens --project jihuanshe/python create"
+        },
+        "includeTools": [
+            "find_exceptions_in_file",
+            "arbitrary_query",
+            "logfire_link",
+            "schema_reference"
+        ]
+    }
+}
