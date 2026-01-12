@@ -133,12 +133,6 @@ from sdk.types import ContentParam, MessageParam
 - `cast(...)` — only after verifying shape matches target type
 - Localized unsafe zone — contain in one function, not spread across codebase
 
-## SDK-specific skills
-
-For SDK-specific rules (overload patterns, escape hatch conventions, observability):
-
-- **OpenAI SDK** -> load `building-with-openai` skill
-
 ## Verification checklist
 
 - [ ] No `dict[str, Any]` for SDK request params
