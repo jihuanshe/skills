@@ -1,11 +1,11 @@
 ---
-name: working-on-logfire-issue
+name: resolving-logfire-issue
 description: 'Debug and fix issues using Logfire traces. Triggers: Logfire trace ID or URL provided for debugging.'
 metadata:
   version: '1'
 ---
 
-# Work on Logfire Issue
+# Resolving Logfire Issue
 
 根据 Logfire 中的 trace ID 分析并生成修复方案。
 
