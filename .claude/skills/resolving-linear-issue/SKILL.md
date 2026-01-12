@@ -1,11 +1,11 @@
 ---
-name: working-on-linear-issue
+name: resolving-linear-issue
 description: 'Fetch Linear issue and generate structured implementation plan. Triggers: Linear issue ID or URL to start working on.'
 metadata:
   version: '1'
 ---
 
-# Work on Linear Issue
+# Resolving Linear Issue
 
 获取 Linear issue 详情并生成结构化实施方案。
 
