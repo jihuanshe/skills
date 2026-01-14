@@ -3,146 +3,120 @@ name: debugging-spider2
 description: 'Debug Spider2 data issues on remote servers. Triggers: spider2 data missing, parquet row count mismatch, crawl failures, pueue task issues.'
 ---
 
-# Debugging Spider2 Data Issues
+# Debugging Spider2
 
-Guide for investigating Spider2 crawler data problems on production servers.
+## Data Structure
 
-## Prerequisites
+```text
+dump_parquet/
+├── all/YYMMDD/                      # 全量爬虫 (UTC 00:00)
+└── increment/YYMMDD_HHMMSS/         # 增量爬虫 (UTC 03:00-23:00)
 
-- SSH access to the spider2 server
-- `pueue`, `jq`, `duckdb` available on the server
-- Spider2 project at `/root/python-spider2`
+dump_ndjson/
+└── increment/YYMMDD_HHMMSS/         # 增量原始数据
 
-## Date Variables
-
-Many commands use date placeholders. Set them first:
-
-```bash
-# For Linux
-TODAY=$(date +%Y%m%d)
-YESTERDAY=$(date -d 'yesterday' +%Y%m%d)
-
-# For macOS
-TODAY=$(date +%Y%m%d)
-YESTERDAY=$(date -v-1d +%Y%m%d)
+~/.local/share/pueue/task_logs/      # Pueue 任务日志 (<ID>.log)
 ```
 
-Then use them in commands:
+## Pueue JSON Schema
 
 ```bash
-ls -la dump_parquet/task_${TODAY}/ dump_parquet/task_${YESTERDAY}/ 2>/dev/null
+pueue status --json | jq '.tasks["<ID>"]'
 ```
 
-## Investigation Workflow
+关键字段：
 
-### 1. Check Task Status (Pueue)
+- `.original_command` → 包含 `crawl <spider_name> -a task_id=<task_id>`
+- `.status.Done.result` → `"Success"` 或 `{"Failed": <code>}`
+- `.created_at` / `.status.Done.start` / `.status.Done.end` → 时间戳
+- `.path` → 包含 `spider2` 可用于过滤
 
-List recent spider2 tasks:
+提取 spider 名称：
 
 ```bash
-pueue status --json 2>/dev/null | jq '[.tasks | to_entries[] | select(.value.path | contains("spider2")) | {id: .key, status: .value.status, command: .value.original_command, created: .value.created_at}] | sort_by(.id | tonumber) | reverse | .[0:20]'
+.original_command | capture("crawl (?<s>[^ ]+)").s
 ```
 
-Check largest log files:
+按日期汇总：
 
 ```bash
-ls -lt ~/.local/share/pueue/task_logs/ | head -30
+pueue status --json | jq '
+  [.tasks | to_entries[]
+   | select(.value.path | contains("spider2"))
+   | select(.value.created_at > "YYYY-MM-DD")
+  ] | group_by(.value.created_at | split("T")[0])
+    | map({date: .[0].value.created_at | split("T")[0], total: length,
+           success: [.[] | select(.value.status.Done.result == "Success")] | length})'
 ```
 
-### 2. Check Cron Configuration
+## Parquet Schema
+
+```sql
+-- 关键字段
+SELECT site, crawler, task_id, COUNT(*)
+FROM 'dump_parquet/all/YYMMDD/**/*.parquet'
+GROUP BY 1,2,3
+```
+
+按 crawler 对比两天数据：
+
+```sql
+WITH t AS (SELECT crawler, COUNT(*) as cnt FROM 'dump_parquet/all/260113/**/*.parquet' GROUP BY 1),
+     y AS (SELECT crawler, COUNT(*) as cnt FROM 'dump_parquet/all/260112/**/*.parquet' GROUP BY 1)
+SELECT COALESCE(t.crawler, y.crawler) as crawler,
+       COALESCE(y.cnt,0) as yesterday, COALESCE(t.cnt,0) as today,
+       COALESCE(t.cnt,0) - COALESCE(y.cnt,0) as diff
+FROM t FULL OUTER JOIN y ON t.crawler = y.crawler
+WHERE ABS(diff) > 100 ORDER BY diff
+```
+
+## Log Patterns
+
+日志位置：`~/.local/share/pueue/task_logs/<ID>.log`
+
+关键 grep patterns：
 
 ```bash
-crontab -l 2>/dev/null
+# 爬取统计 (在日志末尾)
+grep -oP "'item_scraped_count': \K\d+"
+grep -oP "'spider_exceptions/count': \K\d+"
+
+# 错误类型
+grep "ERROR"
+grep "ValueError: Cannot use xpath"      # 代理返回 JSON 而非 HTML
+grep "Failed to get page_max_value"      # 首页解析失败，通常是 403
 ```
 
-### 3. Compare Data Across Days
-
-Check parquet directories:
+批量检查最近日志的 exceptions：
 
 ```bash
-ls -la dump_parquet/task_${TODAY}/ dump_parquet/task_${YESTERDAY}/ 2>/dev/null
+for id in $(ls -t ~/.local/share/pueue/task_logs/*.log | head -20 | xargs -I {} basename {} .log); do
+  exc=$(grep -oP "'spider_exceptions/count': \K\d+" ~/.local/share/pueue/task_logs/${id}.log 2>/dev/null | tail -1)
+  [ -n "$exc" ] && [ "$exc" -gt 0 ] && echo "$id: $exc exceptions"
+done
 ```
 
-Count rows with DuckDB:
+## Common Issues
+
+| 症状 | 原因 | 修复 |
+|------|------|------|
+| `item_scraped_count: 0` + `Failed to get page_max_value` | 网站 403 封禁直连 IP | 添加 `-s JHS_PROXY=cloudbypass` |
+| `ValueError: Cannot use xpath on Selector of type 'json'` | 代理返回 403 JSON | 代理问题或需要增加容错 |
+| 任务 3 秒结束 | 首页解析失败，无分页 | 检查网站是否可访问 |
+| `response_status_count/403` 很高 | 被目标网站限流 | 降低 `CONCURRENT_REQUESTS` |
+
+## Quick Checks
 
 ```bash
-mise exec -- uv run duckdb -c "SELECT COUNT(*) as today FROM 'dump_parquet/task_${TODAY}/**/*.parquet'"
-mise exec -- uv run duckdb -c "SELECT COUNT(*) as yesterday FROM 'dump_parquet/task_${YESTERDAY}/**/*.parquet'"
+# Cron 配置
+crontab -l | grep spider2
+
+# 今日任务概览
+pueue status --json | jq '[.tasks | to_entries[] | select(.value.created_at > "'$(date +%Y-%m-%d)'") | select(.value.path | contains("spider2"))] | length'
+
+# 检查特定 spider 的任务
+pueue status --json | jq '.tasks | to_entries[] | select(.value.original_command | contains("dorasuta_pokemon"))'
+
+# 快速验证网站可访问性
+curl -s -o /dev/null -w "%{http_code}" "https://dorasuta.jp/pokemon-card/product-list?cocd=1"
 ```
-
-### 4. Find Problem Source by Site
-
-Compare row counts per site:
-
-```bash
-mise exec -- uv run duckdb -c "
-WITH today AS (
-    SELECT site, COUNT(*) as cnt FROM 'dump_parquet/task_${TODAY}/**/*.parquet' GROUP BY site
-),
-yesterday AS (
-    SELECT site, COUNT(*) as cnt FROM 'dump_parquet/task_${YESTERDAY}/**/*.parquet' GROUP BY site
-)
-SELECT
-    COALESCE(t.site, y.site) as site,
-    COALESCE(y.cnt, 0) as yesterday,
-    COALESCE(t.cnt, 0) as today,
-    COALESCE(t.cnt, 0) - COALESCE(y.cnt, 0) as diff
-FROM today t
-FULL OUTER JOIN yesterday y ON t.site = y.site
-ORDER BY diff ASC
-LIMIT 30;
-"
-```
-
-### 5. Check Specific Crawler Logs
-
-View log for a specific task:
-
-```bash
-tail -100 ~/.local/share/pueue/task_logs/<TASK_ID>.log
-```
-
-Common issues to look for:
-
-- SSL certificate warnings
-- Connection timeouts
-- Rate limiting (429 errors)
-- Parse errors
-
-### 6. Verify SSL Certificates
-
-Check if target site certificate is valid:
-
-```bash
-echo | openssl s_client -connect <HOSTNAME>:443 -servername <HOSTNAME> 2>/dev/null | openssl x509 -noout -text 2>/dev/null | grep -E "Subject:|DNS:|Not Before|Not After|subjectAltName"
-```
-
-### 7. Check Retry Configuration
-
-Scrapy default retry exceptions:
-
-```bash
-mise exec -- uv run python -c "from scrapy.settings.default_settings import RETRY_EXCEPTIONS; print(RETRY_EXCEPTIONS)"
-```
-
-Check spider-specific retry settings:
-
-```bash
-grep -E "RETRY|retry" /root/python-spider2/apps/spider2/src/spider2/spiders/<SPIDER_PATH>.py
-```
-
-## Common Issues & Fixes
-
-| Symptom | Likely Cause | Fix |
-|---------|--------------|-----|
-| SSL cert warning in logs | Proxy returning wrong cert | Add SSL error to `RETRY_EXCEPTIONS` |
-| 429 errors | Rate limiting | Reduce `CONCURRENT_REQUESTS` |
-| Connection timeout | Network/proxy issues | Check proxy health |
-| Early exit, no errors | Missing pagination | Check next page selector |
-
-## Key Files
-
-- Crawler code: `/root/python-spider2/apps/spider2/src/spider2/spiders/`
-- Proxy middleware: `middlewares/proxy.py`
-- Task runner: `.mise/tasks/spider2/run-crawl-all.sh`
-- Pueue logs: `~/.local/share/pueue/task_logs/`

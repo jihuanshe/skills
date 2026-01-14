@@ -9,6 +9,8 @@ description: Token-efficient reminder to use RepoPrompt MCP tools (file_search, 
 $ARGUMENTS
 </user_instructions>
 
+---
+
 # Oracle Export
 
 Export a comprehensive prompt with full context for consultation with an external oracle.
