@@ -9,6 +9,8 @@ description: Deep codebase investigation and architecture research with RepoProm
 $ARGUMENTS
 </user_instructions>
 
+---
+
 # Deep Investigation Mode
 
 ## Investigation Protocol
@@ -77,8 +79,6 @@ Document:
 - Recommended fixes
 - Preventive measures for the future
 
----
-
 ## Context Builder Tips
 
 The `context_builder` operates in two phases:
@@ -92,8 +92,6 @@ The `context_builder` operates in two phases:
 - Describe symptoms precisely
 - List specific technical questions to answer
 - Mention any relevant constraints or context
-
----
 
 ## Report Template
 
@@ -127,7 +125,5 @@ Create a findings report as you investigate:
 ## Preventive Measures
 - [How to prevent this in future]
 ```
-
----
 
 Now begin the investigation. Read any provided context, then use `context_builder` to start systematic exploration.
