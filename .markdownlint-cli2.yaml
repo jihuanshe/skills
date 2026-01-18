@@ -1,0 +1,10 @@
+gitignore: true
+
+globs:
+    - "**/*.md"
+
+ignores:
+    - "*.local.*"
+
+config:
+    MD013: false
