@@ -1,6 +1,8 @@
 ---
 name: using-linear
 description: 'Linear CLI for daily management + team efficiency analysis. Triggers: linear issues, team metrics, SLA review, WIP analysis, project health, throughput analysis.'
+metadata:
+  version: '1'
 ---
 
 # Using Linear
@@ -14,7 +16,7 @@ linear --version    # Check CLI installed
 linear auth whoami  # Check authenticated
 ```
 
-If not installed: https://github.com/schpet/linear-cli
+If not installed: <https://github.com/schpet/linear-cli>
 
 ## ⚠️ Critical Data Caveats
 
@@ -51,21 +53,21 @@ Many teams auto-set `startedAt` on creation. Check the automation detection outp
 linear team list
 
 # Team overview (last 90 days)
-.claude/skills/using-linear/scripts/overview.py <TEAM_KEY>
+scripts/overview.py <TEAM_KEY>
 
 # Compare teams (--since is optional)
-.claude/skills/using-linear/scripts/compare.py AI INF --since 2025-10-01
+scripts/compare.py AI INF --since 2025-10-01
 
 # Deep dives (--since is optional, defaults to 90 days ago)
-.claude/skills/using-linear/scripts/projects.py <TEAM_KEY> --since <YYYY-MM-DD>
-.claude/skills/using-linear/scripts/workload.py <TEAM_KEY> --since <YYYY-MM-DD>
-.claude/skills/using-linear/scripts/wip.py <TEAM_KEY> --since <YYYY-MM-DD>
-.claude/skills/using-linear/scripts/sla.py <TEAM_KEY> --since <YYYY-MM-DD>
-.claude/skills/using-linear/scripts/flow.py <TEAM_KEY> --since <YYYY-MM-DD>
-.claude/skills/using-linear/scripts/forecast.py <TEAM_KEY> --since <YYYY-MM-DD>
+scripts/projects.py <TEAM_KEY> --since <YYYY-MM-DD>
+scripts/workload.py <TEAM_KEY> --since <YYYY-MM-DD>
+scripts/wip.py <TEAM_KEY> --since <YYYY-MM-DD>
+scripts/sla.py <TEAM_KEY> --since <YYYY-MM-DD>
+scripts/flow.py <TEAM_KEY> --since <YYYY-MM-DD>
+scripts/forecast.py <TEAM_KEY> --since <YYYY-MM-DD>
 
 # Targeted issue list
-.claude/skills/using-linear/scripts/hunt.py <TEAM_KEY> --filter stale_wip --limit 50
+scripts/hunt.py <TEAM_KEY> --filter stale_wip --limit 50
 ```
 
 ## Tool Output Contract (stdout/stderr)
@@ -84,7 +86,7 @@ col1,col2,...
 
 - **stdout**: contract only (PROMPT + one or more CSV tables + END)
 - **stderr**: logs, progress, debug output
-- Validate locally: `mise exec -- uv run .claude/skills/using-linear/scripts/validate_output.py < output.txt`
+- Validate locally: `mise exec -- uv run scripts/validate_output.py < output.txt`
 - Use `-debug` to log query names, variables, and pagination to **stderr** only
 
 ## Part 1: Daily CLI Usage
@@ -106,6 +108,34 @@ linear schema     # Print GraphQL schema
 linear --help
 linear issue --help
 linear issue list --help
+```
+
+### Common Issue Operations
+
+```bash
+# View issue details
+linear issue view <issue-id>
+
+# Add comment (note: requires `add` subcommand)
+linear issue comment add <issue-id> --body "Comment content"
+
+# Update issue state
+linear issue update <issue-id> --state "Canceled"   # Cancel
+linear issue update <issue-id> --state "Done"       # Complete
+linear issue update <issue-id> --state "Duplicate"  # Mark as duplicate
+linear issue update <issue-id> --state "In Progress"
+
+# Update other fields
+linear issue update <issue-id> --assignee self
+linear issue update <issue-id> --priority 1
+linear issue update <issue-id> --label "Bug"
+
+# List available workflow states for a team
+curl -s -X POST https://api.linear.app/graphql \
+  -H "Content-Type: application/json" \
+  -H "Authorization: $(linear auth token)" \
+  -d '{"query": "{ workflowStates(filter: {team: {key: {eq: \"TEAM_KEY\"}}}) { nodes { name type } } }"}' \
+  | jq '.data.workflowStates.nodes'
 ```
 
 ## Part 2: GraphQL API (Escape Hatch)
@@ -142,8 +172,8 @@ issues = issues_created_since("AI", "2025-10-01")
 linear schema -o "${TMPDIR:-/tmp}/linear-schema.graphql"
 
 # Search schema
-grep -A 30 "^type Issue " "${TMPDIR:-/tmp}/linear-schema.graphql"
-grep -A 50 "^input IssueFilter" "${TMPDIR:-/tmp}/linear-schema.graphql"
+rg -A30 "^type Issue " "${TMPDIR:-/tmp}/linear-schema.graphql"
+rg -A50 "^input IssueFilter" "${TMPDIR:-/tmp}/linear-schema.graphql"
 ```
 
 ### Direct API Call (Long-tail Queries)
@@ -234,7 +264,7 @@ Efficiency is NOT "doing things fast" — it's **predictably delivering value**.
 ### Core Metrics
 
 | Metric | Formula | Healthy Range |
-|--------|---------|---------------|
+| -------- | --------- | --------------- |
 | **Throughput** | Completed issues per week | Stable or growing |
 | **Lead Time** | `completedAt - createdAt` | Depends on work type |
 | **Cycle Time** | `completedAt - startedAt` | < Lead Time |
@@ -247,11 +277,11 @@ Efficiency is NOT "doing things fast" — it's **predictably delivering value**.
 All scripts use [uv inline script metadata](https://docs.astral.sh/uv/guides/scripts/#declaring-script-dependencies) with Pydantic models. Run directly:
 
 ```bash
-.claude/skills/using-linear/scripts/<script>.py <TEAM_KEY> [--since YYYY-MM-DD] [--debug]
+scripts/<script>.py <TEAM_KEY> [--since YYYY-MM-DD] [--debug]
 ```
 
 | Script | Purpose |
-|--------|---------|
+| -------- | --------- |
 | `overview.py` | Team stats: state/priority/label/project distribution |
 | `sla.py` | SLA analysis, response time by priority, automation detection |
 | `flow.py` | Lead Time decomposition: Queue vs Execution |
@@ -266,16 +296,16 @@ All scripts use [uv inline script metadata](https://docs.astral.sh/uv/guides/scr
 
 ```bash
 # Team overview (defaults to 90 days)
-.claude/skills/using-linear/scripts/overview.py AI
+scripts/overview.py AI
 
 # Team overview with custom date range
-.claude/skills/using-linear/scripts/overview.py AI --since 2025-10-01
+scripts/overview.py AI --since 2025-10-01
 
 # Compare two teams
-.claude/skills/using-linear/scripts/compare.py AI INF --since 2025-10-01
+scripts/compare.py AI INF --since 2025-10-01
 
 # Targeted issues
-.claude/skills/using-linear/scripts/hunt.py AI --filter stale_wip --limit 50
+scripts/hunt.py AI --filter stale_wip --limit 50
 ```
 
 ## Key Concepts

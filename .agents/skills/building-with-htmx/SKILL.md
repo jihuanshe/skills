@@ -60,7 +60,7 @@ Things to remember when writing FastHTML apps:
 
 - [API List](https://raw.githubusercontent.com/AnswerDotAI/MonsterUI/refs/heads/main/docs/apilist.txt): Complete API Reference
 
-### Examples
+### MonsterUI Examples
 
 - [Dashboard](https://monsterui.answer.ai/dashboard/md): FrankenUI Dashboard Example built with MonsterUI (original design by ShadCN)
 - [Forms](https://monsterui.answer.ai/forms/md): FrankenUI Forms Example built with MonsterUI (original design by ShadCN)
@@ -73,7 +73,7 @@ Things to remember when writing FastHTML apps:
 - [Ticket](https://monsterui.answer.ai/ticket/md): MonsterUI Help Desk Example - Professional Dashboard with DaisyUI components
 - [Playground](https://monsterui.answer.ai/playground/md): FrankenUI Playground Example built with MonsterUI (original design by ShadCN)
 
-### Optional
+### MonsterUI Optional
 
 - [Accordion | Link](https://monsterui.answer.ai/api_ref/docs_accordion_link/md): Accordion API Reference
 - [Button | Link](https://monsterui.answer.ai/api_ref/docs_button_link/md): Buttons & Links API Reference

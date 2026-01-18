@@ -4,7 +4,7 @@ set -euo pipefail
 # Create a new ty reproduction file from the template.
 #
 # Usage:
-#   bash .agents/skills/exploring-types-with-ty/scripts/new-ty-repro.sh demos/my_issue_ty_repro.py
+#   bash scripts/new-ty-repro.sh demos/my_issue_ty_repro.py
 #
 # Then:
 #   mise exec -- ty check demos/my_issue_ty_repro.py

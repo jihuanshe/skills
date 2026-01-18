@@ -10,7 +10,7 @@ metadata:
 ## When to load this skill
 
 | Trigger | Phase |
-|---------|-------|
+| --------- | ------- |
 | Introducing a new SDK / API surface | Design-time |
 | Planning data model for typed params | Design-time |
 | Constructing TypedDict / Literal structures | Build-time |
@@ -32,7 +32,7 @@ Use SDK typing as a source of truth for API shape, before writing implementation
 ### What to extract from SDK types
 
 | Information | How it helps design |
-|-------------|---------------------|
+| ------------- | --------------------- |
 | **Required vs optional fields** | Decide which params to expose in your API |
 | **Literal enums** (`Literal["low", "medium", "high"]`) | Define config options, validate user input |
 | **Nested structure** (TypedDict hierarchy) | Design internal data model to match or adapt |
@@ -42,10 +42,10 @@ Use SDK typing as a source of truth for API shape, before writing implementation
 
 ```bash
 # 1. Locate the module
-ls .venv/lib/python3.13/site-packages/<sdk>/types/
+fd . .venv/lib/python3.13/site-packages/<sdk>/types/ -d 1
 
 # 2. Read type definitions (first 200 lines usually cover exports)
-sed -n '1,200p' .venv/lib/python3.13/site-packages/<sdk>/types/<module>.py
+head -200 .venv/lib/python3.13/site-packages/<sdk>/types/<module>.py
 
 # 3. Find specific TypedDict or Literal
 rg "class.*TypedDict|Literal\[" .venv/lib/python3.13/site-packages/<sdk>/types/
@@ -81,7 +81,7 @@ mise exec -- ty check demos/<topic>_ty_repro.py
 ### Step 3: Fix by narrowing
 
 | Symptom | Fix |
-|---------|-----|
+| --------- | ----- |
 | `Unknown` on dict literal | Add TypedDict annotation to variable |
 | `Unknown` on list items | Type each item before adding to list |
 | `no-matching-overload` on `**kwargs` | Use direct keyword arguments instead |
