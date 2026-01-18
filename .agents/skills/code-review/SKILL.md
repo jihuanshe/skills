@@ -48,6 +48,36 @@ If your environment cannot enforce this via permissions, enforce it via instruct
 
 ## Main Workflow (orchestrator)
 
+```mermaid
+flowchart TB
+    S0[Step 0: Parse Inputs] --> S1[Step 1: Eligibility Gate]
+    S1 -->|ineligible| STOP[Stop]
+    S1 -->|eligible| S2[Step 2: Discover AGENTS.md]
+    S2 --> S3[Step 3: Summarize PR]
+    S3 --> S4
+
+    subgraph S4[Step 4: Parallel Reviews]
+        direction LR
+        R1[reviewer-agents-1]
+        R2[reviewer-agents-2]
+        R3[reviewer-bug-1]
+        R4[reviewer-bug-2]
+    end
+
+    S4 --> S5[Step 5: Deduplicate]
+    S5 --> S6
+
+    subgraph S6[Step 6: Per-Issue Validation]
+        direction LR
+        V1[validator-1]
+        V2[validator-2]
+        Vn[validator-n]
+    end
+
+    S6 --> S7[Step 7: Filter by Confidence]
+    S7 --> S8[Step 8: Post Comments]
+```
+
 ### Step 0 — Parse Inputs & Prepare
 
 You MUST create a TODO list first.
@@ -155,8 +185,8 @@ Return JSON:
 
 Spawn 4 review subagents IN PARALLEL, each independently:
 
-- `reviewer-claude-1` (compliance)
-- `reviewer-claude-2` (compliance redundancy)
+- `reviewer-agents-1` (AGENTS.md compliance)
+- `reviewer-agents-2` (AGENTS.md compliance redundancy)
 - `reviewer-bug-1` (diff-only obvious bugs)
 - `reviewer-bug-2` (diff-only security/correctness issues)
 
@@ -171,11 +201,11 @@ Each review subagent MUST return JSON:
 
 ```json
 {
-  "agent": "reviewer-claude-1",
+  "agent": "reviewer-agents-1",
   "issues": [
     {
       "key": "stable-dedupe-key",
-      "category": "CLAUDE_VIOLATION|COMPILE_ERROR|LOGIC_ERROR|SECURITY_ISSUE",
+      "category": "AGENTS_VIOLATION|COMPILE_ERROR|LOGIC_ERROR|SECURITY_ISSUE",
       "summary": "One-sentence issue summary.",
       "why_high_signal": "Why this is definitely real and important.",
       "location": {
@@ -229,7 +259,7 @@ For EACH candidate issue, spawn a validation subagent IN PARALLEL.
 Validation goals:
 
 - Confirm the issue is real, introduced by/within the changed code, and high-signal.
-- For CLAUDE violations:
+- For AGENTS.md violations:
 
   - Verify the quoted rule exists.
   - Verify scoping is correct.
@@ -248,7 +278,7 @@ Validation subagent MUST return JSON:
   "confidence": 0,
   "validation_notes": "Short, concrete rationale.",
   "final_issue": {
-    "category": "CLAUDE_VIOLATION|COMPILE_ERROR|LOGIC_ERROR|SECURITY_ISSUE",
+    "category": "AGENTS_VIOLATION|COMPILE_ERROR|LOGIC_ERROR|SECURITY_ISSUE",
     "summary": "",
     "location": { "file": "", "line_start": 0, "line_end": 0 },
     "evidence": {
@@ -356,7 +386,7 @@ Tools allowed: read-only GitHub operations only.
 
 Return ONLY the JSON schema specified. No extra text.
 
-### TEMPLATE: reviewer-claude-X
+### TEMPLATE: reviewer-agents-X
 
 You are an AGENTS.md compliance reviewer. High-signal only.
 
@@ -365,7 +395,7 @@ Inputs you have:
 - PR: {{PR_NUMBER}} in {{OWNER_REPO}}
 - PR title: {{PR_TITLE}}
 - PR body: {{PR_BODY}}
-- Relevant AGENTS.md paths: {{CLAUDE_MD_PATHS_JSON}}
+- Relevant AGENTS.md paths: {{AGENTS_MD_PATHS_JSON}}
 
 Rules:
 
@@ -412,7 +442,7 @@ Task:
 - Provide confidence 0-100 based on deterministic evidence.
 - If VALID: produce final issue object with:
 
-  - full-sha code link(s) and (if CLAUDE) rule link(s)
+  - full-sha code link(s) and (if AGENTS_VIOLATION) rule link(s)
   - brief, actionable comment_body
   - suggestion patch ONLY if <=5 lines and self-contained
 
@@ -425,7 +455,7 @@ Return ONLY the validation JSON schema. No extra text.
 
 When linking to code, ALWAYS use:
 
-[https://github.com/OWNER/REPO/blob/](https://github.com/OWNER/REPO/blob/)<FULL_SHA>/<path>#L<start>-L<end>
+`https://github.com/OWNER/REPO/blob/<FULL_SHA>/<path>#L<start>-L<end>`
 
 Requirements:
 
@@ -451,3 +481,10 @@ If no issues found, post a comment like:
 - [ ] Filtered by threshold >= {{THRESHOLD}}
 - [ ] Comments posted only in main thread (if mode requires)
 - [ ] No duplicates; only high-signal issues
+
+## Amp 工具参考
+
+| 工具 | 用途 | 备注 |
+| :----- | :----- | :----- |
+| `Task` | 创建 subagent 执行子任务 | "Spawn subagent" 即调用此工具 |
+| `oracle` | 复杂问题咨询 | 可用于验证候选 issue 的有效性 |
