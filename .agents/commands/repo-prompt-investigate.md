@@ -2,16 +2,43 @@
 description: Deep codebase investigation and architecture research with RepoPrompt MCP tools. A systematic protocol for understanding issues, components, and architecture using context_builder and structured analysis.
 ---
 
-> [!IMPORTANT]
-> Read Repo Prompt SKILL first.
+# Deep Investigation Mode (CLI)
 
-<user_instructions>
-$ARGUMENTS
-</user_instructions>
+Investigate: $ARGUMENTS
+
+You are now in deep investigation mode for the issue described above. Follow this protocol rigorously.
+
+## Using rp-cli
+
+This workflow uses **rp-cli** (RepoPrompt CLI) instead of MCP tool calls. Run commands via:
+
+```bash
+rp-cli -e '<command>'
+```
+
+**Quick reference:**
+
+| MCP Tool | CLI Command |
+| ---------- | ------------- |
+| `get_file_tree` | `rp-cli -e 'tree'` |
+| `file_search` | `rp-cli -e 'search "pattern"'` |
+| `get_code_structure` | `rp-cli -e 'structure path/'` |
+| `read_file` | `rp-cli -e 'read path/file.swift'` |
+| `manage_selection` | `rp-cli -e 'select add path/'` |
+| `context_builder` | `rp-cli -e 'builder "instructions" --response-type plan'` |
+| `chat_send` | `rp-cli -e 'chat "message" --mode plan'` |
+| `apply_edits` | `rp-cli -e 'edit path/file.swift "old" "new"'` |
+| `file_actions` | `rp-cli -e 'file create path/new.swift'` |
+
+Chain commands with `&&`:
+
+```bash
+rp-cli -e 'select set src/ && context'
+```
+
+Use `rp-cli -e 'describe <tool>'` for help on a specific tool, or `rp-cli --help` for CLI usage.
 
 ---
-
-# Deep Investigation Mode
 
 ## Investigation Protocol
 
@@ -20,7 +47,7 @@ $ARGUMENTS
 1. **Don't stop until confident** - pursue every lead until you have solid evidence
 2. **Document findings as you go** - create/update a report file with observations
 3. **Question everything** - if something seems off, investigate it
-4. **Use `context_builder` aggressively** - it's designed for deep exploration
+4. **Use `builder` aggressively** - it's designed for deep exploration
 
 ### Phase 1: Initial Assessment
 
@@ -30,37 +57,30 @@ $ARGUMENTS
 
 ### Phase 2: Systematic Exploration
 
-Use `context_builder` with detailed instructions:
+Use `builder` with detailed instructions:
 
-```
-mcp__repo_prompt__context_builder:
-  instructions: |
-    <Describe the specific area to investigate>
+```bash
+rp-cli -e 'builder "Investigate: <specific area>
 
-    Symptoms observed:
-    <List concrete symptoms>
+Symptoms observed:
+- <symptom 1>
+- <symptom 2>
 
-    Hypotheses to test:
-    <List theories to validate or eliminate>
+Hypotheses to test:
+- <theory 1>
+- <theory 2>
 
-    Areas to explore:
-    <Specific files, patterns, or subsystems>
-
-    What I need to understand:
-    <Specific questions>
-
-  response_type: plan
+Areas to explore:
+- <files/patterns/subsystems>
+" --response-type plan'
 ```
 
 ### Phase 3: Follow-up Deep Dives
 
-After `context_builder` returns, continue with targeted questions:
+After `builder` returns, continue with targeted questions:
 
-```
-mcp__repo_prompt__chat_send:
-  chat_id: <from context_builder>
-  message: <specific follow-up based on findings>
-  mode: plan
+```bash
+rp-cli -e 'chat "<specific follow-up based on findings>" --mode plan'
 ```
 
 ### Phase 4: Evidence Gathering
@@ -79,9 +99,11 @@ Document:
 - Recommended fixes
 - Preventive measures for the future
 
+---
+
 ## Context Builder Tips
 
-The `context_builder` operates in two phases:
+The `builder` operates in two phases:
 
 1. **Discovery**: Intelligently explores the codebase
 2. **Analysis**: A capable model analyzes the captured context
@@ -92,6 +114,8 @@ The `context_builder` operates in two phases:
 - Describe symptoms precisely
 - List specific technical questions to answer
 - Mention any relevant constraints or context
+
+---
 
 ## Report Template
 
@@ -126,4 +150,6 @@ Create a findings report as you investigate:
 - [How to prevent this in future]
 ```
 
-Now begin the investigation. Read any provided context, then use `context_builder` to start systematic exploration.
+---
+
+Now begin the investigation. Read any provided context, then use `builder` to start systematic exploration.
