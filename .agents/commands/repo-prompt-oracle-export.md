@@ -2,16 +2,9 @@
 description: Token-efficient reminder to use RepoPrompt MCP tools (file_search, read_file, apply_edits, file_actions) instead of built-in alternatives.
 ---
 
-> [!IMPORTANT]
-> Read Repo Prompt SKILL first.
+# Oracle Export (CLI)
 
-<user_instructions>
-$ARGUMENTS
-</user_instructions>
-
----
-
-# Oracle Export
+Task: $ARGUMENTS
 
 Export a comprehensive prompt with full context for consultation with an external oracle.
 
@@ -29,11 +22,8 @@ You don't need to specify which files to include—just describe what you need h
 
 ### 1. Build Context
 
-```json
-{"tool":"context_builder","args":{
-  "instructions":"<the task/question above>",
-  "response_type":"clarify"
-}}
+```bash
+rp-cli -e 'builder "<the task/question above>" --response-type clarify'
 ```
 
 Wait for context_builder to complete. It will explore the codebase and build optimal context.
@@ -42,8 +32,8 @@ Wait for context_builder to complete. It will explore the codebase and build opt
 
 Confirm the export path with the user (default: `~/Downloads/oracle-prompt.md`), then export:
 
-```json
-{"tool":"prompt","args":{"op":"export","path":"<confirmed path>"}}
+```bash
+rp-cli -e 'prompt export "<confirmed path>"'
 ```
 
 Report the export path and token count to the user.

@@ -2,46 +2,46 @@
 description: Export current problem context for oracle consultation. Uses context_builder in clarify mode, then exports the prompt to a file.
 ---
 
-# Repo Prompt Tools Reminder
+# RepoPrompt Tools Reminder (CLI)
 
-Continue your current workflow using Repo Prompt MCP tools instead of built-in alternatives.
+Continue your current workflow using rp-cli instead of built-in alternatives.
 
 ## Primary Tools
 
 | Task | Use This | Not This |
-|------|----------|----------|
-| Find files/content | `file_search` | grep, find, Glob |
-| Read files | `read_file` | cat, Read |
-| Edit files | `apply_edits` | sed, Edit |
-| Create/delete/move | `file_actions` | touch, rm, mv, Write |
+| ------ | ---------- | ---------- |
+| Find files/content | `search` | grep, find, Glob |
+| Read files | `read` | cat, Read |
+| Edit files | `edit` | sed, Edit |
+| Create/delete/move | `file` | touch, rm, mv, Write |
 
 ## Quick Reference
 
-```json
-// Search (path or content)
-{"tool":"file_search","args":{"pattern":"keyword","mode":"auto"}}
+```bash
+# Search (path or content)
+rp-cli -e 'search "keyword"'
 
-// Read file (or slice)
-{"tool":"read_file","args":{"path":"Root/file.swift"}}
-{"tool":"read_file","args":{"path":"Root/file.swift","start_line":50,"limit":30}}
+# Read file (or slice)
+rp-cli -e 'read Root/file.swift'
+rp-cli -e 'read Root/file.swift --start-line 50 --limit 30'
 
-// Edit (search/replace)
-{"tool":"apply_edits","args":{"path":"Root/file.swift","search":"old","replace":"new"}}
+# Edit (search/replace)
+rp-cli -e 'edit Root/file.swift "old" "new"'
 
-// File operations
-{"tool":"file_actions","args":{"action":"create","path":"Root/new.swift","content":"..."}}
-{"tool":"file_actions","args":{"action":"delete","path":"/absolute/path.swift"}}
-{"tool":"file_actions","args":{"action":"move","path":"Root/old.swift","new_path":"Root/new.swift"}}
+# File operations
+rp-cli -e 'file create Root/new.swift "content..."'
+rp-cli -e 'file delete /absolute/path.swift'
+rp-cli -e 'file move Root/old.swift Root/new.swift'
 ```
 
 ## Context Management
 
-```json
-// Check selection
-{"tool":"manage_selection","args":{"op":"get","view":"files"}}
+```bash
+# Check selection
+rp-cli -e 'select get'
 
-// Add files for chat context
-{"tool":"manage_selection","args":{"op":"add","paths":["Root/path/file.swift"]}}
+# Add files for chat context
+rp-cli -e 'select add Root/path/file.swift'
 ```
 
 Continue with your task using these tools.

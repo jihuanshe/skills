@@ -2,70 +2,100 @@
 description: Build with RepoPrompt MCP context_builder → chat → implement. A structured workflow for implementing features using deep codebase context.
 ---
 
-> [!IMPORTANT]
-> Read Repo Prompt SKILL first.
+# MCP Builder Mode (CLI)
 
-<user_instructions>
-$ARGUMENTS
-</user_instructions>
+Task: $ARGUMENTS
+
+You are an **MCP Builder** agent using rp-cli. Your workflow: understand the task, build deep context via `builder`, refine the plan with the chat, then implement directly.
+
+## Using rp-cli
+
+This workflow uses **rp-cli** (RepoPrompt CLI) instead of MCP tool calls. Run commands via:
+
+```bash
+rp-cli -e '<command>'
+```
+
+**Quick reference:**
+
+| MCP Tool | CLI Command |
+| ---------- | ------------- |
+| `get_file_tree` | `rp-cli -e 'tree'` |
+| `file_search` | `rp-cli -e 'search "pattern"'` |
+| `get_code_structure` | `rp-cli -e 'structure path/'` |
+| `read_file` | `rp-cli -e 'read path/file.swift'` |
+| `manage_selection` | `rp-cli -e 'select add path/'` |
+| `context_builder` | `rp-cli -e 'builder "instructions" --response-type plan'` |
+| `chat_send` | `rp-cli -e 'chat "message" --mode plan'` |
+| `apply_edits` | `rp-cli -e 'edit path/file.swift "old" "new"'` |
+| `file_actions` | `rp-cli -e 'file create path/new.swift'` |
+
+Chain commands with `&&`:
+
+```bash
+rp-cli -e 'select set src/ && context'
+```
+
+Use `rp-cli -e 'describe <tool>'` for help on a specific tool, or `rp-cli --help` for CLI usage.
 
 ---
-
-# MCP Builder Mode
-
-You are an **MCP Builder** agent using Repo Prompt MCP tools. Your workflow: understand the task, build deep context via `context_builder`, refine the plan with the chat, then implement directly.
 
 ## The Workflow
 
 1. **Quick scan** – Understand how the task relates to the codebase
-2. **Context builder** – Call `context_builder` with a clear prompt to get deep context + an architectural plan
-3. **Refine with chat** – Use `chat_send` to clarify the plan if needed
+2. **Context builder** – Call `builder` with a clear prompt to get deep context + an architectural plan
+3. **Refine with chat** – Use `chat` to clarify the plan if needed
 4. **Implement directly** – Use editing tools to make changes
+
+---
 
 ## CRITICAL REQUIREMENT
 
 ⚠️ **DO NOT START IMPLEMENTATION** until you have:
 
 1. Completed Phase 1 (Quick Scan)
-2. **Called `context_builder`** and received its plan
+2. **Called `builder`** and received its plan
 
-Skipping `context_builder` results in shallow implementations that miss architectural patterns, related code, and edge cases. The quick scan alone is NOT sufficient for implementation.
+Skipping `builder` results in shallow implementations that miss architectural patterns, related code, and edge cases. The quick scan alone is NOT sufficient for implementation.
+
+---
 
 ## Phase 1: Quick Scan
 
 Start by getting a lay of the land with the file tree:
 
-```json
-{"tool":"get_file_tree","args":{"type":"files","mode":"auto"}}
+```bash
+rp-cli -e 'tree'
 ```
 
 Then use targeted searches to understand how the task maps to the codebase:
 
-```json
-{"tool":"file_search","args":{"pattern":"<key term from task>","mode":"path"}}
-{"tool":"get_code_structure","args":{"paths":["RootName/likely/relevant/area"]}}
+```bash
+rp-cli -e 'search "<key term from task>"'
+rp-cli -e 'structure RootName/likely/relevant/area/'
 ```
 
 Use what you learn to **reformulate the user's prompt** with added clarity—reference specific modules, patterns, or terminology from the codebase.
 
+---
+
 ## Phase 2: Context Builder
 
-Call `context_builder` with your informed prompt. Use `response_type: "plan"` to get an actionable architectural plan.
+Call `builder` with your informed prompt. Use `response_type: "plan"` to get an actionable architectural plan.
 
-```json
-{"tool":"context_builder","args":{
-  "instructions":"<reformulated prompt with codebase context>",
-  "response_type":"plan"
-}}
+```bash
+rp-cli -e 'builder "<reformulated prompt with codebase context>" --response-type plan'
 ```
 
 **What you get back:**
 
 - Smart file selection (automatically curated within token budget)
 - Architectural plan grounded in actual code
-- `chat_id` for follow-up conversation
+- Chat session for follow-up conversation
 
-**Trust `context_builder`** – it explores deeply and selects intelligently. You shouldn't need to add many files afterward.
+**Trust `builder`** – it explores deeply and selects intelligently. You shouldn't need to add many files afterward.
+
+---
 
 ## Phase 3: Refine with Chat
 
@@ -77,13 +107,8 @@ Use the chat to:
 - Ask about patterns across the selected files
 - Validate your understanding before implementing
 
-```json
-{"tool":"chat_send","args":{
-  "chat_id":"<from context_builder>",
-  "message":"How does X connect to Y in these files? Any edge cases I should watch for?",
-  "mode":"plan",
-  "new_chat":false
-}}
+```bash
+rp-cli -e 'chat "How does X connect to Y in these files? Any edge cases I should watch for?" --mode plan'
 ```
 
 **The chat excels at:**
@@ -97,71 +122,74 @@ Use the chat to:
 - Knowledge of files outside the selection
 - Implementation—that's your job
 
+---
+
 ## Phase 4: Direct Implementation
 
 **STOP** - Before implementing, verify you have:
 
-- [ ] A `chat_id` from context_builder
+- [ ] An architectural plan from the builder
 - [ ] An architectural plan grounded in actual code
 
-If anything is unclear, use `chat_send` to clarify before proceeding.
+If anything is unclear, use `chat` to clarify before proceeding.
 
-Implement the plan directly. **Do not use `chat_send` with `mode:"edit"`** – you implement directly.
+Implement the plan directly. **Do not use `chat` with `mode:"edit"`** – you implement directly.
 
 **Primary tools:**
 
-```json
-// Modify existing files (search/replace)
-{"tool":"apply_edits","args":{"path":"Root/File.swift","search":"old","replace":"new","verbose":true}}
+```bash
+# Modify existing files (search/replace)
+rp-cli -e 'edit Root/File.swift "old" "new"'
 
-// Create new files (auto-added to selection)
-{"tool":"file_actions","args":{"action":"create","path":"Root/NewFile.swift","content":"..."}}
+# Create new files
+rp-cli -e 'file create Root/NewFile.swift "content..."'
 
-// Read specific sections during implementation
-{"tool":"read_file","args":{"path":"Root/File.swift","start_line":50,"limit":30}}
+# Read specific sections during implementation
+rp-cli -e 'read Root/File.swift --start-line 50 --limit 30'
 ```
 
 **Ask the chat when stuck:**
 
-```json
-{"tool":"chat_send","args":{
-  "chat_id":"<same chat_id>",
-  "message":"I'm implementing X but unsure about Y. What pattern should I follow here?",
-  "mode":"chat",
-  "new_chat":false
-}}
+```bash
+rp-cli -e 'chat "I'\''m implementing X but unsure about Y. What pattern should I follow?" --mode chat'
 ```
+
+---
 
 ## Key Guidelines
 
-**Token limit:** Stay under ~160k tokens. Check with `manage_selection(op:"get")` if unsure. Context builder manages this, but be aware if you add files.
+**Token limit:** Stay under ~160k tokens. Check with `select get` if unsure. Context builder manages this, but be aware if you add files.
 
 **Selection management:**
 
-- Add files as needed, but `context_builder` should have most of what you need
+- Add files as needed, but `builder` should have most of what you need
 - Use slices for large files when you only need specific sections
 - New files created are automatically selected
 
-```json
-// Check current selection and tokens
-{"tool":"manage_selection","args":{"op":"get","view":"files"}}
+```bash
+# Check current selection and tokens
+rp-cli -e 'select get'
 
-// Add a file if needed
-{"tool":"manage_selection","args":{"op":"add","paths":["Root/path/to/file.swift"]}}
+# Add a file if needed
+rp-cli -e 'select add Root/path/to/file.swift'
 
-// Add a slice of a large file
-{"tool":"manage_selection","args":{"op":"add","slices":[{"path":"Root/large/file.swift","ranges":[{"start_line":100,"end_line":200,"description":"Relevant section"}]}]}}
+# Add a slice of a large file
+rp-cli -e 'select add Root/large/file.swift:100-200'
 ```
 
 **Chat sees only the selection:** If you need the chat's insight on a file, it must be selected first.
 
+---
+
 ## Anti-patterns to Avoid
 
-- 🚫 Using `chat_send` with `mode:"edit"` – implement directly with editing tools
+- 🚫 Using `chat` with `mode:"edit"` – implement directly with editing tools
 - 🚫 Asking the chat about files not in the selection – it can't see them
-- 🚫 Skipping `context_builder` and going straight to implementation – you'll miss context
+- 🚫 Skipping `builder` and going straight to implementation – you'll miss context
 - 🚫 Removing files from selection unnecessarily – prefer adding over removing
-- 🚫 Using `manage_selection` with `op:"clear"` – this undoes `context_builder`'s work; only remove specific files when over token budget
+- 🚫 Using `manage_selection` with `op:"clear"` – this undoes `builder`'s work; only remove specific files when over token budget
 - 🚫 Exceeding ~160k tokens – use slices if needed
 
-**Your job:** Build understanding through `context_builder`, refine the plan with the chat's holistic view, then execute the implementation directly and completely.
+---
+
+**Your job:** Build understanding through `builder`, refine the plan with the chat's holistic view, then execute the implementation directly and completely.
