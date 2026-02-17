@@ -1,4 +1,4 @@
 __pycache__/
 *.pyc
 
-.agents/skills/using-logfire/mcp.json
+.agents/skills/logfire/mcp.json

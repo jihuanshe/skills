@@ -5,13 +5,7 @@
             "logfire-mcp"
         ],
         "env": {
-            "LOGFIRE_READ_TOKEN": "pylf_v1_us_4nM6cvT2XsG0mDcfS3h49TjhfgxBYdGVFcPMGRC9nFDF"
-        },
-        "includeTools": [
-            "find_exceptions_in_file",
-            "arbitrary_query",
-            "logfire_link",
-            "schema_reference"
-        ]
+            "LOGFIRE_READ_TOKEN": "pylf_v1_us_vd6nw7XYsGtL6Jj5kD8CZSgPl3qTklW7cZ66mv1DLs0y"
+        }
     }
 }

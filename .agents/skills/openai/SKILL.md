@@ -7,13 +7,6 @@ metadata:
 
 # Building with OpenAI (Python)
 
-## Available Tools
-
-- `search_openai_docs` - Search across `platform.openai.com` + `developers.openai.com` docs
-- `fetch_openai_doc` - Fetch full markdown for a specific doc page (use after search)
-- `list_api_endpoints` - List all OpenAI API endpoint URLs from OpenAPI spec
-- `get_openapi_spec` - Get OpenAPI spec for a specific endpoint
-
 ## Workflow
 
 1. **Search** docs with `search_openai_docs` to find relevant pages
@@ -151,6 +144,12 @@ See template: `templates/responses_create_typed_with_logfire.py`
   - Instrumented (logfire warning spans)
 
 Keep retry policy in one place; do not sprinkle ad-hoc retries.
+
+### Background Mode
+
+For long-running tasks, use `background=True` with polling. Cancel on timeout to release server resources.
+
+**Docs**: <https://platform.openai.com/docs/guides/background>
 
 ### Testing Strategy
 

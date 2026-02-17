@@ -1,5 +1,3 @@
-"""Prompt templates for tool outputs."""
-
 from __future__ import annotations
 
 

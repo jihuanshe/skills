@@ -1,5 +1,3 @@
-"""Pydantic models and metrics for Linear analysis."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta

@@ -1,11 +1,3 @@
-"""Feishu webhook client for sending rich-text card messages.
-
-Usage:
-    from feishu import send_card
-
-    send_card(title="Alert", content="Something happened", template="red")
-"""
-
 from __future__ import annotations
 
 import json
