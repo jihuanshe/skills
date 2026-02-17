@@ -1,0 +1,3 @@
+[default.extend-words]
+# "nin" is a valid GraphQL filter operator (not-in) used in Linear API queries
+nin = "nin"
