@@ -1,13 +1,3 @@
-"""
-Template: Typed OpenAI call wrapped with logfire spans and exception recording.
-
-Key patterns:
-- Type input construction, use direct keyword arguments
-- Wrap with logfire.span for observability
-- Use span.record_exception() + span.set_level() for handled exceptions
-- Do NOT double-log with both logfire.exception() and span.record_exception()
-"""
-
 from __future__ import annotations
 
 import asyncio

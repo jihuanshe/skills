@@ -1,12 +1,5 @@
 {
-    "openai-docs": {
-        "url": "https://developers.openai.com/mcp",
-        "includeTools": [
-            "fetch_openai_doc",
-            "get_openapi_spec",
-            "list_api_endpoints",
-            "list_openai_docs",
-            "search_openai_docs"
-        ]
+    "openai": {
+        "url": "https://developers.openai.com/mcp"
     }
 }

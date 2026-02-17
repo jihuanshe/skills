@@ -1,5 +1,3 @@
-"""Streaming Responses API call with proper typing."""
-
 from openai import AsyncOpenAI
 from openai.types.responses import ResponseInputTextParam, ResponseTextDeltaEvent
 from openai.types.responses.response_input_param import Message

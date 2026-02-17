@@ -1,9 +1,8 @@
 #!/usr/bin/env -S mise x -E local -- uv run --script
 # /// script
-# requires-python = ">=3.13"
+# requires-python = ">=3.13,<3.14"
 # dependencies = ["pydantic>=2.10", "httpx>=0.28"]
 # ///
-"""Emit a filtered issue list for targeted follow-up."""
 
 from __future__ import annotations
 

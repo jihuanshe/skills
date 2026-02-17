@@ -17,7 +17,7 @@ metadata:
 | `ty` reports `Unknown`, `no-matching-overload`, or type mismatch | Build-time |
 | PR contains `dict[str, Any]` or `Any` in SDK call context | Review-time |
 
-## Core principles (also in AGENTS.md)
+## Core principles
 
 - **Narrow, don't widen.** Add explicit annotations—never widen to `Any`.
 - **Type intermediate values.** Annotate each variable before composing into final structure.

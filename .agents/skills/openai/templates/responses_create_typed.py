@@ -1,16 +1,3 @@
-"""
-Template: Typed OpenAI Responses API call.
-
-Key pattern:
-- Type the INPUT construction (content items, messages)
-- Use DIRECT keyword arguments to client.responses.create()
-- Do NOT use **kwargs unpack (causes ty no-matching-overload)
-
-Copy into demos/ if you want a minimal repro.
-Run:
-  mise exec -- ty check demos/<file>.py
-"""
-
 from __future__ import annotations
 
 from openai import AsyncOpenAI

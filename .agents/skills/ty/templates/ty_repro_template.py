@@ -1,15 +1,3 @@
-"""
-Template: ty minimal reproduction (copy into demos/ and edit).
-
-Goal: reproduce a type inference problem in < 60 lines and fix it by narrowing
-dict literals via explicit TypedDict/type alias annotations.
-
-Keep this file small:
-- Imports only what you need
-- A single builder function returning a typed value
-- Run: mise exec -- ty check demos/<file>.py
-"""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

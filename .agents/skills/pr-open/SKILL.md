@@ -2,7 +2,7 @@
 name: pr-open
 description: 'Create or update GitHub PRs. Triggers: open PR, create PR, update PR.'
 metadata:
-  version: '2'
+  version: '4'
 ---
 
 # Opening OR Updating PR
@@ -41,10 +41,22 @@ git log --oneline HEAD..origin/main
 
 **如果有风险，暂停让用户确认后再继续。**
 
-### Rebase 到 main
+### 是否需要 Rebase？
+
+> ⚠️ **Rebase 不是必须的**，因为 PR 最终用 squash merge，中间历史无所谓。
+
+**何时需要 rebase**：
+
+- 上游 main 有**与本 PR 相关的变更**（API 变更、依赖更新等），需要基于新代码继续开发
+- 存在**冲突**，GitHub 无法自动合并
+
+**何时不需要 rebase**：
+
+- 只是"落后 main 几个 commit"但无冲突、无相关变更
+- 为了"让历史干净"——squash merge 后历史本来就只有一个 commit
 
 ```bash
-# PR 合并用 squash merge，本地不需要手动 squash，直接 rebase 即可
+# 如果确实需要 rebase
 git rebase origin/main
 ```
 
@@ -71,31 +83,80 @@ git add <resolved-files>
 git rebase --continue
 ```
 
-## Step 2: Review Changes
+## Step 2: Gather All Context
+
+> ⚠️ **先收集所有上下文，再动笔写 PR / 更新 Linear。** 跳过任何一个来源都可能导致描述不完整或与实际偏移。
+
+以下 4 个来源**尽量并行获取**（互不依赖）：
+
+### 2a. Code diff
 
 ```bash
-# 查看变更（用 ... 更符合 PR 视角，显示 merge-base 到 HEAD 的差异）
+# 分支上所有变更（... = merge-base 视角，最接近 PR diff）
 git diff --stat origin/main...HEAD
 git diff origin/main...HEAD
 
-# 获取 issue 上下文（如果分支关联了 Linear）
-linear issue view $(linear issue-id)
+# 分支上的所有 commits（可能有之前的 wip commits）
+git log --oneline origin/main..HEAD
+```
 
-# 读取 PR 模板
+**常见错误**：只看 `git status`（uncommitted changes），忽略分支上已有的 commits，导致 PR 描述不完整。
+
+### 2b. Existing PR（如果已有）
+
+```bash
+gh pr view --json number,url,state,title,body
+```
+
+已有 OPEN PR 时，读取当前 title/body 作为基线——后续只需增量更新，而非从零重写。
+
+### 2c. Existing Linear Issue
+
+```bash
+linear issue view $(linear issue-id)
+```
+
+读取当前 issue 标题和描述，后续用来判断是否与实际变更偏移。
+
+### 2d. Amp Threads（Amp 必做，Claude Code 可跳过）
+
+> ⚠️ 必须使用 `find_thread` 搜索相关 threads，不能偷懒只写当前 thread。
+
+**识别当前 Thread 并追溯**：
+
+1. **当前 Thread**：你正在工作的这个（必须包含）
+2. **Handoff 来源**：如果当前 Thread 是从其他 Thread handoff 过来的，追溯上游
+3. **Cluster 搜索**：用 `find_thread` 工具的 `cluster_of:` 过滤器查找同一任务的相关 threads
+
+| 搜索场景 | query 参数 |
+| :--------- | :----------- |
+| 同 cluster 的 threads | `cluster_of:T-当前thread-id` |
+| 关联 Linear issue | `task:AI-596` |
+| 包含依赖任务 | `task:AI-596+` |
+| 按关键词 + 时间范围 | `skills migration after:7d` |
+
+对每个候选 Thread，用 `read_thread` 验证是否真正相关：
+
+- ✅ 讨论了本 PR 要解决的问题 / 包含设计决策 / 是直接前置任务
+- ❌ 只是碰巧修改了同一文件 / 完全独立的功能开发
+
+### 2e. PR 模板
+
+```bash
 cat .github/pull_request_template.md
 ```
 
-## Step 3: Create or Update PR
+## Step 3: Push & Create/Update PR + Linear
+
+> ⚠️ **PR 和 Linear 在同一步骤内一起写出**，确保两者内容对齐、来源一致。
+
+### 3a. Push
 
 ```bash
-# Push（rebase/squash 后需要 force）
 git push -u origin HEAD --force-with-lease
-
-# ⚠️ 检查是否已有 PR，必须同时检查 state
-gh pr view --json number,url,state
 ```
 
-### 判断 create vs edit
+### 3b. 判断 PR create vs edit
 
 > ⚠️ **必须检查 PR 的 state，不能只看 PR 是否存在！**
 >
@@ -108,6 +169,21 @@ gh pr view --json number,url,state
 | state = `OPEN` | `gh pr edit` 更新现有 PR |
 | state = `MERGED` 或 `CLOSED` | `gh pr create` 创建新 PR |
 
+### 3c. 写出 PR
+
+基于 Step 2 收集的全部上下文（diff + 现有 PR/Linear + Amp threads），按 PR 模板撰写 title 和 body。
+
+PR body 必须包含 `## Related Amp Threads` 部分（只添加真正相关的 threads，并注明关系）：
+
+```markdown
+## Related Amp Threads
+
+- https://ampcode.com/threads/T-xxx - 当前实现线程
+- https://ampcode.com/threads/T-yyy - 方案设计讨论（handoff 来源）
+```
+
+如果没有找到相关 threads，只写当前 thread 即可。
+
 ```bash
 # 创建新 PR
 gh pr create --base main --title "..." --body "..."
@@ -116,77 +192,54 @@ gh pr create --base main --title "..." --body "..."
 gh pr edit --title "..." --body "..."
 ```
 
-## Step 4: Link Related Amp Threads（关键步骤）
+### 3d. 同步 Linear Issue
 
-**每次创建或更新 PR 时，必须搜索并关联真正相关的 Amp Threads。**
+对比 Step 2c 获取的现有 issue 标题/描述与 PR 最终内容，判断是否偏移：
 
-### 识别当前 Thread
+- issue 标题是否仍能准确概括 PR 的变更？
+- issue 描述是否覆盖了 PR 的所有关键变更？
+- 是否有 PR 中做了但 issue 里没提的工作？
 
-首先，**从当前 Thread 开始追溯**。一个任务可能经历多次 handoff（从一个 Thread 移交到另一个 Thread 继续工作）：
-
-1. **当前 Thread**：你正在工作的这个（必须包含）
-2. **Handoff 来源**：如果当前 Thread 是从其他 Thread handoff 过来的，追溯上游
-3. **Cluster 搜索**：用 `find_thread` 工具的 `cluster_of:` 过滤器查找同一任务的相关 threads
-
-使用 `find_thread` 工具搜索相关 threads：
-
-| 搜索场景 | query 参数 |
-| :--------- | :----------- |
-| 同 cluster 的 threads | `cluster_of:T-当前thread-id` |
-| 关联 Linear issue | `task:AI-596` |
-| 包含依赖任务 | `task:AI-596+` |
-| 按关键词 + 时间范围 | `skills migration after:7d` |
-
-### 验证相关性
-
-> ⚠️ **不要只按文件路径搜索**（`file:xxx`）。修改同一文件的 threads 不一定相关。
-
-对每个候选 Thread，用 `read_thread` 工具验证是否真正相关：
-
-- **threadID**: `T-candidate-id`
-- **goal**: "这个 thread 是否与本 PR 的目标相关？提取关键决策和上下文。"
-
-**相关性判断标准**：
-
-- ✅ 讨论了本 PR 要解决的问题
-- ✅ 包含本 PR 的设计决策或方案讨论
-- ✅ 是本 PR 工作的直接前置任务
-- ❌ 只是碰巧修改了同一文件（不相关）
-- ❌ 是完全独立的功能开发（不相关）
-
-### 更新 PR Body
-
-只添加**真正相关**的 threads，并注明关系：
-
-```markdown
-## Related Amp Threads
-
-- https://ampcode.com/threads/T-xxx - 当前实现线程
-- https://ampcode.com/threads/T-yyy - 方案设计讨论（handoff 来源）
-- https://ampcode.com/threads/T-zzz - 问题排查（发现了本 PR 要修复的 bug）
-```
-
-**如果没有找到相关 threads，只写当前 thread 即可**——不要为了"看起来完整"而添加不相关的链接。
-
-### 同步到 Linear Issue
+**如果存在偏移**，更新 issue 标题和描述：
 
 ```bash
-# 获取关联的 issue-id
-linear issue-id
+linear issue update <issue-id> \
+  --title "新标题（准确概括实际变更）" \
+  --description "## 变更范围
 
-# 添加 comment 到 Linear Issue
+### 1. ...
+### 2. ...
+
+## PR
+
+- https://github.com/<org>/<repo>/pull/<number>
+
+## Amp Threads
+
+- https://ampcode.com/threads/T-xxx - 主线程"
+```
+
+**如果无偏移**，添加 comment 关联 PR 和 Threads：
+
+```bash
 linear issue comment add <issue-id> -b "## Related Amp Threads
 
 PR #<number> 相关的 Amp 工作线程：
 
 - https://ampcode.com/threads/T-xxx - 主线程
-- https://ampcode.com/threads/T-yyy - 功能规划
 
 **PR**: https://github.com/<org>/<repo>/pull/<number>"
 ```
 
-**为什么这步很重要**：
+**原则**：
 
+- Issue 标题 = PR 标题的中文版（或等价语义）
+- Issue 描述 = PR body 的精简版，聚焦「做了什么」而非「怎么做的」
+- 不要保留过时的原始描述——直接覆盖，Git 有历史
+
+**为什么 PR + Linear 必须一起写出**：
+
+- 保证两者描述一致，避免分步骤写导致信息漂移
 - 保留完整的决策上下文和讨论记录
 - 便于后续回溯问题根因
 - 新成员可快速了解功能演进历史
@@ -195,7 +248,7 @@ PR #<number> 相关的 Amp 工作线程：
 
 ```bash
 # 查看当前分支 PR
-gh pr view --json number,title,url
+gh pr view --json number,title,url,state,body
 
 gh pr create --base main --title "..." --body "..."
 
@@ -206,6 +259,9 @@ linear issue-id
 
 # 查看 issue 详情
 linear issue view <issue-id>
+
+# 更新 issue
+linear issue update <issue-id> --title "..." --description "..."
 ```
 
 ## Troubleshooting

@@ -1,0 +1,70 @@
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit, pre-push]
+fail_fast: false
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        name: check YAML files
+        stages: [pre-commit, pre-push]
+      - id: end-of-file-fixer
+        name: fix end of file fixer
+        stages: [pre-commit]
+      - id: trailing-whitespace
+        name: fix trailing whitespace
+        stages: [pre-commit]
+      - id: no-commit-to-branch
+        name: block commit to main
+        args: [--branch, main]
+        stages: [pre-commit]
+
+      - id: check-ast
+        name: check ast
+        stages: [pre-commit, pre-push]
+      - id: check-merge-conflict
+        name: check merge conflict
+        stages: [pre-commit, pre-push]
+      - id: check-shebang-scripts-are-executable
+        name: check shebang scripts are executable
+        stages: [pre-commit]
+      - id: check-added-large-files
+        name: check added large files
+        stages: [pre-commit, pre-push]
+        args: [--maxkb=4096]
+      - id: check-symlinks
+        name: check symlinks
+        stages: [pre-commit, pre-push]
+      - id: destroyed-symlinks
+        name: destroyed symlinks
+        stages: [pre-commit, pre-push]
+      - id: detect-private-key
+        name: detect private key
+        stages: [pre-commit, pre-push]
+
+  - repo: https://github.com/sirwart/ripsecrets
+    rev: v0.1.11
+    hooks:
+      - id: ripsecrets
+        name: ripsecrets
+        args:
+          - --strict-ignore
+          - --additional-pattern
+          - "sk-proj-[A-Za-z0-9_-]{20,}"
+          - --additional-pattern
+          - "xai-[A-Za-z0-9]{20,}"
+          - --additional-pattern
+          - "fc-[A-Za-z0-9]{20,}"
+          - --additional-pattern
+          - "tpuf_[A-Za-z0-9]{20,}"
+          - --additional-pattern
+          - "pylf_v1_[a-z]+_[A-Za-z0-9]{20,}"
+        require_serial: true
+        stages: [pre-commit, pre-push]
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.42.3
+    hooks:
+      - id: typos
+        name: typos

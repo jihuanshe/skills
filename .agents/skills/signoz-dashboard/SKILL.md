@@ -173,6 +173,7 @@ Common units: `none`, `s`, `ms`, `percent`, `bytes`, `reqps`, `ops`
 ## Layout Configuration
 
 Panel positions use grid coordinates:
+
 - `w`: width (1-12, full width = 12)
 - `h`: height (rows, typical = 3-6)
 - `x`: horizontal position (0-11)

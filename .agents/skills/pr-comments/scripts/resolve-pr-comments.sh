@@ -68,9 +68,7 @@ query($owner: String!, $repo: String!, $number: Int!) {
 EOF
 
 # Execute query
-RESPONSE=$(gh api graphql -f query="$QUERY" -F owner="$OWNER" -F repo="$REPO_NAME" -F number="$PR_NUMBER" 2>/dev/null)
-
-if [ $? -ne 0 ]; then
+if ! RESPONSE=$(gh api graphql -f query="$QUERY" -F owner="$OWNER" -F repo="$REPO_NAME" -F number="$PR_NUMBER" 2>/dev/null); then
 	echo "Error: Could not fetch PR #$PR_NUMBER"
 	exit 1
 fi
