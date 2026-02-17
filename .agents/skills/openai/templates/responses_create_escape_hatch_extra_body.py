@@ -1,16 +1,3 @@
-"""
-Template: Type inputs, put unmodeled fields into extra_body.
-
-Use this when:
-- The API supports a parameter but the installed SDK typing does not yet model it
-- You want to avoid widening to dict[str, Any]
-
-Key pattern:
-- Type all input construction as usual
-- Use direct keyword arguments for known params
-- Pass new/untyped fields via extra_body at the call boundary
-"""
-
 from __future__ import annotations
 
 from openai import AsyncOpenAI

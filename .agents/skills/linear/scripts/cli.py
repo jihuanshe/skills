@@ -1,5 +1,3 @@
-"""Unified CLI argument parsing for Linear tools."""
-
 from __future__ import annotations
 
 import argparse

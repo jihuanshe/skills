@@ -1,8 +1,7 @@
 #!/usr/bin/env -S mise x -E local -- uv run --script
 # /// script
-# requires-python = ">=3.13"
+# requires-python = ">=3.13,<3.14"
 # ///
-"""Validate tool output contract from stdin."""
 
 from __future__ import annotations
 

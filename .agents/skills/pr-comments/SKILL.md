@@ -1,53 +1,48 @@
 ---
 name: pr-comments
-description: 'Resolve PR review feedback. Triggers: fix PR comments, address review.'
+description: 'Fetch and triage PR review feedback. Triggers: fix PR comments, address review, read PR comments, check PR review, triage review.'
 metadata:
-  version: '1'
+  version: '2'
 ---
 
 # Resolve PR Comments
 
-获取 GitHub PR 的所有评审意见并生成结构化解决方案。
+Fetch all review feedback from a GitHub PR and generate structured resolution proposals.
 
-## 使用场景
+## Prerequisites
 
-- 收到 PR 评审意见后需要系统性处理时
-- 需要将评审反馈转化为具体操作计划时
+Requires `gh` CLI installed and authenticated.
 
-## 环境要求
+## Usage
 
-需要配置 `gh` CLI 并完成认证。
-
-## 运行
-
-从 skill 目录执行：
+Run from the skill directory:
 
 ```bash
 bash scripts/resolve-pr-comments.sh <pr-number-or-url>
 ```
 
-## 参数
+## Arguments
 
-- `<pr-number-or-url>`: PR 编号或完整 URL
+- `<pr-number-or-url>`: PR number or full URL
 
-## 示例
+## Examples
 
 ```bash
 builtin://skills/scripts/resolve-pr-comments.sh 123
 builtin://skills/scripts/resolve-pr-comments.sh https://github.com/owner/repo/pull/123
 ```
 
-## 输出
+## Output
 
-脚本会获取 PR 详情和所有评审意见，并输出一份指导 prompt，引导 agent：
+The script fetches PR details and all review feedback, then outputs a guidance prompt that directs the agent to:
 
-1. 搭建对 PR 的整体认知
-2. 分析所有反馈并分类（bug、design、performance、security、tests 等）
-3. 为每条反馈提出解决方案
-4. 制定实施计划
-5. 起草给评审者的回复模版
+1. Build an overall understanding of the PR
+2. Analyze all feedback and categorize it (bug, design, performance, security, tests, etc.)
+3. Propose a resolution for each piece of feedback
+4. Create an implementation plan
+5. Draft reply templates for reviewers
 
-最终输出包含：
+The final output includes:
 
 - PR summary
 - Open questions
@@ -55,3 +50,78 @@ builtin://skills/scripts/resolve-pr-comments.sh https://github.com/owner/repo/pu
 - Resolution proposals (by comment)
 - Implementation plan
 - Suggested reviewer replies
+
+## gh API Pitfalls
+
+Watch out for these gotchas when manually calling gh CLI to handle PR reviews:
+
+### Two Separate Comment APIs
+
+GitHub has two independent comment systems. You **must fetch both** to get complete review data:
+
+| API | Returns | Purpose |
+|-----|---------|---------|
+| `gh pr view --comments --json comments` | Issue-level comments (discussion below the PR body) | General comments |
+| `gh api repos/{owner}/{repo}/pulls/{number}/comments` | Inline review comments (code-line-level reviews) | Code review |
+
+> ⚠️ Using only one will miss the other half of comments. This skill's GraphQL script fetches both.
+
+### Replying to a Review Comment
+
+```bash
+# ✅ Correct: create a new comment with in_reply_to
+gh api repos/{owner}/{repo}/pulls/{number}/comments \
+  -f body="..." -F in_reply_to={comment_id}
+
+# ❌ Wrong: /pulls/comments/{id}/replies (404, does not exist)
+gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/replies \
+  -f body="..."
+
+# ❌ Wrong: PATCH the comment directly (this edits, not replies)
+gh api repos/{owner}/{repo}/pulls/comments/{comment_id} \
+  -X PATCH -f body="..."
+```
+
+### Resolving a Review Thread
+
+REST API **does not support** resolving review threads. You must use GraphQL.
+
+> ⚠️ **node_id prefix matters**: comment `node_id` starts with `PRRC_` (PullRequestReviewComment), thread `node_id` starts with `PRRT_` (PullRequestReviewThread). The `resolveReviewThread` mutation only accepts `PRRT_`-prefixed IDs — using `PRRC_` returns NOT_FOUND.
+
+```bash
+# First, get the thread node_id
+gh api graphql -f query='
+  query($owner: String!, $repo: String!, $number: Int!) {
+    repository(owner: $owner, name: $repo) {
+      pullRequest(number: $number) {
+        reviewThreads(first: 100) {
+          nodes { id isResolved comments(first: 1) { nodes { body } } }
+        }
+      }
+    }
+  }' -F owner=OWNER -F repo=REPO -F number=NUMBER
+
+# Then resolve
+gh api graphql -f query='
+  mutation($threadId: ID!) {
+    resolveReviewThread(input: {threadId: $threadId}) {
+      thread { isResolved }
+    }
+  }' -F threadId=THREAD_NODE_ID
+```
+
+### General Comments Cannot Be Resolved
+
+Issue-level comments (`IC_` prefix) have no resolve mechanism. The closest alternative is `minimizeComment`:
+
+```bash
+# Collapse an issue-level comment (e.g., bot noise)
+gh api graphql -f query='
+  mutation($id: ID!) {
+    minimizeComment(input: {subjectId: $id, classifier: RESOLVED}) {
+      minimizedComment { isMinimized }
+    }
+  }' -F id=IC_NODE_ID
+
+# Available classifiers: SPAM, ABUSE, OFF_TOPIC, OUTDATED, DUPLICATE, RESOLVED
+```

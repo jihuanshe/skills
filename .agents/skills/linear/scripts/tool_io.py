@@ -1,5 +1,3 @@
-"""Structured stdout helpers for Linear analysis tools."""
-
 from __future__ import annotations
 
 import csv

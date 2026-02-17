@@ -2,7 +2,7 @@
 name: linear
 description: 'Query and manage Linear issues. Triggers: linear issue, team metrics, WIP.'
 metadata:
-  version: '1'
+  version: '2'
 ---
 
 # Using Linear
@@ -26,15 +26,15 @@ Before running any analysis, understand these key constraints:
 
 Scripts now use explicit selection functions. Always read the `@selection` meta line:
 
-- **createdAt >= since**: cohort view (process hygiene, structure)
-- **completedAt >= since**: completion window (throughput/lead time)
-- **snapshot**: current state (WIP, open SLA risk)
+- createdAt >= since: cohort view (process hygiene, structure)
+- completedAt >= since: completion window (throughput/lead time)
+- snapshot: current state (WIP, open SLA risk)
 
 Do not compare metrics across different selections.
 
 ### 2. Time Precision
 
-Scripts now use **float days** (e.g., `2.5d`) instead of integer days. This fixes:
+Scripts now use float days (e.g., `2.5d`) instead of integer days. This fixes:
 
 - SLA calculations (previously `23h` was counted as `0d`)
 - Queue/Cycle time analysis
@@ -43,7 +43,7 @@ Scripts now use **float days** (e.g., `2.5d`) instead of integer days. This fixe
 
 Many teams auto-set `startedAt` on creation. Check the automation detection output:
 
-- If **>50% issues have startedAt within 1 minute** → Cycle Time data is unreliable
+- If >50% issues have startedAt within 1 minute → Cycle Time data is unreliable
 - Lead Time (created→completed) remains valid
 
 ## Quick Start (Runbook)
@@ -72,7 +72,7 @@ scripts/hunt.py <TEAM_KEY> --filter stale_wip --limit 50
 
 ## Tool Output Contract (stdout/stderr)
 
-All tools must emit **only** the structured contract to stdout:
+All tools must emit only the structured contract to stdout:
 
 ```text
 @key: value
@@ -84,10 +84,10 @@ col1,col2,...
 ===END===
 ```
 
-- **stdout**: contract only (PROMPT + one or more CSV tables + END)
-- **stderr**: logs, progress, debug output
+- stdout: contract only (PROMPT + one or more CSV tables + END)
+- stderr: logs, progress, debug output
 - Validate locally: `mise exec -- uv run scripts/validate_output.py < output.txt`
-- Use `-debug` to log query names, variables, and pagination to **stderr** only
+- Use `-debug` to log query names, variables, and pagination to stderr only
 
 ## Part 1: Daily CLI Usage
 
@@ -140,11 +140,26 @@ curl -s -X POST https://api.linear.app/graphql \
 
 ## Part 2: GraphQL API (Escape Hatch)
 
+### ⛔ MANDATORY: Schema-First
+
+Linear API evolves — field names, argument names, and entire queries get deprecated without warning.
+**NEVER guess a query shape from memory.** Always verify against the live schema first:
+
+```bash
+linear schema -o "${TMPDIR:-/tmp}/linear-schema.graphql"
+
+# Then search for the operation you need:
+rg "searchIssues|issueSearch" "${TMPDIR:-/tmp}/linear-schema.graphql"
+rg -A10 "searchIssues" "${TMPDIR:-/tmp}/linear-schema.graphql"
+```
+
+Only after confirming the correct field name and argument signature, construct your curl call.
+
 ### ⛔ MANDATORY: Pagination is Required
 
-**NEVER** use `first: 250` or any large number without pagination. This will truncate data silently.
+NEVER use `first: 250` or any large number without pagination. This will truncate data silently.
 
-**Always** implement pagination with `hasNextPage` and `endCursor`:
+Always implement pagination with `hasNextPage` and `endCursor`:
 
 ```graphql
 {
@@ -158,7 +173,7 @@ curl -s -X POST https://api.linear.app/graphql \
 }
 ```
 
-**Recommended**: Use Python selection helpers instead of raw GraphQL:
+Recommended: Use Python selection helpers instead of raw GraphQL:
 
 ```python
 from selection import issues_created_since
@@ -167,20 +182,36 @@ issues = issues_created_since("AI", "2025-10-01")
 
 ### Schema Discovery
 
-```bash
-# Write schema to tempfile
-linear schema -o "${TMPDIR:-/tmp}/linear-schema.graphql"
+See **Schema-First** rule above. Additional useful searches:
 
-# Search schema
+```bash
 rg -A30 "^type Issue " "${TMPDIR:-/tmp}/linear-schema.graphql"
 rg -A50 "^input IssueFilter" "${TMPDIR:-/tmp}/linear-schema.graphql"
+```
+
+### Full-text Search
+
+Use `searchIssues` (not the deprecated `issueSearch`) to find issues by keyword:
+
+```bash
+curl -s -X POST https://api.linear.app/graphql \
+  -H "Content-Type: application/json" \
+  -H "Authorization: $(linear auth token)" \
+  -d '{"query": "{ searchIssues(term: \"KEYWORD\", first: 50) { nodes { identifier title state { name } project { name } team { key name } labels { nodes { name } } priority createdAt } } }"}' \
+  | jq '.data.searchIssues.nodes'
+```
+
+Combine with jq to filter by project/team:
+
+```bash
+... | jq '.data.searchIssues.nodes[] | select(.project.name != null and (.project.name | test("PATTERN"; "i")))'
 ```
 
 ### Direct API Call (Long-tail Queries)
 
 For ad-hoc queries not covered by scripts, use curl directly.
 
-**Base pattern:**
+Base pattern:
 
 ```bash
 curl -s -X POST https://api.linear.app/graphql \
@@ -189,7 +220,7 @@ curl -s -X POST https://api.linear.app/graphql \
   -d '{"query": "YOUR_QUERY_HERE"}' | jq .
 ```
 
-**Handling timestamps with milliseconds (jq fix):**
+Handling timestamps with milliseconds (jq fix):
 
 Linear timestamps may include milliseconds (e.g., `2026-01-08T08:53:59.922Z`):
 
@@ -207,7 +238,7 @@ curl -s -X POST https://api.linear.app/graphql \
 
 ### Common Long-tail Query Templates
 
-**Count issues by state type:**
+Count issues by state type:
 
 ```bash
 curl -s -X POST https://api.linear.app/graphql \
@@ -217,7 +248,7 @@ curl -s -X POST https://api.linear.app/graphql \
   | jq '[.data.issues.nodes[].state.type] | group_by(.) | map({type: .[0], count: length})'
 ```
 
-**Find issues with specific label:**
+Find issues with specific label:
 
 ```bash
 curl -s -X POST https://api.linear.app/graphql \
@@ -227,7 +258,7 @@ curl -s -X POST https://api.linear.app/graphql \
   | jq '.data.issues.nodes[] | "\(.identifier): \(.title) [\(.state.name)]"'
 ```
 
-**Get issue history (audit trail):**
+Get issue history (audit trail):
 
 ```bash
 curl -s -X POST https://api.linear.app/graphql \
@@ -237,7 +268,7 @@ curl -s -X POST https://api.linear.app/graphql \
   | jq '.data.issue.history.nodes'
 ```
 
-**List cycle contents:**
+List cycle contents:
 
 ```bash
 curl -s -X POST https://api.linear.app/graphql \
@@ -247,7 +278,7 @@ curl -s -X POST https://api.linear.app/graphql \
   | jq '.data.cycles.nodes[0]'
 ```
 
-**Check recent comments on an issue:**
+Check recent comments on an issue:
 
 ```bash
 curl -s -X POST https://api.linear.app/graphql \
@@ -259,18 +290,18 @@ curl -s -X POST https://api.linear.app/graphql \
 
 ## Part 3: Team Efficiency Analysis
 
-Efficiency is NOT "doing things fast" — it's **predictably delivering value**.
+Efficiency is NOT "doing things fast" — it's predictably delivering value.
 
 ### Core Metrics
 
 | Metric | Formula | Healthy Range |
 | -------- | --------- | --------------- |
-| **Throughput** | Completed issues per week | Stable or growing |
-| **Lead Time** | `completedAt - createdAt` | Depends on work type |
-| **Cycle Time** | `completedAt - startedAt` | < Lead Time |
-| **Queue Time** | `startedAt - createdAt` | < 50% of Lead Time |
-| **WIP** | Started but not completed | 2-3 per person |
-| **SLA Hit Rate** | % completed within target | > 80% for P1/P2 |
+| Throughput | Completed issues per week | Stable or growing |
+| Lead Time | `completedAt - createdAt` | Depends on work type |
+| Cycle Time | `completedAt - startedAt` | < Lead Time |
+| Queue Time | `startedAt - createdAt` | < 50% of Lead Time |
+| WIP | Started but not completed | 2-3 per person |
+| SLA Hit Rate | % completed within target | > 80% for P1/P2 |
 
 ### Analysis Scripts
 
@@ -317,8 +348,8 @@ Lead Time = Queue Time + Execution Time
      (C→C)      (C→S)         (S→C)
 ```
 
-- If **Queue > 50%** → Control WIP, improve prioritization
-- If **Execution > 50%** → Break down tasks, reduce blockers
+- If Queue > 50% → Control WIP, improve prioritization
+- If Execution > 50% → Break down tasks, reduce blockers
 
 ### Little's Law
 
@@ -348,7 +379,7 @@ If team doesn't use Linear Cycles, use natural weeks:
 
 Many teams auto-set `startedAt` on creation, making Cycle Time meaningless.
 
-**Detection**: If >50% issues have startedAt within 1 minute of createdAt → data unreliable.
+Detection: If >50% issues have startedAt within 1 minute of createdAt → data unreliable.
 
 ### 2. Comparing Raw Counts
 
