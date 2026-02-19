@@ -19,7 +19,9 @@ def _has_error() -> bool:
 
 @app.function(
     image=image,
-    schedule=modal.Period(seconds=60),  # or modal.Cron("0 * * * *")
+    schedule=modal.Period(
+        seconds=60
+    ),  # Period(minutes=15), Period(hours=4), Period(days=1), or modal.Cron("0 * * * *")
     max_containers=1,
     secrets=[modal.Secret.from_name(MODAL_SECRET_NAME)],
 )

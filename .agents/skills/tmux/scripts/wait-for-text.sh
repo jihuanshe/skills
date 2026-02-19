@@ -19,6 +19,13 @@ Options:
 USAGE
 }
 
+require_arg() {
+  if [[ -z "${2-}" || "${2-}" == -* ]]; then
+    echo "Option $1 requires a value" >&2
+    exit 1
+  fi
+}
+
 target=""
 pattern=""
 socket=""
@@ -29,13 +36,13 @@ lines=1000
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -t|--target)   target="${2-}"; shift 2 ;;
-    -p|--pattern)  pattern="${2-}"; shift 2 ;;
-    -S|--socket)   socket="${2-}"; shift 2 ;;
+    -t|--target)   require_arg "$1" "${2-}"; target="$2"; shift 2 ;;
+    -p|--pattern)  require_arg "$1" "${2-}"; pattern="$2"; shift 2 ;;
+    -S|--socket)   require_arg "$1" "${2-}"; socket="$2"; shift 2 ;;
     -F|--fixed)    grep_flag="-F"; shift ;;
-    -T|--timeout)  timeout="${2-}"; shift 2 ;;
-    -i|--interval) interval="${2-}"; shift 2 ;;
-    -l|--lines)    lines="${2-}"; shift 2 ;;
+    -T|--timeout)  require_arg "$1" "${2-}"; timeout="$2"; shift 2 ;;
+    -i|--interval) require_arg "$1" "${2-}"; interval="$2"; shift 2 ;;
+    -l|--lines)    require_arg "$1" "${2-}"; lines="$2"; shift 2 ;;
     -h|--help)     usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage; exit 1 ;;
   esac
@@ -76,7 +83,7 @@ while true; do
   # -J joins wrapped lines, -S uses negative index to read last N lines
   pane_text="$("${tmux_cmd[@]}" capture-pane -p -J -t "$target" -S "-${lines}" 2>/dev/null || true)"
 
-  if printf '%s\n' "$pane_text" | grep $grep_flag -- "$pattern" >/dev/null 2>&1; then
+  if printf '%s\n' "$pane_text" | grep "$grep_flag" -- "$pattern" >/dev/null 2>&1; then
     exit 0
   fi
 
