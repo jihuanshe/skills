@@ -1,7 +1,9 @@
 ---
 name: agent-browser
-description: Browser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, testing web apps, or automating any browser task. Triggers include requests to "open a website", "fill out a form", "click a button", "take a screenshot", "scrape data from a page", "test this web app", "login to a site", "automate browser actions", or any task requiring programmatic web interaction.
-allowed-tools: Bash(agent-browser:*)
+description: 'Browser automation CLI for AI agents. Triggers: open website, fill form, click button, take screenshot, scrape data, automate browser.'
+allowed-tools: Bash(npx agent-browser:*), Bash(agent-browser:*)
+metadata:
+  version: '1'
 ---
 
 # Browser Automation with agent-browser
@@ -27,6 +29,23 @@ agent-browser wait --load networkidle
 agent-browser snapshot -i  # Check result
 ```
 
+## Command Chaining
+
+Commands can be chained with `&&` in a single shell invocation. The browser persists between commands via a background daemon, so chaining is safe and more efficient than separate calls.
+
+```bash
+# Chain open + wait + snapshot in one call
+agent-browser open https://example.com && agent-browser wait --load networkidle && agent-browser snapshot -i
+
+# Chain multiple interactions
+agent-browser fill @e1 "user@example.com" && agent-browser fill @e2 "password123" && agent-browser click @e3
+
+# Navigate and capture
+agent-browser open https://example.com && agent-browser wait --load networkidle && agent-browser screenshot page.png
+```
+
+**When to chain:** Use `&&` when you don't need to read the output of an intermediate command before proceeding (e.g., open + wait + screenshot). Run commands separately when you need to parse the output first (e.g., snapshot to discover refs, then interact using those refs).
+
 ## Essential Commands
 
 ```bash
@@ -41,17 +60,20 @@ agent-browser snapshot -s "#selector" # Scope to CSS selector
 
 # Interaction (use @refs from snapshot)
 agent-browser click @e1               # Click element
+agent-browser click @e1 --new-tab     # Click and open in new tab
 agent-browser fill @e2 "text"         # Clear and type text
 agent-browser type @e2 "text"         # Type without clearing
-agent-browser select @e1 "option"     # Select dropdown option
+agent-browser select @e1 "option"     # Select by visible text (not value attr)
 agent-browser check @e1               # Check checkbox
 agent-browser press Enter             # Press key
 agent-browser scroll down 500         # Scroll page
 
 # Get information
-agent-browser get text @e1            # Get element text
+agent-browser get text @e1            # Get element text (refs only, not CSS selectors)
 agent-browser get url                 # Get current URL
 agent-browser get title               # Get page title
+# Note: `get text` only accepts @refs or `body`. For CSS selectors, use eval:
+#   agent-browser eval 'document.querySelector("#my-id").innerText'
 
 # Wait
 agent-browser wait @e1                # Wait for element
@@ -93,8 +115,7 @@ agent-browser wait --url "**/dashboard"
 agent-browser state save auth.json
 
 # Reuse in future sessions
-agent-browser state load auth.json
-agent-browser open https://app.example.com/dashboard
+agent-browser --state auth.json open https://app.example.com/dashboard
 ```
 
 ### Session Persistence
@@ -134,12 +155,15 @@ agent-browser get text @e1 --json
 
 ### Parallel Sessions
 
+The `--session` flag works with all commands (`open`, `snapshot`, `screenshot`, `eval`, `get`, `close`, etc.):
+
 ```bash
 agent-browser --session site1 open https://site-a.com
 agent-browser --session site2 open https://site-b.com
 
 agent-browser --session site1 snapshot -i
 agent-browser --session site2 snapshot -i
+agent-browser --session site1 eval 'document.title'
 
 agent-browser session list
 ```
@@ -161,6 +185,8 @@ agent-browser --cdp 9222 snapshot
 agent-browser --headed open https://example.com
 agent-browser highlight @e1          # Highlight element
 agent-browser record start demo.webm # Record session
+agent-browser profiler start         # Start Chrome DevTools profiling
+agent-browser profiler stop trace.json # Stop and save profile (path optional)
 ```
 
 ### Local Files (PDFs, HTML)
@@ -196,7 +222,57 @@ agent-browser -p ios close
 
 **Requirements:** macOS with Xcode, Appium (`npm install -g appium && appium driver install xcuitest`)
 
-**Real devices:** Works with physical iOS devices if pre-configured. Use `--device "<UUID>"` where UUID is from `xcrun xctrace list devices`.
+**Real devices:** Works with physical iOS devices if pre-configured. Use `--device "<UDID>"` where UDID is from `xcrun xctrace list devices`.
+
+## Timeouts and Slow Pages
+
+The default Playwright timeout is 60 seconds for local browsers. For slow websites or large pages, use explicit waits instead of relying on the default timeout:
+
+```bash
+# Wait for network activity to settle (best for slow pages)
+agent-browser wait --load networkidle
+
+# Wait for a specific element to appear
+agent-browser wait "#content"
+agent-browser wait @e1
+
+# Wait for a specific URL pattern (useful after redirects)
+agent-browser wait --url "**/dashboard"
+
+# Wait for a JavaScript condition
+agent-browser wait --fn "document.readyState === 'complete'"
+
+# Wait a fixed duration (milliseconds) as a last resort
+agent-browser wait 5000
+```
+
+When dealing with consistently slow websites, use `wait --load networkidle` after `open` to ensure the page is fully loaded before taking a snapshot. If a specific element is slow to render, wait for it directly with `wait <selector>` or `wait @ref`.
+
+## Session Management and Cleanup
+
+When running multiple agents or automations concurrently, always use named sessions to avoid conflicts:
+
+```bash
+# Each agent gets its own isolated session
+agent-browser --session agent1 open site-a.com
+agent-browser --session agent2 open site-b.com
+
+# Check active sessions
+agent-browser session list
+```
+
+Always close your browser session when done to avoid leaked processes. In bash scripts, use a `trap` to ensure cleanup on errors:
+
+```bash
+# Robust cleanup pattern for scripts
+cleanup() { agent-browser close 2>/dev/null; }
+trap cleanup EXIT
+
+agent-browser close                    # Close default session
+agent-browser --session agent1 close   # Close specific session
+```
+
+If a previous session was not closed properly, the daemon may still be running. Use `agent-browser close` to clean it up before starting new work.
 
 ## Ref Lifecycle (Important)
 
@@ -254,6 +330,20 @@ agent-browser eval -b "$(echo -n 'Array.from(document.querySelectorAll("a")).map
 - Nested quotes, arrow functions, template literals, or multiline -> use `eval --stdin <<'EVALEOF'`
 - Programmatic/generated scripts -> use `eval -b` with base64
 
+## Configuration File
+
+Create `agent-browser.json` in the project root for persistent settings:
+
+```json
+{
+  "headed": true,
+  "proxy": "http://localhost:8080",
+  "profile": "./browser-data"
+}
+```
+
+Priority (lowest to highest): `~/.agent-browser/config.json` < `./agent-browser.json` < env vars < CLI flags. Use `--config <path>` or `AGENT_BROWSER_CONFIG` env var for a custom config file (exits with error if missing/invalid). All CLI options map to camelCase keys (e.g., `--executable-path` -> `"executablePath"`). Boolean flags accept `true`/`false` values (e.g., `--headed false` overrides config). Extensions from user and project configs are merged, not replaced.
+
 ## Deep-Dive Documentation
 
 | Reference | When to Use |
@@ -263,6 +353,7 @@ agent-browser eval -b "$(echo -n 'Array.from(document.querySelectorAll("a")).map
 | [references/session-management.md](references/session-management.md) | Parallel sessions, state persistence, concurrent scraping |
 | [references/authentication.md](references/authentication.md) | Login flows, OAuth, 2FA handling, state reuse |
 | [references/video-recording.md](references/video-recording.md) | Recording workflows for debugging and documentation |
+| [references/profiling.md](references/profiling.md) | Chrome DevTools profiling for performance analysis |
 | [references/proxy-support.md](references/proxy-support.md) | Proxy configuration, geo-testing, rotating proxies |
 
 ## Ready-to-Use Templates

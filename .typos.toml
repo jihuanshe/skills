@@ -1,2 +1,18 @@
+[files]
+extend-exclude = ["*.jsonl"]
+
 [default.extend-words]
-nin = "nin"
+nd = "nd"             # ordinal suffix (e.g. 2nd)
+nin = "nin"           # not `inn`; numpy ufunc.nin attribute
+PN662742 = "PN662742" # dorasuta product_number example
+PNXXXXXX = "PNXXXXXX" # dorasuta product_number format placeholder
+serie = "serie"       # not `series`; valid singular in Italian/German TCG card set names
+Serie = "Serie"       # not `Series`; capitalized form in German TCG card set names
+teched = "teched"     # TCG term: to include a targeted counter card (tech card)
+THS = "THS"           # MTG set code: Theros (e.g. THS-062)
+thw = "thw"           # Qwen VL: Temporal, Height, Width grid dimensions
+UDID = "UDID"           # not `UUID`; Apple Unique Device Identifier
+BRIN = "BRIN"           # PostgreSQL Block Range INdex type
+brin = "brin"           # not `bring`; lowercase form of BRIN index type
+RTO = "RTO"             # Recovery Time Objective
+INSER = "INSER"         # typos matches INSER in INSERTs

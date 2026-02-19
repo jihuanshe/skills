@@ -1,6 +1,6 @@
 ---
 name: turbopuffer
-description: '构建向量与全文搜索。触发词: turbopuffer, vector search, BM25, hybrid search, embedding search。'
+description: 'Build vector and full-text search with turbopuffer. Triggers: turbopuffer, vector search, BM25, hybrid search.'
 metadata:
   version: '1'
 ---

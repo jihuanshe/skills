@@ -1,5 +1,5 @@
 ---
-name: amp-threads
+name: amp-thread-digest
 description: 'Extract knowledge from Amp threads. Triggers: analyze thread, thread URL, learn from thread.'
 metadata:
   version: '1'

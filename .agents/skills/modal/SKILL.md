@@ -2,14 +2,14 @@
 name: modal
 description: 'Deploy, test, and debug serverless apps with Modal. Triggers: modal, modal deploy, modal serve, modal app, modal run, serverless, spawn_map, latency, tunnel, e2e test modal.'
 metadata:
-  version: '28'
+  version: '30'
 ---
 
 # Modal
 
 Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什么（CPU、GPU、依赖、密钥），Modal 负责打包、调度、缩扩容。
 
-五个原语撑起整个系统：
+五个原语：
 
 - **App**：部署单元，包含一组 Function/Cls。一个 `.py` 文件通常对应一个 App。
 - **Function**：执行单元。`@app.function()` 装饰一个普通函数，声明硬件和依赖。
@@ -17,11 +17,11 @@ Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什
 - **Image**：容器镜像。链式构建：`modal.Image.debian_slim().uv_pip_install("torch")`。
 - **Secret**：密钥注入。`modal.Secret.from_name("my-secret")` 将键值对注入环境变量。
 
-关键事实：**模块级代码在远端容器也会执行。** 容器启动时重新 import 整个模块来重建依赖图。本地文件系统操作、`git` 命令等必须用 `modal.is_local()` 守卫。
+**模块级代码在远端容器也会执行。** 容器启动时重新 import 模块以重建依赖图，本地文件系统操作须用 `modal.is_local()` 守卫。容器内也可以用环境变量 `MODAL_IS_REMOTE=1` 判定远端（调试时比 `modal.is_local()` 更直观）。
 
 ## 查阅
 
-本文档覆盖项目约定和不可自行发现的陷阱。Modal 自身的 API 用法，先查证再作答。
+项目约定和不可自行发现的陷阱。Modal API 用法先查官方源：
 
 **文档**：概念、用法、完整示例：
 
@@ -46,16 +46,16 @@ python -c 'import modal, pathlib; print(pathlib.Path(modal.__file__).resolve().p
 
 ## 操作闭环
 
-每次 Modal 操作遵循四步：Preflight -> 行动 -> 验证 -> 诊断。不跳步。
+每次操作四步：Preflight → 行动 → 验证 → 诊断。
 
 ### Preflight
 
-任何操作前执行。任一项失败即停止。
+任一项失败即停止。
 
 ```bash
 # 确认身份
 modal profile current || { echo "BLOCK: 无法获取 profile"; exit 1; }
-modal config show | jq -e .token_id || { echo "BLOCK: 无有效 token"; exit 1; }
+modal config show --redact | jq -e .token_id || { echo "BLOCK: 无有效 token"; exit 1; }
 
 # 确认环境已设置且不是 prod
 ENV=$(modal config show 2>/dev/null | jq -r '.environment // "null"')
@@ -77,7 +77,7 @@ fi
 
 `modal serve <file>`：启动 web endpoint，热重载，URL 带 `-dev` 后缀。**阻塞终端**（放 tmux）。用于开发调试。
 
-`modal deploy <file>`：持久部署，直到 `modal app stop`。只有定义了 web endpoint（ASGI/WSGI/webhook）的 App 才会输出 `https://...modal.run` URL。加 `--tag` 可标记版本。
+`modal deploy <file>`：持久部署，直到 `modal app stop`。只有定义了 web endpoint（`asgi_app` / `wsgi_app` / `fastapi_endpoint` / `web_endpoint` / `web_server`）的 App 才会输出 `https://...modal.run` URL。加 `--tag` 可标记版本。
 
 部署命令须对齐 `mise --env` 和 `modal --env`：
 
@@ -96,7 +96,7 @@ modal deploy <f> 2>&1 | grep -oE 'https://[^ ]+\.modal\.run'
 
 ### 验证
 
-部署后立即验证。区分 web 与 non-web：
+区分 web 与 non-web：
 
 ```bash
 OUT=$(modal deploy <f> 2>&1)
@@ -108,13 +108,15 @@ if [[ -n "${URL:-}" ]]; then
 else
   # Non-web app（cron/job/Cls）：确认 app 已注册，检查启动日志
   APP_ID=$(printf "%s" "$OUT" | grep -oE 'ap-[A-Za-z0-9]+' | tail -1 || true)
-  [[ -n "${APP_ID:-}" ]] && timeout 30 modal app logs "$APP_ID" 2>&1 | head -100
+  [[ -n "${APP_ID:-}" ]] && modal app logs "$APP_ID" 2>&1 | head -100 &
+  LOGS_PID=$!; ( sleep 30; kill "$LOGS_PID" 2>/dev/null ) &
+  wait "$LOGS_PID" 2>/dev/null || true
 fi
 ```
 
 ### 诊断
 
-验证失败时，按成本递增排查，不跳级。CLI 输出字段可能随版本变化；若 jq 失败，先 `modal <cmd> --help` 或 `modal <cmd> --json | head` 查看实际结构。
+按成本递增排查。CLI 输出字段随版本变化，jq 失败时先查 `modal <cmd> --help` 或 `--json | head`。
 
 #### 环境：部署到了错误的 env/profile 是最常见的原因
 
@@ -125,8 +127,10 @@ modal app list --json | jq '.[] | select(.Description | contains("<app>"))'
 #### 日志：启动失败、依赖缺失、端口冲突都在这里
 
 ```bash
-# 阻塞命令，放 tmux 或用 timeout
-timeout 30 modal app logs <app> 2>&1 | head -100
+# 阻塞命令，放 tmux 或用后台进程限时
+modal app logs <app> 2>&1 | head -100 &
+LOGS_PID=$!; ( sleep 30; kill "$LOGS_PID" 2>/dev/null ) &
+wait "$LOGS_PID" 2>/dev/null || true
 ```
 
 #### 容器：进入运行中的容器检查
@@ -150,7 +154,7 @@ MODAL_LOGLEVEL=DEBUG modal run <f>
 
 ## 阻塞命令
 
-Agent 主流程运行阻塞命令后无法继续工具调用。这是 agent 场景最常见的死因。
+阻塞命令会挂起 Agent 主流程。
 
 **必须放 tmux**（先加载 tmux skill）：
 
@@ -171,11 +175,9 @@ Agent 主流程运行阻塞命令后无法继续工具调用。这是 agent 场�
 
 ## 陷阱
 
-以下是不读代码无法发现的问题。每一条都来自真实事故。
-
 ### 依赖图不匹配
 
-Modal 容器重新 import 模块重建依赖图。App 声明（哪些 function/cls 被注册、它们的 image/secrets/volumes 等参数）在本地与远端 import 时**必须一致**。`modal.is_local()` 只能用于避免本地副作用（读文件、git），不能让 App 声明两端不同。
+容器重新 import 模块重建依赖图，App 声明在本地与远端必须一致。`modal.is_local()` 只用于守卫本地副作用（读文件、git），不能改变 App 声明。
 
 ```python
 # ❌ 本地 2 deps，远端 1 dep，导致容器报错
@@ -189,7 +191,7 @@ else:
 @app.function(image=image, secrets=_secrets)
 def f(): ...
 
-# ✅ 两端都是 2 deps
+# ✅ 方案 A：统一用 from_name（推荐，Secret 预先在 dashboard/CLI 创建）
 if modal.is_local():
     image = build_workspace_image("core")
 else:
@@ -197,11 +199,22 @@ else:
 
 @app.function(image=image, secrets=[modal.Secret.from_name("my-secret")])
 def f(): ...
+
+# ✅ 方案 B：本地用 from_dict 转发 shell 变量，远端用 from_name，两端都是 1 个 Secret
+if modal.is_local():
+    _secret = modal.Secret.from_dict({"TOKEN": os.environ.get("TOKEN", "")})
+else:
+    _secret = modal.Secret.from_name("my-secret")
+
+@app.function(image=image, secrets=[_secret])
+def f(): ...
 ```
+
+`from_dict` 和 `from_dotenv` 适合本地开发转发环境变量。关键是**两个分支的 secrets 列表长度必须一致**。
 
 ### `modal.is_local()` 守卫
 
-模块级代码在远端容器也会执行。本地文件系统操作须守卫，`else` 分支须为所有变量提供占位值：
+本地文件系统操作须守卫，`else` 分支须为所有变量提供占位值：
 
 ```python
 # ❌ 远端 NameError
@@ -221,16 +234,16 @@ Pickle 序列化函数，容器不重新 import。适用于 `modal run` 的工�
 
 ### Secret 覆盖 `.env()`
 
-Secret env vars 优先级高于 image `.env()`。如果 Secret 里有 `ENV=dev`，即使部署到 prod 环境，容器仍然看到 `ENV=dev`。
+Secret env vars 优先级高于 image `.env()`。Secret 里有 `ENV=dev`，即使部署到 prod，容器仍然看到 `ENV=dev`。
 
-规则：Secret 里**只放密钥**（token、key、password）。配置放 image `.env()` 或运行时从 `MODAL_ENVIRONMENT`（Modal 自动注入）推导。
+Secret 里只放密钥（token、key、password），配置放 image `.env()` 或从 `MODAL_ENVIRONMENT` 推导。
 
 ### 模块级 import
 
-重依赖（`torch`、`transformers`）不放模块顶部。模块级代码在所有环境都会执行，如果某个 import 只存在于特定 Image，远端会 `ImportError`。
+重依赖（`torch`、`transformers`）不放模块顶部——模块级代码在所有环境都执行，Image 外的 import 会 `ImportError`。
 
 - **Function**：import 放函数体内
-- **Cls**：import + 模型加载放 `@modal.enter()`（每个容器只执行一次），不要放 `@modal.method()` 里（否则每次请求都重复）
+- **Cls**：import 和模型加载放 `@modal.enter()`（每容器一次），不放 `@modal.method()`（每请求重复）
 
 ```python
 @app.cls(image=image, gpu=GPU)
@@ -271,13 +284,11 @@ Service = modal.Cls.from_name("eye-embed-prod-v2", "EmbeddingModel")
 
 ### 环境
 
-项目约定默认环境 `dev`（通过 `modal config set-environment dev` 设置）。部署到 `prod` 显式 `--env prod`。不用 Shebang 硬编码环境。
+默认环境 `dev`（`modal config set-environment dev`）。`prod` 须显式 `--env prod`。
 
 ### Workspace Image
 
-`build_workspace_image(*package_names)` 构建包含本地 workspace package 的 Image。详见 `.agents/skills/modal/tools/workspace_image.py` docstring。
-
-需要额外依赖时，用 `_extract_third_party_deps` + 手动 `uv_pip_install`：
+`build_workspace_image(*package_names)` 构建含本地 package 的 Image（详见 `tools/workspace_image.py`）。额外依赖用 `_extract_third_party_deps`：
 
 ```python
 if modal.is_local():
@@ -300,14 +311,32 @@ else:
 
 ### Secret 管理
 
+- 创建：`modal secret create <name> KEY1=val1 KEY2=val2 --env dev`
 - Web 服务用 `from_name`，工具脚本可用 `from_local_environ` + `serialized=True`
 - 导出/克隆：`.agents/skills/modal/tools/clone_secret.py`（CLI 无 export 命令，该脚本用 diff 方式提取）
+
+### Dict（分布式键值存储）
+
+`modal.Dict.from_name("name", create_if_missing=True)` 创建或引用持久化 Dict。值用 `cloudpickle` 序列化。
+
+限制：单对象 ≤ 100 MiB（建议 < 5 MiB），单次更新 ≤ 10,000 条，**7 天无读写自动过期**。可变值修改后须显式写回（`d[k] = updated_obj`），嵌套赋值 `d["a"]["b"] = v` 不会同步。
+
+多容器可并发读写同一 Dict，但 `d[k] = v` 不是事务性的——无内置锁。需要原子性时自行协调（如 `max_containers=1`）。
+
+### 多 `local_entrypoint`
+
+一个 App 可注册多个 `@app.local_entrypoint()`。若只有一个，`modal run script.py` 自动使用它。多个时须指定：
+
+```bash
+modal run script.py::app.trigger   # 调用 trigger()
+modal run script.py::app.reset     # 调用 reset()
+```
 
 ### 计费
 
 - `min_containers` 未设置（默认 `None`，等效 scale-to-zero）-> 按请求计费
 - `min_containers=1` -> 持续计费，叠加 GPU 尤其危险
-- 仅代理远程 API -> `min_containers=0` + 无 GPU
+- `min_containers=0` 与 `None` 行为等价（都是 scale-to-zero），仅作意图声明
 
 ### 代码检查
 
@@ -315,66 +344,15 @@ else:
 
 ## E2E 测试
 
-测试 Modal web 服务用 `modal serve` + curl，不写 pytest。
-
-```bash
-# 1. tmux 后台启动
-SOCKET="${TMPDIR:-/tmp}/agent-tmux-sockets/agent.sock"
-SESSION=modal-serve
-tmux -S "$SOCKET" new -d -s "$SESSION" -n serve
-PANE=$(tmux -S "$SOCKET" list-panes -t "$SESSION" -F '#{window_index}.#{pane_index}' | head -1)
-tmux -S "$SOCKET" send-keys -t "$SESSION:$PANE" -- 'modal serve <file>' Enter
-
-# 2. 等待就绪
-.agents/skills/tmux/scripts/wait-for-text.sh -S "$SOCKET" -t "$SESSION:$PANE" -p 'modal.run' -T 120
-
-# 3. 提取 URL 和 App ID
-URL=$(tmux -S "$SOCKET" capture-pane -p -J -t "$SESSION:$PANE" -S -50 \
-  | grep -oE 'https://[^ ]+\.modal\.run' | head -1)
-APP_ID=$(tmux -S "$SOCKET" capture-pane -p -J -t "$SESSION:$PANE" -S -30 \
-  | grep -oE 'ap-[A-Za-z0-9]+' | tail -1)
-
-# 4. 流式看 logs
-tmux -S "$SOCKET" new-window -t "$SESSION" -n logs
-LOGS_PANE=$(tmux -S "$SOCKET" list-panes -t "$SESSION:logs" -F '#{window_index}.#{pane_index}' | head -1)
-tmux -S "$SOCKET" send-keys -t "$SESSION:$LOGS_PANE" -- "modal app logs $APP_ID 2>&1" Enter
-
-# 5. 验证
-curl --max-time 15 -sf "$URL/health" | jq -e '.status == "ok"'
-
-# 6. 诊断
-tmux -S "$SOCKET" capture-pane -p -J -t "$SESSION:$LOGS_PANE" -S -30
-
-# 7. 清理
-tmux -S "$SOCKET" kill-session -t "$SESSION"
-```
+测试 Modal web 服务用 `modal serve` + curl，不写 pytest。完整流程见 [references/e2e-testing.md](references/e2e-testing.md)。
 
 ## 并发、延迟与隧道
 
-以下主题本文档不展开，给出入口和关键注意点。详细用法查官方文档：`curl -sf https://modal.com/docs/guide/<topic>.md`
-
-### spawn_map（并发执行）
-
-批量任务用 `f.map(inputs)` 或 `f.starmap(inputs)` 并发执行。注意 `max_containers` 和 `@modal.concurrent(max_inputs=N)` 控制并发上限。失败重试需自行实现。参考：`curl -sf https://modal.com/docs/guide/scale.md`
-
-### latency（冷启动与低延迟）
-
-冷启动是 Modal 最常见的延迟来源。缓解手段：
-
-- `min_containers=1`：保持至少一个热容器（**持续计费，叠加 GPU 尤其危险**）
-- `@modal.concurrent(max_inputs=N)`：单容器处理多请求
-- Image 层缓存：把变化少的依赖放在 Image 链前面
-- 验证时用 `curl --retry`，不用 `sleep`
-
-参考：`curl -sf https://modal.com/docs/guide/cold-start.md`
-
-### tunnel（本地调试网络）
-
-`modal serve` 自动创建隧道暴露 web endpoint。如需从容器内访问外部服务或 VPN 内网，不在 Modal 原生能力内，需通过环境变量传入外部 API 地址。`modal serve` 是阻塞命令，必须放 tmux。
+spawn_map、冷启动优化、tunnel 用法见 [references/advanced-topics.md](references/advanced-topics.md)。
 
 ## 模板与参考
 
 - HTTP webhook / API -> `.agents/skills/modal/templates/web_endpoint.py`
 - GPU 推理服务 -> `.agents/skills/modal/templates/gpu_service.py`
 - 定时任务 -> `.agents/skills/modal/templates/cron_job.py`
-- 生产级示例（observability、workspace image、dedup）-> `apps/modal/logfire_feishu_relay/fastapi_app.py`
+- 生产级示例（observability、workspace image、dedup）-> 参考 Modal 官方 examples
