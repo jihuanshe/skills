@@ -33,8 +33,13 @@ Notes:
     4. **CLI limitations**: ``modal secret list/create/delete`` only — no
        export. This script's diff approach is the recommended workaround.
 
+    4b. **Key-diff limitation**: This script only captures **newly introduced
+        env keys**. If a Secret overrides an existing env var key (e.g.,
+        ``DATABASE_URL`` already set by the base image), that key will **not**
+        appear in the diff. Keep Secrets to pure credentials to avoid this.
+
     5. **Programmatic create**:
-       ``modal.Secret.objects.create(name, kvs, environment_name=..., allow_existing=False)``
+       ``modal.Secret.objects.create(name, env_dict, environment_name=..., allow_existing=False)``
        — see SDK source ``secret.py`` for full API.
 
     6. **serialized=True usage**: This script uses ``serialized=True`` because
@@ -53,10 +58,9 @@ Notes:
        requires every developer to have the env vars locally.
        Web services should use ``from_name``.
 
-    8. **modal secret delete is interactive**: The CLI prompts for confirmation
-       and ``yes |`` piping is unreliable (CLI may detect tty).  In agent/script
-       contexts, prefer SDK deletion (``modal.Secret.objects.delete(name)``) or
-       accept manual confirmation.
+    8. **modal secret delete**: Use ``modal secret delete <name> -y`` to skip
+       the confirmation prompt.  Alternatively, use SDK deletion
+       (``modal.Secret.objects.delete(name)``).
 """
 
 from __future__ import annotations

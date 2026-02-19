@@ -76,7 +76,7 @@ agent-browser open https://app.example.com/dashboard
 ### Authenticated Session Reuse
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 # Save login state once, reuse many times
 
 STATE_FILE="/tmp/auth-state.json"
@@ -102,7 +102,7 @@ fi
 ### Concurrent Scraping
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 # Scrape multiple sites concurrently
 
 # Start all sessions
@@ -189,6 +189,8 @@ rm /tmp/auth-state.json
 ### 4. Timeout Long Sessions
 
 ```bash
-# Set timeout for automated scripts
+# Set timeout for automated scripts (macOS coreutils: gtimeout)
 timeout 60 agent-browser --session long-task get text body
+# Always close after timeout — the daemon survives a killed command
+agent-browser --session long-task close
 ```

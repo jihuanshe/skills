@@ -16,6 +16,13 @@ Options:
 USAGE
 }
 
+require_arg() {
+  if [[ -z "${2-}" || "${2-}" == -* ]]; then
+    echo "Option $1 requires a value" >&2
+    exit 1
+  fi
+}
+
 socket_name=""
 socket_path=""
 query=""
@@ -24,10 +31,10 @@ socket_dir="${AGENT_TMUX_SOCKET_DIR:-${TMPDIR:-/tmp}/agent-tmux-sockets}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -L|--socket)      socket_name="${2-}"; shift 2 ;;
-    -S|--socket-path) socket_path="${2-}"; shift 2 ;;
+    -L|--socket)      require_arg "$1" "${2-}"; socket_name="$2"; shift 2 ;;
+    -S|--socket-path) require_arg "$1" "${2-}"; socket_path="$2"; shift 2 ;;
     -A|--all)         scan_all=true; shift ;;
-    -q|--query)       query="${2-}"; shift 2 ;;
+    -q|--query)       require_arg "$1" "${2-}"; query="$2"; shift 2 ;;
     -h|--help)        usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage; exit 1 ;;
   esac
@@ -52,13 +59,15 @@ list_sessions() {
   local label="$1"; shift
   local tmux_cmd=(tmux "$@")
 
-  if ! sessions="$("${tmux_cmd[@]}" list-sessions -F '#{session_name}\t#{session_attached}\t#{session_created_string}' 2>/dev/null)"; then
+  # Use real tab characters as field separator (tmux does not interpret \t in format strings)
+  local sep=$'\t'
+  if ! sessions="$("${tmux_cmd[@]}" list-sessions -F "#{session_name}${sep}#{session_attached}${sep}#{t:session_created}" 2>/dev/null)"; then
     echo "No tmux server found on $label" >&2
     return 1
   fi
 
   if [[ -n "$query" ]]; then
-    sessions="$(printf '%s\n' "$sessions" | grep -i -- "$query" || true)"
+    sessions="$(printf '%s\n' "$sessions" | grep -iF -- "$query" || true)"
   fi
 
   if [[ -z "$sessions" ]]; then
@@ -68,7 +77,11 @@ list_sessions() {
 
   echo "Sessions on $label:"
   printf '%s\n' "$sessions" | while IFS=$'\t' read -r name attached created; do
-    attached_label=$([[ "$attached" == "1" ]] && echo "attached" || echo "detached")
+    if [[ "$attached" =~ ^[0-9]+$ ]] && (( attached > 0 )); then
+      attached_label="attached"
+    else
+      attached_label="detached"
+    fi
     printf '  - %s (%s, started %s)\n' "$name" "$attached_label" "$created"
   done
 }
@@ -89,12 +102,19 @@ if [[ "$scan_all" == true ]]; then
   fi
 
   exit_code=0
+  found_socket=false
   for sock in "${sockets[@]}"; do
     if [[ ! -S "$sock" ]]; then
       continue
     fi
+    found_socket=true
     list_sessions "socket path '$sock'" -S "$sock" || exit_code=$?
   done
+
+  if [[ "$found_socket" == false ]]; then
+    echo "No tmux sockets found under $socket_dir" >&2
+    exit 1
+  fi
   exit "$exit_code"
 fi
 

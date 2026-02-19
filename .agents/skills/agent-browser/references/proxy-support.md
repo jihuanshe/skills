@@ -17,10 +17,13 @@ Proxy configuration for geo-testing, rate limiting avoidance, and corporate envi
 
 ## Basic Proxy Configuration
 
-Set proxy via environment variable before starting:
+Use the `--proxy` flag or set proxy via environment variable:
 
 ```bash
-# HTTP proxy
+# Via CLI flag
+agent-browser --proxy "http://proxy.example.com:8080" open https://example.com
+
+# Via environment variable
 export HTTP_PROXY="http://proxy.example.com:8080"
 agent-browser open https://example.com
 
@@ -58,10 +61,13 @@ agent-browser open https://example.com
 
 ## Proxy Bypass
 
-Skip proxy for specific domains:
+Skip proxy for specific domains using `--proxy-bypass` or `NO_PROXY`:
 
 ```bash
-# Bypass proxy for local addresses
+# Via CLI flag
+agent-browser --proxy "http://proxy.example.com:8080" --proxy-bypass "localhost,*.internal.com" open https://example.com
+
+# Via environment variable
 export NO_PROXY="localhost,127.0.0.1,.internal.company.com"
 agent-browser open https://internal.company.com  # Direct connection
 agent-browser open https://external.com          # Via proxy
@@ -72,7 +78,7 @@ agent-browser open https://external.com          # Via proxy
 ### Geo-Location Testing
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 # Test site from different regions using geo-located proxies
 
 PROXIES=(
@@ -85,7 +91,7 @@ for proxy in "${PROXIES[@]}"; do
     export HTTP_PROXY="$proxy"
     export HTTPS_PROXY="$proxy"
 
-    region=$(echo "$proxy" | grep -oP '^\w+-\w+')
+    region=$(echo "$proxy" | grep -oE '^[a-zA-Z0-9_]+-[a-zA-Z0-9_]+')
     echo "Testing from: $region"
 
     agent-browser --session "$region" open https://example.com
@@ -97,7 +103,7 @@ done
 ### Rotating Proxies for Scraping
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 # Rotate through proxy list to avoid rate limiting
 
 PROXY_LIST=(
@@ -128,7 +134,7 @@ done
 ### Corporate Network Access
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 # Access internal sites via corporate proxy
 
 export HTTP_PROXY="http://corpproxy.company.com:8080"

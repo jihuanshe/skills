@@ -58,6 +58,7 @@ from __future__ import annotations
 
 import re
 import tomllib
+from importlib import import_module
 from pathlib import Path
 
 import modal
@@ -171,11 +172,12 @@ def verify_imports() -> dict[str, str | list[str]]:
     """Verify that local packages are importable and inspect their contents."""
     results: dict[str, str | list[str]] = {}
 
-    from core.models.game import GameKey
+    game_module = import_module("core.models.game")
+    GameKey = game_module.__dict__["GameKey"]
 
     results["core_GameKey"] = str(GameKey)
 
-    import core
+    core = import_module("core")
 
     results["core_location"] = core.__file__ or "unknown"
 

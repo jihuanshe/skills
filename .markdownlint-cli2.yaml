@@ -1,15 +1,19 @@
 gitignore: true
 
 globs:
-  - "**/*.md"
+    - "**/*.md"
 
 ignores:
-  - "*.local.*"
+    - "*.local.*"
+    - ".agents/skills/mysql/references/**"
+    - ".agents/skills/postgres/references/**"
+    - ".pi/skills/mysql/references/**"
+    - ".pi/skills/postgres/references/**"
 
 config:
-  MD013: false
-  MD033: false
-  MD036: false
-  MD040: false
-  MD041: false
-  MD060: false
+    MD013: false
+    MD033: false
+    MD036: false
+    MD040: false
+    MD041: false
+    MD060: false
