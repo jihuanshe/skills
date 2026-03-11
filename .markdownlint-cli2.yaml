@@ -4,8 +4,8 @@ globs:
     - "**/*.md"
 
 ignores:
-    - "skills/mysql/references/**"
-    - "skills/postgres/references/**"
+    - "db-skills/mysql/references/**"
+    - "db-skills/postgres/references/**"
 
 config:
     MD013: false
