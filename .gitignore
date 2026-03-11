@@ -186,4 +186,4 @@ AGENTS.override.md
 .vscode/settings.json
 
 # Logfire MCP
-skills/logfire/mcp.json
+**/logfire/mcp.json

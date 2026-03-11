@@ -1,5 +1,5 @@
 ---
-name: signoz-dashboard
+name: signoz
 description: "Generates SigNoz dashboard JSON files for metrics visualization. Use when asked to create SigNoz dashboards, monitoring panels, or export metrics to SigNoz."
 ---
 
@@ -27,7 +27,7 @@ Generates ready-to-import SigNoz dashboard JSON files based on OpenTelemetry met
    - Follow naming convention: `{service}-dashboard-otlp-v1.json`
 
 3. **Output Location**
-   - Save to `docs/signoz-dashboards/` directory
+   - Save to `docs/signoz/` directory
 
 ## Panel Types
 

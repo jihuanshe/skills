@@ -1,5 +1,5 @@
 ---
-name: tcg-card-verifier
+name: card-verifier
 description: 'Verify and correct AI-generated card guide MD files against official sources. Triggers: verify card, fact check, correct guide, card verifier.'
 metadata:
   version: '4'
