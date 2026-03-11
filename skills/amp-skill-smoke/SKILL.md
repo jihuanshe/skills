@@ -1,6 +1,6 @@
 ---
 name: amp-skill-smoke
-description: 'Smoke-test any SKILL.md by spawning a sub-agent. Triggers: test skill, validate skill, skill regression test.'
+description: 'Smoke-test any SKILL.md by spawning a sub-agent. Triggers: smoke-test SKILL.md, validate skill file, test skill.'
 metadata:
   author: ipruning
   version: "3.0.0"

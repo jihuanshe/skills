@@ -28,8 +28,8 @@ bash scripts/resolve-pr-comments.sh <pr-number-or-url>
 ## Examples
 
 ```bash
-builtin://skills/scripts/resolve-pr-comments.sh 123
-builtin://skills/scripts/resolve-pr-comments.sh https://github.com/owner/repo/pull/123
+bash scripts/resolve-pr-comments.sh 123
+bash scripts/resolve-pr-comments.sh https://github.com/owner/repo/pull/123
 ```
 
 ## Output

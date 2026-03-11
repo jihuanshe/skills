@@ -1,6 +1,6 @@
 ---
 name: agent-browser
-description: 'Browser automation CLI for AI agents. Triggers: open website, fill form, click button, take screenshot, scrape data, automate browser.'
+description: 'Browser automation CLI for AI agents. Triggers: automate browser, fill form, click button, take screenshot, scrape with browser, browser interaction.'
 allowed-tools: Bash(npx agent-browser:*), Bash(agent-browser:*)
 metadata:
   version: '1'

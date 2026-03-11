@@ -288,32 +288,13 @@ Service = modal.Cls.from_name("eye-embed-prod-v2", "EmbeddingModel")
 
 ### Workspace Image
 
-`build_workspace_image(*package_names)` 构建含本地 package 的 Image（详见 `tools/workspace_image.py`）。额外依赖用 `_extract_third_party_deps`：
-
-```python
-if modal.is_local():
-    import sys
-    from pathlib import Path
-
-    sys.path.insert(0, str(Path(__file__).resolve().parents[N] / ".agents/skills/modal/tools"))
-    from workspace_image import _extract_third_party_deps, _find_repo_root
-
-    _EXTRA_DEPS = ["fastapi[standard]>=0.115.0"]
-    _third_party = _extract_third_party_deps(_find_repo_root() / "pyproject.toml", "core")
-    image = (
-        modal.Image.debian_slim(python_version="3.13")
-        .uv_pip_install(*_third_party, *_EXTRA_DEPS)
-        .add_local_python_source("core")  # 必须是 image 链最后一步
-    )
-else:
-    image = modal.Image.debian_slim()
-```
+需要挂载本地 workspace package 时，在 `if modal.is_local():` 块内 inline 依赖解析函数，确保单文件自洽。参考实现和 self-test：`workspace_image.py`。
 
 ### Secret 管理
 
 - 创建：`modal secret create <name> KEY1=val1 KEY2=val2 --env dev`
 - Web 服务用 `from_name`，工具脚本可用 `from_local_environ` + `serialized=True`
-- 导出/克隆：`.agents/skills/modal/tools/clone_secret.py`（CLI 无 export 命令，该脚本用 diff 方式提取）
+- 导出/克隆：`clone_secret.py`（CLI 无 export 命令，该脚本用 diff 方式提取）
 
 ### Dict（分布式键值存储）
 
@@ -344,15 +325,15 @@ modal run script.py::app.reset     # 调用 reset()
 
 ## E2E 测试
 
-测试 Modal web 服务用 `modal serve` + curl，不写 pytest。完整流程见 [references/e2e-testing.md](references/e2e-testing.md)。
+测试 Modal web 服务用 `modal serve` + curl，不写 pytest。完整流程见 [e2e-testing.md](e2e-testing.md)。
 
 ## 并发、延迟与隧道
 
-spawn_map、冷启动优化、tunnel 用法见 [references/advanced-topics.md](references/advanced-topics.md)。
+spawn_map、冷启动优化、tunnel 用法见 [concurrency-and-tunnels.md](concurrency-and-tunnels.md)。
 
-## 模板与参考
+## 示例
 
-- HTTP webhook / API -> `.agents/skills/modal/templates/web_endpoint.py`
-- GPU 推理服务 -> `.agents/skills/modal/templates/gpu_service.py`
-- 定时任务 -> `.agents/skills/modal/templates/cron_job.py`
+- HTTP webhook / API -> `example_web.py`
+- GPU 推理服务 -> `example_gpu.py`
+- 定时任务 -> `example_cron.py`
 - 生产级示例（observability、workspace image、dedup）-> 参考 Modal 官方 examples

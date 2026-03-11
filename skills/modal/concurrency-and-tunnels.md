@@ -1,4 +1,4 @@
-## 并发、延迟与隧道
+## 并发与隧道
 
 以下主题本文档不展开，给出入口和关键注意点。详细用法查官方文档：`curl -sf https://modal.com/docs/guide/<topic>.md`
 

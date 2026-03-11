@@ -1,12 +1,13 @@
-## E2E 测试
+## 端对端测试
 
 测试 Modal web 服务用 `modal serve` + curl，不写 pytest。
 
 ```bash
 # 1. tmux 后台启动
 SOCKET="${TMPDIR:-/tmp}/agent-tmux-sockets/agent.sock"
+mkdir -p "$(dirname "$SOCKET")"
 SESSION=modal-serve
-tmux -S "$SOCKET" new -d -s "$SESSION" -n serve
+tmux -f /dev/null -S "$SOCKET" new -d -s "$SESSION" -n serve
 PANE=$(tmux -S "$SOCKET" list-panes -t "$SESSION" -F '#{window_index}.#{pane_index}' | head -1)
 tmux -S "$SOCKET" send-keys -t "$SESSION:$PANE" -- 'modal serve <file>' Enter
 

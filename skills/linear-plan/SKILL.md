@@ -1,6 +1,6 @@
 ---
 name: linear-plan
-description: 'Plan implementation for a Linear issue. Triggers: start issue, work on LIN-xxx.'
+description: 'Plan implementation for a Linear issue. Triggers: start issue, work on LIN-xxx, plan issue, break down issue.'
 metadata:
   version: '1'
 ---

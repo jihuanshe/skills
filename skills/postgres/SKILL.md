@@ -1,6 +1,6 @@
 ---
 name: postgres
-description: PostgreSQL best practices, query optimization, connection troubleshooting, and performance improvement. Load when working with Postgres databases.
+description: 'PostgreSQL best practices, query optimization, connection troubleshooting, and performance improvement. Triggers: postgres, postgresql, pg connection, slow query, query plan.'
 license: MIT
 metadata:
   author: planetscale

@@ -1,6 +1,6 @@
 ---
 name: reflect
-description: 'Review and verify code review suggestions. Triggers: reflect review, verify suggestions, check review.'
+description: 'Verify and cross-check code review feedback before applying. Triggers: reflect review, double-check review feedback, verify code review suggestions.'
 metadata:
   version: '4'
 ---

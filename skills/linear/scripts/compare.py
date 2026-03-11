@@ -137,7 +137,7 @@ def compare_teams(team_keys: list[str], since_date: str | None = None, *, debug:
 
 
 if __name__ == "__main__":
-    from cli import parse_compare_args
+    from cli import parse_compare_args  # type: ignore[attr-defined]
 
     args = parse_compare_args("Compare efficiency metrics between teams")
     compare_teams(args.team_keys, args.since, debug=args.debug)

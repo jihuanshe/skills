@@ -183,7 +183,7 @@ def analyze_lead_time(team_key: str, since_date: str | None = None, *, debug: bo
 
 
 if __name__ == "__main__":
-    from cli import parse_team_args
+    from cli import parse_team_args  # type: ignore[attr-defined]
 
     args = parse_team_args("Analyze lead time flow efficiency")
     analyze_lead_time(args.team_key, args.since, debug=args.debug)

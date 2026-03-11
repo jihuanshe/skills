@@ -1,6 +1,6 @@
 ---
 name: amp-thread-digest
-description: 'Extract knowledge from Amp threads. Triggers: analyze thread, thread URL, learn from thread.'
+description: 'Extract knowledge from Amp threads and persist to skills/docs. Triggers: thread digest, extract lessons from thread, thread retrospective, thread knowledge.'
 metadata:
   version: '1'
 ---
@@ -177,7 +177,7 @@ rg -n "FROM.*parquet" /tmp/T-xxx.md
 - 人类反馈往往是最有价值的信号，用 awk 命令过滤 Tool Result 后提取
 - 一次只沉淀一个主题，便于追踪效果
 
-## Amp 工具参考
+## Amp CheatSheet
 
 | 工具 | 用途 | 备注 |
 | :----- | :----- | :----- |

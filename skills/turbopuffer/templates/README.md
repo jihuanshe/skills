@@ -8,7 +8,7 @@ These templates are meant to be **copied and adapted** into your actual Python p
 
 ```bash
 # Copy templates to your package
-cp .agents/skills/turbopuffer/templates/*.py packages/core/src/core/search/
+cp templates/*.py packages/core/src/core/search/
 ```
 
 ## Type Checking Notes

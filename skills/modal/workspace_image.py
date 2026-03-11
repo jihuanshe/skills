@@ -7,7 +7,7 @@ any Modal app in this repo can call it instead of duplicating the logic.
 
 Self-test entrypoint::
 
-    modal run .agents/skills/modal/tools/workspace_image.py
+    modal run .agents/skills/modal/workspace_image.py
 
 Notes
 -----
@@ -27,24 +27,12 @@ Notes
 4. **Extra deps pattern** — ``build_workspace_image()`` only installs
    the package's own declared dependencies.  If a service needs
    additional packages (e.g., ``fastapi``, ``logfire``), install them
-   *before* ``add_local_python_source``::
-
-        if modal.is_local():
-            import sys
-            from pathlib import Path
-
-            sys.path.insert(0, str(Path(__file__).resolve().parents[N] / ".agents/skills/modal/tools"))
-            from workspace_image import _extract_third_party_deps, _find_repo_root
-
-            _EXTRA_DEPS = ["fastapi[standard]>=0.115.0"]
-            _third_party = _extract_third_party_deps(_find_repo_root() / "pyproject.toml", "core")
-            image = (
-                modal.Image.debian_slim(python_version="3.13")
-                .uv_pip_install(*_third_party, *_EXTRA_DEPS)  # all pip install before
-                .add_local_python_source("core")  # mount last
-            )
-        else:
-            image = modal.Image.debian_slim()
+   *before* ``add_local_python_source``.  Inline the helper functions
+   (``_find_repo_root``, ``_normalize``, ``_extract_third_party_deps``)
+   directly into your modal app's ``if modal.is_local():`` block for
+   self-contained single-file apps.  See
+   ``apps/modal/logfire_feishu_relay/fastapi_app.py`` for a production
+   example.
 
 5. **``modal.is_local()`` guard** — Module-level code runs inside
    remote containers too.  Local-only logic (reading ``pyproject.toml``,
@@ -150,7 +138,7 @@ def build_workspace_image(*package_names: str, python_version: str = "3.13") -> 
 
 
 # ---------------------------------------------------------------------------
-# Self-test entrypoint: modal run .agents/skills/modal/tools/workspace_image.py
+# Self-test entrypoint: modal run .agents/skills/modal/workspace_image.py
 # ---------------------------------------------------------------------------
 
 _LOCAL_PACKAGES: tuple[str, ...] = ("deck", "core")

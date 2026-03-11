@@ -139,7 +139,7 @@ def analyze_team(team_key: str, since_date: str | None = None, *, debug: bool = 
 
 
 if __name__ == "__main__":
-    from cli import parse_team_args
+    from cli import parse_team_args  # type: ignore[attr-defined]
 
     args = parse_team_args("Team overview analysis")
     analyze_team(args.team_key, args.since, debug=args.debug)
