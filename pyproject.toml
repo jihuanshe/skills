@@ -3,7 +3,7 @@ name = "skills"
 version = "0.1.0"
 description = "Skills for Amp & Codex"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.135.1",
     "logfire>=4.27.0",
@@ -45,7 +45,7 @@ indent-style = "space"
 indent-width = 4
 
 [tool.ty.environment]
-python-version = "3.14"
+python-version = "3.13"
 
 [tool.ty.rules]
 unresolved-import = "warn"

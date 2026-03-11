@@ -160,7 +160,7 @@
       "softMin": 0,
       "stackedBarChart": false,
       "thresholds": [],
-      "timePreferance": "GLOBAL_TIME",
+      "timePreference": "GLOBAL_TIME",
       "yAxisUnit": "reqps"
     }
   ]
