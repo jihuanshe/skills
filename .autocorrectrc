@@ -31,17 +31,6 @@ textRules:
     # For example, if we wants to let "Hello你好" just warning, and "Hi你好" to ignore
     # "Hello你好": 2
     # "Hi你好": 0
-    09_电电虫BOX: 0
-    GD03补充包发售赛: 0
-    M2a環境でもサーフゴーは最強デッキ: 0
-    M2a環境の前提: 0
-    v10_deck_09_电电虫BOX: 0
-    在庫:: 0
-    在庫なし:点: 0
-    文本内容citeturn16view0turn0search6继续: 0
-    状態A: 0
-    状態A特価: 0
-    状態C: 0
 fileTypes:
     # Config the files associations, you config is higher priority than default.
     # "rb": ruby

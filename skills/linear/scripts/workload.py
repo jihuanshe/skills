@@ -222,7 +222,7 @@ def analyze_person_load(team_key: str, since_date: str | None = None, *, debug: 
 
 
 if __name__ == "__main__":
-    from cli import parse_team_args  # type: ignore[attr-defined]
+    from cli import parse_team_args
 
     args = parse_team_args("Analyze team workload")
     analyze_person_load(args.team_key, args.since, debug=args.debug)

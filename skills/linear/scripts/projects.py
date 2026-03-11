@@ -221,7 +221,7 @@ def analyze_projects(team_key: str, since_date: str | None = None, *, debug: boo
 
 
 if __name__ == "__main__":
-    from cli import parse_team_args  # type: ignore[attr-defined]
+    from cli import parse_team_args
 
     args = parse_team_args("Analyze team projects")
     analyze_projects(args.team_key, args.since, debug=args.debug)

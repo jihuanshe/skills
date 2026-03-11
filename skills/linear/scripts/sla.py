@@ -189,7 +189,7 @@ def analyze_sla(team_key: str, since_date: str | None = None, *, debug: bool = F
 
 
 if __name__ == "__main__":
-    from cli import parse_team_args  # type: ignore[attr-defined]
+    from cli import parse_team_args
 
     args = parse_team_args("Analyze SLA performance")
     analyze_sla(args.team_key, args.since, debug=args.debug)

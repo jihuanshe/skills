@@ -30,8 +30,10 @@
 - 最后把 `.agents/skills/logfire/mcp.json` 添加到 `.gitignore`
 ```
 
-## 安装 Linear Agent Skill (TODO)
+## TODO 安装 Linear Agent Skill
 
 ```markdown
 https://raw.githubusercontent.com/schpet/linear-cli/refs/heads/main/README.md
 ```
+
+## TODO 基于 Skillshare 配置

@@ -381,7 +381,7 @@ def main(team_key: str, since_date: str | None, *, debug: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    from cli import parse_team_args  # type: ignore[attr-defined]
+    from cli import parse_team_args
 
     args = parse_team_args("Project forecast and risk analysis")
     main(args.team_key, args.since, debug=args.debug)
