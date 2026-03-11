@@ -2,4 +2,4 @@ __pycache__/
 .ruff_cache/
 *.pyc
 
-.agents/skills/logfire/mcp.json
+skills/logfire/mcp.json
