@@ -1,5 +1,6 @@
 __pycache__/
 .ruff_cache/
+.venv/
 *.pyc
 
 skills/logfire/mcp.json
