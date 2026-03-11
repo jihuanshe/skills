@@ -1,0 +1,9 @@
+{
+    "logfire": {
+        "command": "uvx",
+        "args": ["logfire-mcp"],
+        "env": {
+            "LOGFIRE_READ_TOKEN": "1. `uvx logfire projects list`\n2. `uvx logfire read-tokens --project jihuanshe/{cn|jp|us} create`"
+        }
+    }
+}
