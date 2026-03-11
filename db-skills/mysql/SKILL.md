@@ -24,10 +24,10 @@ Use this skill to make safe, measurable MySQL/InnoDB changes.
 
 References:
 
-- [primary-keys](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/primary-keys.md)
-- [data-types](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/data-types.md)
-- [character-sets](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/character-sets.md)
-- [json-column-patterns](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/json-column-patterns.md)
+- [primary-keys](./references/primary-keys.md)
+- [data-types](./references/data-types.md)
+- [character-sets](./references/character-sets.md)
+- [json-column-patterns](./references/json-column-patterns.md)
 
 ## Indexing
 
@@ -38,10 +38,10 @@ References:
 
 References:
 
-- [composite-indexes](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/composite-indexes.md)
-- [covering-indexes](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/covering-indexes.md)
-- [fulltext-indexes](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/fulltext-indexes.md)
-- [index-maintenance](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/index-maintenance.md)
+- [composite-indexes](./references/composite-indexes.md)
+- [covering-indexes](./references/covering-indexes.md)
+- [fulltext-indexes](./references/fulltext-indexes.md)
+- [index-maintenance](./references/index-maintenance.md)
 
 ## Partitioning
 
@@ -50,7 +50,7 @@ References:
 
 References:
 
-- [partitioning](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/partitioning.md)
+- [partitioning](./references/partitioning.md)
 
 ## Query Optimization
 
@@ -60,9 +60,9 @@ References:
 
 References:
 
-- [explain-analysis](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/explain-analysis.md)
-- [query-optimization-pitfalls](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/query-optimization-pitfalls.md)
-- [n-plus-one](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/n-plus-one.md)
+- [explain-analysis](./references/explain-analysis.md)
+- [query-optimization-pitfalls](./references/query-optimization-pitfalls.md)
+- [n-plus-one](./references/n-plus-one.md)
 
 ## Transactions & Locking
 
@@ -72,9 +72,9 @@ References:
 
 References:
 
-- [isolation-levels](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/isolation-levels.md)
-- [deadlocks](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/deadlocks.md)
-- [row-locking-gotchas](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/row-locking-gotchas.md)
+- [isolation-levels](./references/isolation-levels.md)
+- [deadlocks](./references/deadlocks.md)
+- [row-locking-gotchas](./references/row-locking-gotchas.md)
 
 ## Operations
 
@@ -84,9 +84,9 @@ References:
 
 References:
 
-- [online-ddl](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/online-ddl.md)
-- [connection-management](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/connection-management.md)
-- [replication-lag](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/mysql/references/replication-lag.md)
+- [online-ddl](./references/online-ddl.md)
+- [connection-management](./references/connection-management.md)
+- [replication-lag](./references/replication-lag.md)
 
 ## Guardrails
 

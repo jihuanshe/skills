@@ -61,7 +61,7 @@ rp-cli -w $WINDOW_ID -t $TAB_ID -q -e "prompt export $OUT --copy-preset codeRevi
 ## 第五步：Token 检查
 
 ```bash
-uv run --script .agents/skills/ralph/templates/ttok.py "$OUT"
+uv run --script ../templates/ttok.py "$OUT"
 ```
 
 读取 token 数。超过 65000 应缩小上下文重新跑 builder。不要盲目继续。
@@ -69,7 +69,7 @@ uv run --script .agents/skills/ralph/templates/ttok.py "$OUT"
 ## 第六步：通过 pueue 提交给 Oracle
 
 ```bash
-bash .agents/skills/ralph/templates/submit-oracle.sh "$WORK_DIR" "$OUT" "$WS_NAME"
+bash ../templates/submit-oracle.sh "$WORK_DIR" "$OUT" "$WS_NAME"
 ```
 
 等待并收集：

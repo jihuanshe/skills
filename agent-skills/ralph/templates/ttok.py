@@ -6,8 +6,8 @@
 """Count tokens using tiktoken o200k_base encoding.
 
 Usage:
-  uv run --script .agents/skills/ralph/templates/ttok.py path/to/file.md
-  uv run --script .agents/skills/ralph/templates/ttok.py < file.md
+  uv run --script ./ttok.py path/to/file.md
+  uv run --script ./ttok.py < file.md
 """
 
 from __future__ import annotations

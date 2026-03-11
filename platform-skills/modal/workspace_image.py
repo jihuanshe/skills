@@ -7,7 +7,7 @@ any Modal app in this repo can call it instead of duplicating the logic.
 
 Self-test entrypoint::
 
-    modal run .agents/skills/modal/workspace_image.py
+    modal run ./workspace_image.py
 
 Notes
 -----
@@ -138,7 +138,7 @@ def build_workspace_image(*package_names: str, python_version: str = "3.13") -> 
 
 
 # ---------------------------------------------------------------------------
-# Self-test entrypoint: modal run .agents/skills/modal/workspace_image.py
+# Self-test entrypoint: modal run ./workspace_image.py
 # ---------------------------------------------------------------------------
 
 _LOCAL_PACKAGES: tuple[str, ...] = ("deck", "core")

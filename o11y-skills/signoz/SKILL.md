@@ -23,7 +23,7 @@ Generates ready-to-import SigNoz dashboard JSON files based on OpenTelemetry met
    - Ask for labels/attributes to filter or group by
 
 2. **Generate Dashboard JSON**
-   - Use the template structure from `reference/template.json`
+   - Use the template structure from `./reference/template.json`
    - Follow naming convention: `{service}-dashboard-otlp-v1.json`
 
 3. **Output Location**

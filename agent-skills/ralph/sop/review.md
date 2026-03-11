@@ -56,7 +56,7 @@ rp-cli -w <id> -t $TAB -q -e "prompt export $WORK_DIR/prompt.md --copy-preset co
 #### Token 检查
 
 ```bash
-uv run --script .agents/skills/ralph/templates/ttok.py "$WORK_DIR/prompt.md"
+uv run --script ../templates/ttok.py "$WORK_DIR/prompt.md"
 ```
 
 读取 token 数。超过 65000 应缩小上下文重新跑 builder。
@@ -64,7 +64,7 @@ uv run --script .agents/skills/ralph/templates/ttok.py "$WORK_DIR/prompt.md"
 #### 提交 Oracle
 
 ```bash
-bash .agents/skills/ralph/templates/submit-oracle.sh "$WORK_DIR" "$WORK_DIR/prompt.md" "review-$TASK_ID"
+bash ../templates/submit-oracle.sh "$WORK_DIR" "$WORK_DIR/prompt.md" "review-$TASK_ID"
 ```
 
 #### 等待并收集

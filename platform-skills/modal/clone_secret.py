@@ -9,13 +9,13 @@ local (has sys.argv) and remote (no sys.argv) environments.
 
 Usage:
     # Dry run (default): show what would be migrated
-    modal run .agents/skills/modal/tools/clone_secret.py --old-name foo --new-name bar
+    modal run ./clone_secret.py --old-name foo --new-name bar
 
     # Execute migration
-    modal run .agents/skills/modal/tools/clone_secret.py --old-name foo --new-name bar --no-dry-run
+    modal run ./clone_secret.py --old-name foo --new-name bar --no-dry-run
 
     # Cross-environment: read from prod, write to dev
-    modal run .agents/skills/modal/tools/clone_secret.py --old-name foo --new-name bar --from-env prod --to-env dev --no-dry-run
+    modal run ./clone_secret.py --old-name foo --new-name bar --from-env prod --to-env dev --no-dry-run
 
 Notes:
     1. **Secret env vars priority**: Secret env vars override image ``.env()``.

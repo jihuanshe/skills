@@ -37,7 +37,7 @@ metadata:
 
 1. **`/tmp` 隔离无效**——SubAgent 可读磁盘任意文件。把阉割版放 `/tmp` 再说"只读这个"行不通，SubAgent 仍可能（且往往会）读原版。
 2. **Mutation 必须物理替换原文件**——临时改写磁盘上的 SKILL.md，测试完恢复（见 Step 5）。
-3. **task-prompt 须显式禁止路径**——告知 SubAgent 不得读取 `.agents/skills/` 目录下的文件，仅用指定源。
+3. **task-prompt 须显式禁止路径**——告知 SubAgent 不得读取 skills 目录下的其他文件，仅用指定源。
 4. **AGENTS.md 泄漏不可避免**——若 AGENTS.md 提及被测工具的关键信息，审计时应视为"已知上下文"，不计入 skill 教学效果。
 
 ## 工作流
@@ -74,7 +74,7 @@ metadata:
 为每个用例填写模板后用 `Task` tool 派发：
 
 ```
-templates/task-prompt.md
+./templates/task-prompt.md
 ```
 
 填入 `{{SKILL_PATH}}`、`{{REFERENCE_SOURCES}}`、`{{TASK_DESCRIPTION}}`、`{{FORBIDDEN_PATHS}}`。
@@ -114,7 +114,7 @@ templates/task-prompt.md
 
 ```bash
 # 1. 备份
-SKILL_PATH=".agents/skills/<name>/SKILL.md"
+SKILL_PATH="<category>-skills/<name>/SKILL.md"
 cp "$SKILL_PATH" "${SKILL_PATH}.bak"
 
 # 2. 删除目标章节（用 edit_file）

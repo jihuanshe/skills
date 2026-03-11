@@ -371,20 +371,6 @@ def test_search():
 **实践**：
 
 ```python
-from .templates import write_with_verification, query_with_retry
-
-# 写入并验证
-result = write_with_verification(
-    ns,
-    rows=rows_to_sdk_payload(documents),
-    distance_metric="cosine_distance",
-    verify=True,  # 启用验证
-)
-
-if not result.verified:
-    raise RuntimeError(f"Write verification failed: {result.verified_ids}")
-
-# 或手动验证
 doc_ids = [doc["id"] for doc in documents]
 ns.write(upsert_rows=documents, distance_metric="cosine_distance")
 
@@ -412,20 +398,8 @@ assert verified_ids == set(doc_ids), f"Missing: {set(doc_ids) - verified_ids}"
 **实践**：
 
 ```python
-from .templates import with_retry, TurbopufferWriteError
 import turbopuffer
 
-try:
-    result = with_retry(
-        lambda: ns.write(upsert_rows=documents),
-        max_attempts=3,
-        base_delay=1.0,
-    )
-except TurbopufferWriteError as e:
-    logfire.error("turbopuffer.write_failed", error=str(e))
-    raise
-
-# 或手动处理
 try:
     ns.query(rank_by=..., top_k=10)
 except turbopuffer.RateLimitError:

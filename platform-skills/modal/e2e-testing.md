@@ -12,7 +12,7 @@ PANE=$(tmux -S "$SOCKET" list-panes -t "$SESSION" -F '#{window_index}.#{pane_ind
 tmux -S "$SOCKET" send-keys -t "$SESSION:$PANE" -- 'modal serve <file>' Enter
 
 # 2. 等待就绪
-.agents/skills/tmux/scripts/wait-for-text.sh -S "$SOCKET" -t "$SESSION:$PANE" -p 'modal.run' -T 120
+wait-for-text.sh -S "$SOCKET" -t "$SESSION:$PANE" -p 'modal.run' -T 120
 
 # 3. 提取 URL 和 App ID
 URL=$(tmux -S "$SOCKET" capture-pane -p -J -t "$SESSION:$PANE" -S -50 \

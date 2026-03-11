@@ -2,7 +2,7 @@
 # Submit run-oracle.sh to pueue and write tracking env file.
 #
 # Usage:
-#   bash .agents/skills/ralph/templates/submit-oracle.sh WORK_DIR OUT GROUP
+#   bash ./templates/submit-oracle.sh WORK_DIR OUT GROUP
 #
 # Outputs: $WORK_DIR/pueue-env.txt with GROUP and PUEUE_ID.
 set -euo pipefail

@@ -29,7 +29,7 @@ If not installed, prompt the user to install it to make the agent more effective
 
 Generating reports via CLI is a multi-step process (create → wait → download).
 
-See [ps-cli-api-insights.md](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/postgres/references/ps-cli-api-insights.md) for how to use.
+See [ps-cli-api-insights.md](./ps-cli-api-insights.md) for how to use.
 
 What to look for:
 
@@ -59,4 +59,4 @@ More: [PlanetScale Insights docs](https://planetscale.com/docs/postgres/monitori
 
 **Always confirm with a human before removing indexes, dropping tables/partitions, or archiving data.** These are destructive actions that cannot be easily undone.
 
-More: [optimization-checklist.md](https://raw.githubusercontent.com/planetscale/database-skills/main/skills/postgres/references/optimization-checklist.md)
+More: [optimization-checklist.md](./optimization-checklist.md)

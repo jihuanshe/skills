@@ -16,7 +16,7 @@ metadata:
 - `data/local/deck/{game}/{env}/{lang}/*.md` — AI 生成的 deck guide（最常见）
 - `packages/deck/src/deck/infra/templates/shared/env_brief/{env}/*.md` — 环境概览模板
 
-当用户提供的路径不明确（如只说"验证 pkm 330"）时，**用 `AskUserQuestion` 确认**：
+当用户提供的路径不明确（如只说"验证 pkm 330"）时，**向用户确认**：
 
 - 验证 `data/local/` 下的 deck guide 文件？
 - 验证 `templates/shared/env_brief/` 下的环境概览？
@@ -46,17 +46,17 @@ metadata:
 
 ## 禁止事项
 
-- **禁止使用 `WebSearch` 工具** - 搜索结果会返回 pokemon-card.com，该网站文本丢失能量符号
-- **禁止直接引用 pokemon-card.com 网页文本** - 能量图标无法被 WebFetch 读取，会导致验证错误
+- **禁止使用 web_search 工具** - 搜索结果会返回 pokemon-card.com，该网站文本丢失能量符号
+- **禁止直接引用 pokemon-card.com 网页文本** - 能量图标无法被 read_web_page 读取，会导致验证错误
 - **禁止猜测 URL** - 必须通过搜索页面获取实际卡牌页面链接
 
-> ✅ 允许使用 `WebFetch` 工具直接访问带搜索参数的 URL（如 `limitlesstcg.com/cards?q={name}`），这与 `WebSearch` 工具不同。
+> ✅ 允许使用 `read_web_page` 工具直接访问带搜索参数的 URL（如 `limitlesstcg.com/cards?q={name}`），这与 `web_search` 工具不同。
 
 ## 数据源（按顺序执行，前一个成功则停止）
 
 ### 1. Limitless TCG（首选）
 
-搜索卡牌：用 `WebFetch` 访问 `https://limitlesstcg.com/cards?q={卡牌名}&lang={lang}`
+搜索卡牌：用 `read_web_page` 访问 `https://limitlesstcg.com/cards?q={卡牌名}&lang={lang}`
 
 根据卡牌名语言选择 `lang` 参数：
 - 日文名 → `lang=jp`
@@ -71,7 +71,7 @@ metadata:
 
 ### 2. 52poke 百科（Limitless 找不到时）
 
-用 `WebFetch` 访问 https://wiki.52poke.com/wiki/{卡牌中文名}（TCG）
+用 `read_web_page` 访问 https://wiki.52poke.com/wiki/{卡牌中文名}（TCG）
 
 ### 3. 找不到时：标记为无法验证
 
@@ -91,7 +91,7 @@ metadata:
 1. 读取文件，列出所有卡牌效果声明
 2. 按分级策略，对需验证的卡按上述顺序查询（Limitless → 52poke → 标记无法验证）
 3. 对比时重点检查能量类型限定（常见错误：遗漏「闘」「草」「鋼」「悪」等）
-4. 用 `Edit` 工具修正错误
+4. 用 `edit_file` 工具修正错误
 5. 创建 `{原文件名}.changelog.md`（格式见下方完整示例）
 
 ## Changelog 完整示例
@@ -149,7 +149,7 @@ unverified: 0
 
 1. 读取文件，提取卡牌效果声明
 2. 查询官方数据对比
-3. 用 `Edit` 工具修正错误
+3. 用 `edit_file` 工具修正错误
 4. 创建 changelog.md（格式同 PKM 模板中的完整示例）
 
 返回：验证卡牌数 | 修正数 | 无法验证数
@@ -186,7 +186,7 @@ unverified: 0
 files = Glob("data/local/deck/{game}/{env}/{lang}/*.md", exclude="*.changelog.md")
 
 for batch in chunks(files, 5):
-    # 在同一条消息中并发启动（Claude Code 支持单消息多 Task 调用）
+    # 在同一条消息中并发启动（支持单消息多 Task 调用）
     parallel [Task(prompt=TEMPLATE.format(FILE_PATH=f)) for f in batch]
     # 等待本批完成后启动下一批
 ```
