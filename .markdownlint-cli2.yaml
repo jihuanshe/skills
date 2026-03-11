@@ -4,11 +4,8 @@ globs:
     - "**/*.md"
 
 ignores:
-    - "*.local.*"
-    - ".agents/skills/mysql/references/**"
-    - ".agents/skills/postgres/references/**"
-    - ".pi/skills/mysql/references/**"
-    - ".pi/skills/postgres/references/**"
+    - "skills/mysql/references/**"
+    - "skills/postgres/references/**"
 
 config:
     MD013: false
