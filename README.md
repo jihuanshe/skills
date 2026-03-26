@@ -178,6 +178,59 @@ skillshare check
    fd -H -t f '.skillshare-meta.json' -x dirname {} | sed 's|^\./||' | sort -u
    ```
 
+### 实际例子：配好后长什么样
+
+可以参考 [github.com/ipruning/skills](https://github.com/ipruning/skills)，这是一个已经配好的个人 skills 仓库。本地 `~/.config/skillshare/skills/` 目录就是这个 repo 的 clone，结构如下：
+
+```text
+~/.config/skillshare/skills/          <- git remote: github.com/ipruning/skills
+├── demand-audit-v0/                  <- own skill (committed)
+├── demand-audit-v1/                  <- own skill (committed)
+├── demand-audit-v2/                  <- own skill (committed)
+├── prek/                             <- own skill (committed)
+├── vps/                              <- own skill (committed)
+├── surge-cli/                        <- own skill (committed)
+├── agent-browser/                    <- vendored (from vercel-labs)
+├── electron/                         <- vendored (from vercel-labs)
+├── exe.dev/                          <- vendored (from boldsoftware)
+├── skill-creator/                    <- vendored (from anthropics)
+├── skillshare/                       <- vendored (from runkids)
+├── stl/                              <- vendored (from stainless-api)
+├── _jihuanshe-skills/                <- dependency, --track (gitignored)
+│   ├── logfire/
+│   ├── linear/
+│   ├── modal/
+│   └── ...21 skills
+├── _planetscale-database-skills/     <- dependency, --track (gitignored)
+│   ├── mysql/
+│   ├── postgres/
+│   └── vitess/
+├── .gitignore                        <- skillshare auto-manages _ dirs
+├── AGENTS.md
+├── README.md
+└── pyproject.toml                    <- linter config, excludes vendored dirs
+```
+
+`.gitignore` 由 skillshare 自动维护，`_` 前缀的依赖目录自动排除：
+
+```gitignore
+# BEGIN SKILLSHARE MANAGED - DO NOT EDIT
+_jihuanshe-skills/
+_planetscale-database-skills/
+# END SKILLSHARE MANAGED
+```
+
+`skillshare sync` 后，所有 skill 通过 symlink 分发到各 AI CLI：
+
+```text
+~/.config/amp/skills/
+├── demand-audit-v0 -> ~/.config/skillshare/skills/demand-audit-v0
+├── agent-browser   -> ~/.config/skillshare/skills/agent-browser
+├── _jihuanshe-skills__logfire -> ~/.config/skillshare/skills/_jihuanshe-skills/logfire
+├── _jihuanshe-skills__linear  -> ~/.config/skillshare/skills/_jihuanshe-skills/linear
+└── ...
+```
+
 ## 技能清单
 
 | Skill | 一句话 |
