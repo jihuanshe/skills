@@ -9,20 +9,17 @@ metadata:
 
 Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什么（CPU、GPU、依赖、密钥），Modal 负责打包、调度、缩扩容。
 
-这份 Skill 先覆盖最常用的一组原语：
+## 核心原语
 
 - **App**：部署单元，包含一组 Function/Cls。一个 `.py` 文件通常对应一个 App。
 - **Function**：执行单元。`@app.function()` 装饰一个普通函数，声明硬件和依赖。默认应按「可能被重试 / 重跑」的执行语义来设计。
 - **Cls**：容器复用与生命周期 hook 的执行单元。`@app.cls()` 装饰一个类，`@modal.enter()` 做一次性初始化，`@modal.method()` 处理请求。`self` 上的状态默认只是容器内缓存，不是 durable state。
 - **Image**：容器镜像。链式构建：`modal.Image.debian_slim().uv_pip_install("torch")`。
 - **Secret**：密钥注入。`modal.Secret.from_name("my-secret")` 将键值对注入环境变量。
-
-另有一线原语：
-
 - **Sandbox**：长会话、可复用容器，适合 agent / 不可信代码 / 浏览器 / 代码解释器。普通 CPU Sandbox 默认不受 preemption 影响；GPU Sandbox 可能被抢占。
 - **Volume / Dict / Queue**：分别用于文件、KV、消息传递。它们是存储/协调对象，不是业务语义上的「唯一事实来源」；持久业务状态优先放数据库。
 
-## 执行语义与生命周期
+## 心智模型：执行语义与生命周期
 
 不要把 Modal 当成传统常驻后端。先区分三类对象：
 
@@ -48,7 +45,7 @@ Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什
   - `Volume` 更适合文件、缓存、模型权重、checkpoint；`Dict` 是分布式 KV；`Queue` 适合活动函数之间传递消息，不应当作持久业务真相源。
   - 业务状态优先放外部数据库（例如 Postgres）。
 
-### 设计规则
+### 设计规则：副作用与幂等
 
 - **纯读 / 纯计算**：允许重跑。
 - **有副作用**（写 PG、发邮件、发 webhook、扣费、调用会改变外部状态的 API）：必须幂等。优先使用业务 `operation_id` / idempotency key + 数据库唯一约束 / 状态机事务收口。
@@ -57,7 +54,7 @@ Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什
 - **启用 `@modal.concurrent` 时**：同一容器会并发处理多个 inputs；同步函数使用多线程，代码必须 thread-safe；`self` 上的可变状态要谨慎。
 - **`nonpreemptible=True`**：只适用于 CPU `Function` / `Cls`；GPU Function 不支持。它只能去掉「抢占」这一种失败模式，不能替代幂等、重试和 checkpoint 设计。
 
-### 决策规则
+### 选型决策：Function vs Cls vs Sandbox
 
 - 需要 **短任务 / HTTP 接口 / batch fan-out**：先想 `Function`。
 - 需要 **模型常驻 / expensive init / 生命周期 hooks**：先想 `Cls`。
@@ -66,11 +63,11 @@ Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什
 
 **模块级代码在远端容器也会执行。** 容器启动时重新 import 模块以重建依赖图，本地文件系统操作须用 `modal.is_local()` 守卫。容器内也可以用环境变量 `MODAL_IS_REMOTE=1` 判定远端（调试时比 `modal.is_local()` 更直观）。
 
-## 查阅
+## 文档与源码查阅
 
-项目约定和不可自行发现的陷阱。Modal API 用法先查官方源：
+Modal API 用法先查官方源：
 
-**文档**：概念、用法、完整示例：
+**文档**：
 
 ```bash
 # 索引，定位目标页面
@@ -91,11 +88,9 @@ python -c 'import modal, pathlib; print(pathlib.Path(modal.__file__).resolve().p
 # 然后在该目录下查看 app.py / image.py / cls.py 等
 ```
 
-## 操作闭环
+## 操作闭环：Preflight → 行动 → 验证 → 诊断
 
-每次操作四步：Preflight → 行动 → 验证 → 诊断。
-
-### Preflight
+### 1. Preflight
 
 任一项失败即停止。
 
@@ -116,9 +111,7 @@ fi
 
 失败修复：`modal token new` · `modal profile activate <p>` · `modal config set-environment dev`
 
-### 行动
-
-三条命令，三种生命周期：
+### 2. 行动：run / serve / deploy
 
 `modal run <file>::<func>`：执行一个函数或 `local_entrypoint`，完成即退。无 web URL。加 `-d` 进入分离模式（本地断连后远端继续运行，但本地进程仍阻塞）。
 
@@ -141,9 +134,7 @@ URL 从 stdout 获取，不猜：
 modal deploy <f> 2>&1 | grep -oE 'https://[^ ]+\.modal\.run'
 ```
 
-### 验证
-
-区分 web 与 non-web：
+### 3. 验证：web vs non-web
 
 ```bash
 OUT=$(modal deploy <f> 2>&1)
@@ -161,17 +152,17 @@ else
 fi
 ```
 
-### 诊断
+### 4. 诊断：环境 → 日志 → 容器 → Shell → Debug
 
 按成本递增排查。CLI 输出字段随版本变化，jq 失败时先查 `modal <cmd> --help` 或 `--json | head`。
 
-#### 环境：部署到了错误的 env/profile 是最常见的原因
+**环境**：部署到了错误的 env/profile 是最常见的原因
 
 ```bash
 modal app list --json | jq '.[] | select(.Description | contains("<app>"))'
 ```
 
-#### 日志：启动失败、依赖缺失、端口冲突都在这里
+**日志**：启动失败、依赖缺失、端口冲突都在这里
 
 ```bash
 # 阻塞命令，放 tmux 或用后台进程限时
