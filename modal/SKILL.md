@@ -22,6 +22,48 @@ Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什
 - **Sandbox**：长会话、可复用容器，适合 agent / 不可信代码 / 浏览器 / 代码解释器。普通 CPU Sandbox 默认不受 preemption 影响；GPU Sandbox 可能被抢占。
 - **Volume / Dict / Queue**：分别用于文件、KV、消息传递。它们是存储/协调对象，不是业务语义上的「唯一事实来源」；持久业务状态优先放数据库。
 
+## 执行语义与生命周期
+
+不要把 Modal 当成传统常驻后端。先区分三类对象：
+
+- **计算原语：Function / Cls / web endpoint**
+  - 这是「会执行代码」的地方。
+  - 每个 Function 对应一个 autoscaling container pool，默认可 scale-to-zero。
+  - `Function` 默认可能被 preempt；容器 crash 时，当前工作会被重新调度；配置了 `retries=` 时会再次尝试；`timeout` 按 **每次 attempt** 单独计时。
+  - `web_endpoint` / `fastapi_endpoint` / `asgi_app` / `wsgi_app` 本质上也属于 Function 的 web 暴露形式；HTTP 请求层有 150 秒上限，超出后会返回 303 result URL。
+  - **因此：有副作用的代码必须按「可能重跑」设计。默认心智模型是 `at-least-once-ish`，不是 `exactly-once`。**
+- **容器复用：Cls 不是持久状态机**
+  - `@app.cls()` 的价值主要是容器复用、`@modal.enter()` 初始化、`@modal.exit()` 清理，以及把多个方法放到同一组容器里服务。
+  - `Cls` 上的状态默认只是**容器内内存状态**（例如模型、缓存、DB client）。它可能因为扩缩容、重建、抢占、crash 而消失；也可能同时存在多个容器副本。
+  - 不要把 `self` 上的数据当成 durable state；业务真相应放到外部数据库/对象存储。
+- **交互原语：Sandbox**
+  - Sandbox 是长会话、可复用容器，不是一次性 Function 调用。
+  - 默认最大生命周期 5 分钟，可配置到 24 小时；可设置 `idle_timeout`。
+  - 可通过 `Sandbox.from_id()` / `Sandbox.from_name()` 重新接回运行中的 Sandbox。
+  - `detach()` 只是断开本地连接，不等于停止 Sandbox。
+  - 普通 Sandbox 默认**不受 preemption 影响**；带 `gpu=` 的 Sandbox 例外，可能被抢占。
+  - 适合 agent、代码解释器、浏览器自动化、长会话服务。
+- **持久化/协调原语：App / Image / Secret / Volume / Dict / Queue**
+  - 它们不是「自己跑业务代码的 worker」。真正会被中断的是访问它们的 Function / Cls / Sandbox。
+  - `Volume` 更适合文件、缓存、模型权重、checkpoint；`Dict` 是分布式 KV；`Queue` 适合活动函数之间传递消息，不应当作持久业务真相源。
+  - 业务状态优先放外部数据库（例如 Postgres）。
+
+### 设计规则
+
+- **纯读 / 纯计算**：允许重跑。
+- **有副作用**（写 PG、发邮件、发 webhook、扣费、调用会改变外部状态的 API）：必须幂等。优先使用业务 `operation_id` / idempotency key + 数据库唯一约束 / 状态机事务收口。
+- **长任务**：拆成小步并频繁 checkpoint。不要把 `@modal.exit()` 当唯一保存点；它在 preemption 时只有有限 grace period。
+- **Web handler**：只做短事务、入队、查状态。长任务优先异步化，不要强依赖同步 HTTP。
+- **启用 `@modal.concurrent` 时**：同一容器会并发处理多个 inputs；同步函数使用多线程，代码必须 thread-safe；`self` 上的可变状态要谨慎。
+- **`nonpreemptible=True`**：只适用于 CPU `Function` / `Cls`；GPU Function 不支持。它只能去掉「抢占」这一种失败模式，不能替代幂等、重试和 checkpoint 设计。
+
+### 决策规则
+
+- 需要 **短任务 / HTTP 接口 / batch fan-out**：先想 `Function`。
+- 需要 **模型常驻 / expensive init / 生命周期 hooks**：先想 `Cls`。
+- 需要 **长会话 / 任意命令 / 不可信代码 / agent 工具执行**：先想 `Sandbox`。
+- 需要 **持久业务状态**：先想外部数据库，不要先想 `Cls.self` / 本地磁盘 / Queue。
+
 **模块级代码在远端容器也会执行。** 容器启动时重新 import 模块以重建依赖图，本地文件系统操作须用 `modal.is_local()` 守卫。容器内也可以用环境变量 `MODAL_IS_REMOTE=1` 判定远端（调试时比 `modal.is_local()` 更直观）。
 
 ## 查阅
