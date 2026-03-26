@@ -9,13 +9,18 @@ metadata:
 
 Modal 把 Python 函数变成云端容器。写一个函数，声明它需要什么（CPU、GPU、依赖、密钥），Modal 负责打包、调度、缩扩容。
 
-五个原语：
+这份 Skill 先覆盖最常用的一组原语：
 
 - **App**：部署单元，包含一组 Function/Cls。一个 `.py` 文件通常对应一个 App。
-- **Function**：执行单元。`@app.function()` 装饰一个普通函数，声明硬件和依赖。
-- **Cls**：有状态的执行单元。`@app.cls()` 装饰一个类，`@modal.enter()` 加载模型，`@modal.method()` 处理请求。
+- **Function**：执行单元。`@app.function()` 装饰一个普通函数，声明硬件和依赖。默认应按「可能被重试 / 重跑」的执行语义来设计。
+- **Cls**：容器复用与生命周期 hook 的执行单元。`@app.cls()` 装饰一个类，`@modal.enter()` 做一次性初始化，`@modal.method()` 处理请求。`self` 上的状态默认只是容器内缓存，不是 durable state。
 - **Image**：容器镜像。链式构建：`modal.Image.debian_slim().uv_pip_install("torch")`。
 - **Secret**：密钥注入。`modal.Secret.from_name("my-secret")` 将键值对注入环境变量。
+
+另有一线原语：
+
+- **Sandbox**：长会话、可复用容器，适合 agent / 不可信代码 / 浏览器 / 代码解释器。普通 CPU Sandbox 默认不受 preemption 影响；GPU Sandbox 可能被抢占。
+- **Volume / Dict / Queue**：分别用于文件、KV、消息传递。它们是存储/协调对象，不是业务语义上的「唯一事实来源」；持久业务状态优先放数据库。
 
 **模块级代码在远端容器也会执行。** 容器启动时重新 import 模块以重建依赖图，本地文件系统操作须用 `modal.is_local()` 守卫。容器内也可以用环境变量 `MODAL_IS_REMOTE=1` 判定远端（调试时比 `modal.is_local()` 更直观）。
 
