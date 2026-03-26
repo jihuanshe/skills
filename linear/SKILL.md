@@ -131,7 +131,7 @@ linear issue update <issue-id> --priority 1
 linear issue update <issue-id> --label "Bug"
 
 # List available workflow states for a team
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ workflowStates(filter: {team: {key: {eq: \"TEAM_KEY\"}}}) { nodes { name type } } }"}' \
@@ -194,7 +194,7 @@ rg -A50 "^input IssueFilter" "${TMPDIR:-/tmp}/linear-schema.graphql"
 Use `searchIssues` (not the deprecated `issueSearch`) to find issues by keyword:
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ searchIssues(term: \"KEYWORD\", first: 50) { nodes { identifier title state { name } project { name } team { key name } labels { nodes { name } } priority createdAt } } }"}' \
@@ -214,7 +214,7 @@ For ad-hoc queries not covered by scripts, use curl directly.
 Base pattern:
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "YOUR_QUERY_HERE"}' | jq .
@@ -225,7 +225,7 @@ Handling timestamps with milliseconds (jq fix):
 Linear timestamps may include milliseconds (e.g., `2026-01-08T08:53:59.922Z`):
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ issues(filter: {team: {key: {eq: \"AI\"}}}, first: 10) { nodes { identifier createdAt completedAt } } }"}' \
@@ -241,7 +241,7 @@ curl -s -X POST https://api.linear.app/graphql \
 Count issues by state type:
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ issues(filter: {team: {key: {eq: \"AI\"}}, createdAt: {gte: \"2025-10-01\"}}, first: 100) { nodes { state { type } } } }"}' \
@@ -251,7 +251,7 @@ curl -s -X POST https://api.linear.app/graphql \
 Find issues with specific label:
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ issues(filter: {team: {key: {eq: \"AI\"}}, labels: {name: {eq: \"Bug\"}}}, first: 50) { nodes { identifier title state { name } } } }"}' \
@@ -261,7 +261,7 @@ curl -s -X POST https://api.linear.app/graphql \
 Get issue history (audit trail):
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ issue(id: \"ISSUE_UUID\") { history(first: 20) { nodes { createdAt fromState { name } toState { name } } } } }"}' \
@@ -271,7 +271,7 @@ curl -s -X POST https://api.linear.app/graphql \
 List cycle contents:
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ cycles(filter: {team: {key: {eq: \"AI\"}}, isActive: {eq: true}}, first: 1) { nodes { name issues { nodes { identifier title state { name } } } } } }"}' \
@@ -281,7 +281,7 @@ curl -s -X POST https://api.linear.app/graphql \
 Check recent comments on an issue:
 
 ```bash
-curl -s -X POST https://api.linear.app/graphql \
+curl -sSL -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: $(linear auth token)" \
   -d '{"query": "{ issue(id: \"ISSUE_UUID\") { comments(first: 10) { nodes { body createdAt user { name } } } } }"}' \
