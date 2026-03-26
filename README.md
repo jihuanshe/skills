@@ -34,15 +34,15 @@
 │  Source = Git Repo (~/.config/skillshare/skills/)      │
 │                                                        │
 │  1. Your own skills (committed)                        │
-│  ├── demand-audit-v0/                                  │
-│  ├── vps/                                              │
+│  ├── my-code-review/                                   │
+│  ├── my-deploy-checklist/                              │
 │                                                        │
 │  2. Vendored (committed + .skillshare-meta.json)       │
 │  ├── agent-browser/      <- from vercel-labs           │
-│  ├── stl/                <- from stainless-api         │
+│  ├── exe.dev/            <- from boldsoftware          │
 │                                                        │
 │  3. Dependencies (gitignored, _-prefixed, --track)     │
-│  ├── _jihuanshe-skills/  <- install --track            │
+│  ├── _jihuanshe-skills/  <- this repo, --track         │
 │  │   ├── logfire/                                      │
 │  │   ├── linear/                                       │
 │  │   └── ...21 skills                                  │
@@ -61,12 +61,12 @@
 
 **核心设计：三层 skill 来源：**
 
-整个 source 目录本身是一个 Git repo（`--remote` 指向你自己的 skills 仓库）。三种来源的 skill 共存但管理方式不同：
+整个 source 目录本身是一个 Git repo（`--remote` 指向你自己的 skills 仓库，比如 `github.com/<你>/skills`）。三种来源的 skill 共存但管理方式不同：
 
 | 层 | 例子 | Git 状态 | 怎么更新 |
 | --- | --- | --- | --- |
-| **你自己写的** | `demand-audit-v0/`, `vps/` | ✅ committed | 你自己 `git push/pull` |
-| **Vendored（不带 `--track`）** | `agent-browser/`, `stl/` | ✅ committed + `.skillshare-meta.json` 记录上游 | `skillshare update` 从上游拉，更新后 `git commit` |
+| **你自己写的** | `my-code-review/`, `my-deploy-checklist/` | ✅ committed | 你自己 `git push/pull` |
+| **Vendored（不带 `--track`）** | `agent-browser/`, `exe.dev/` | ✅ committed + `.skillshare-meta.json` 记录上游 | `skillshare update` 从上游拉，更新后 `git commit` |
 | **依赖（`--track`）** | `_jihuanshe-skills/`, `_planetscale-database-skills/` | ❌ gitignored（`_` 前缀） | `skillshare update` 从上游拉，不进 git |
 
 - **Vendored 模式**（`skillshare install <url>`）：skill 代码直接 commit 进你的 repo，相当于 fork。`.skillshare-meta.json` 记录了 `repo_url`、`version`、`tree_hash`，所以 `skillshare update` 依然能追踪上游更新。适合你想自己改、或者保证离线可用的 skill。
