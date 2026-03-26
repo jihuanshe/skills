@@ -71,11 +71,11 @@ Modal API 用法先查官方源：
 
 ```bash
 # 索引，定位目标页面
-curl -sf https://modal.com/llms.txt
+curl -sSL https://modal.com/llms.txt
 
 # Guide / Examples 均支持 .md 后缀
-curl -sf https://modal.com/docs/guide/<topic>.md
-curl -sf https://modal.com/docs/examples/<example>.md
+curl -sSL https://modal.com/docs/guide/<topic>.md
+curl -sSL https://modal.com/docs/examples/<example>.md
 ```
 
 API Reference（`/docs/reference/modal.App` 等）不支持 `.md`，用源码替代。
@@ -142,7 +142,7 @@ URL=$(printf "%s" "$OUT" | grep -oE 'https://[^ ]+\.modal\.run' | head -1 || tru
 
 if [[ -n "${URL:-}" ]]; then
   # Web app：curl /health，用 --retry 等待冷启动，不用 sleep
-  curl --max-time 15 --retry 3 --retry-delay 5 --retry-all-errors -sf "$URL/health" | jq -e '.status == "ok"'
+  curl --max-time 15 --retry 3 --retry-delay 5 --retry-all-errors -sSfL "$URL/health" | jq -e '.status == "ok"'
 else
   # Non-web app（cron/job/Cls）：确认 app 已注册，检查启动日志
   APP_ID=$(printf "%s" "$OUT" | grep -oE 'ap-[A-Za-z0-9]+' | tail -1 || true)
