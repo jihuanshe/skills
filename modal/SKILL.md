@@ -171,28 +171,26 @@ LOGS_PID=$!; ( sleep 30; kill "$LOGS_PID" 2>/dev/null ) &
 wait "$LOGS_PID" 2>/dev/null || true
 ```
 
-#### 容器：进入运行中的容器检查
+**容器**：进入运行中的容器检查
 
 ```bash
 modal container exec <id> -- nvidia-smi
 modal container exec <id> -- python -c "import torch; print(torch.cuda.is_available())"
 ```
 
-#### Shell：在同一 Image 环境中复现问题
+**Shell**：在同一 Image 环境中复现问题
 
 ```bash
 modal shell <file>::<func>
 ```
 
-#### Debug 日志：最后手段
+**Debug 日志**：最后手段
 
 ```bash
 MODAL_LOGLEVEL=DEBUG modal run <f>
 ```
 
-## 阻塞命令
-
-阻塞命令会挂起 Agent 主流程。
+## 阻塞命令：哪些会挂 Agent
 
 **必须放 tmux**（先加载 tmux skill）：
 
@@ -211,7 +209,7 @@ MODAL_LOGLEVEL=DEBUG modal run <f>
 
 **`modal run -d` 仅防止本地断连后远端清理，本地进程仍阻塞。长任务始终走 tmux。**
 
-## 陷阱
+## 常见陷阱
 
 ### 依赖图不匹配
 
@@ -250,7 +248,7 @@ def f(): ...
 
 `from_dict` 和 `from_dotenv` 适合本地开发转发环境变量。关键是**两个分支的 secrets 列表长度必须一致**。
 
-### `modal.is_local()` 守卫
+### is_local() 守卫
 
 本地文件系统操作须守卫，`else` 分支须为所有变量提供占位值：
 
@@ -266,7 +264,7 @@ else:
     image = modal.Image.debian_slim()
 ```
 
-### `serialized=True`
+### serialized=True
 
 Pickle 序列化函数，容器不重新 import。适用于 `modal run` 的工具脚本（如 `clone_secret.py`）。与 `@modal.asgi_app()` / `@modal.wsgi_app()` 组合使用时，序列化/反序列化环节可能失败。Web 服务通过保持依赖图一致解决，不用 `serialized=True`。
 
