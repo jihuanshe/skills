@@ -19,15 +19,15 @@
 
 **这个仓库就是那堆 SOP。** 21 个技能平铺存放，每个文件夹是一个独立 Skill，包含 SKILL.md（SOP）和可选的 scripts/templates（电脑上的工具）。不做分类嵌套--分类以多种视角记录在下方，作为理解这些 skill 的索引。
 
-## 用 Skillshare 分发 Skills
+## Skillshare 安装与使用
 
 这个仓库是**公司公共 skills 仓库**——同事通过 `skillshare install` 把它装到自己本地的 source 目录里。每个人的 source 目录是一个独立的 Git repo，里面可以同时放自己的 skill、公司的 skill、社区的 skill，然后 `skillshare sync` 一条命令分发到所有 AI CLI。
 
-### 这套工作流牛在哪
+### 为什么用 Skillshare
 
-问题很简单：你有 Amp、Claude Code、Codex、OpenClaw……每个 AI CLI 都有自己的 skills 目录。你在一个地方改了，另外几个工具就不知道。手动管理必然失控。
+你有 Amp、Claude Code、Codex、OpenClaw……每个 AI CLI 都有自己的 skills 目录。你在一个地方改了，另外几个工具就不知道。手动管理必然失控。
 
-[Skillshare](https://github.com/runkids/skillshare) 解决这个问题的方式极其干净：
+[Skillshare](https://github.com/runkids/skillshare) 用一个 source 目录统一管理，symlink 分发到所有 target：
 
 ```text
 ┌────────────────────────────────────────────────────────┐
@@ -59,7 +59,9 @@
      skills/          skills/       skills/
 ```
 
-**核心设计：三层 skill 来源：**
+一处修改，处处生效。新机器几条命令搞定。install 时自动安全审计。
+
+### 三层 Skill 来源
 
 整个 source 目录本身是一个 Git repo（`--remote` 指向你自己的 skills 仓库，比如 `github.com/<你>/skills`）。三种来源的 skill 共存但管理方式不同：
 
