@@ -124,7 +124,7 @@ ORG_URL="https://github.com/${ORG}"
 
 # ---- Fetch latest runner version ----
 info "Checking latest GitHub Actions Runner version..."
-RUNNER_VER="$(curl -s https://api.github.com/repos/actions/runner/releases/latest \
+RUNNER_VER="$(curl -sSL https://api.github.com/repos/actions/runner/releases/latest \
     | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'].lstrip('v'))" 2>/dev/null \
     || echo "2.332.0")"
 PKG="actions-runner-linux-x64-${RUNNER_VER}.tar.gz"
@@ -156,7 +156,7 @@ fi
 # ---- Download runner package ----
 if [[ ! -f "$PKG_PATH" ]]; then
     info "Downloading runner v${RUNNER_VER}..."
-    curl -sL -o "$PKG_PATH" \
+    curl -sSL -o "$PKG_PATH" \
         "https://github.com/actions/runner/releases/download/v${RUNNER_VER}/${PKG}"
     chown "${RUNNER_USER}:${RUNNER_USER}" "$PKG_PATH"
     ok "Download complete"
