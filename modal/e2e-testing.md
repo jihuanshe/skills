@@ -26,7 +26,7 @@ LOGS_PANE=$(tmux -S "$SOCKET" list-panes -t "$SESSION:logs" -F '#{window_index}.
 tmux -S "$SOCKET" send-keys -t "$SESSION:$LOGS_PANE" -- "modal app logs $APP_ID 2>&1" Enter
 
 # 5. 验证
-curl --max-time 15 -sf "$URL/health" | jq -e '.status == "ok"'
+curl --max-time 15 -sSfL "$URL/health" | jq -e '.status == "ok"'
 
 # 6. 诊断
 tmux -S "$SOCKET" capture-pane -p -J -t "$SESSION:$LOGS_PANE" -S -30

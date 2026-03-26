@@ -1,10 +1,10 @@
 ## 并发与隧道
 
-以下主题本文档不展开，给出入口和关键注意点。详细用法查官方文档：`curl -sf https://modal.com/docs/guide/<topic>.md`
+以下主题本文档不展开，给出入口和关键注意点。详细用法查官方文档：`curl -sSL https://modal.com/docs/guide/<topic>.md`
 
 ### 并发执行（map / starmap / spawn_map）
 
-批量任务用 `f.map(inputs)` 或 `f.starmap(inputs)` 并发执行。注意 `max_containers` 和 `@modal.concurrent(max_inputs=N)` 控制并发上限。函数级重试可用 `retries=` 参数（`int` 或 `modal.Retries`）配置，默认不重试。参考：`curl -sf https://modal.com/docs/guide/scale.md`
+批量任务用 `f.map(inputs)` 或 `f.starmap(inputs)` 并发执行。注意 `max_containers` 和 `@modal.concurrent(max_inputs=N)` 控制并发上限。函数级重试可用 `retries=` 参数（`int` 或 `modal.Retries`）配置，默认不重试。参考：`curl -sSL https://modal.com/docs/guide/scale.md`
 
 ### latency（冷启动与低延迟）
 
@@ -15,7 +15,7 @@
 - Image 层缓存：把变化少的依赖放在 Image 链前面
 - 验证时用 `curl --retry`，不用 `sleep`
 
-参考：`curl -sf https://modal.com/docs/guide/cold-start.md`
+参考：`curl -sSL https://modal.com/docs/guide/cold-start.md`
 
 ### tunnel（本地调试网络）
 
