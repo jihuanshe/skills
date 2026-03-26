@@ -76,111 +76,7 @@
 
 新机器恢复流程：`git clone` 你的 repo → 前两层从 git 恢复 → `skillshare install` 重建第三层 → `skillshare sync` 分发到所有 AI CLI。
 
-**其他优势：**
-
-1. **一处修改，处处生效** — `skillshare sync` 一条命令，所有 AI CLI 拿到一模一样的 skills。symlink 方式连 sync 都不用——改了 source 就是改了所有 target。
-2. **新机器 / 云主机几条命令搞定** — curl 装 skillshare → init 配 source → install 公司仓库 → sync。
-3. **安全审计** — install 时自动扫描，发现 sudo 提权、hardcoded secrets、网络外泄等风险会报告，CRITICAL 级别直接阻断。
-
-### 第一次配置（macOS，你自己的电脑）
-
-**前置条件：** 已安装 [mise](https://mise.jdx.dev/) 或 Homebrew。
-
-```bash
-# 1. 装 skillshare（二选一）
-brew install skillshare
-# 或
-mise use -g github:runkids/skillshare@0.17.11
-
-# 2. 初始化（交互式，会自动检测本地已有的 AI CLI）
-skillshare init
-
-# init 会问你：
-#   - Source 目录放哪？（默认 ~/.config/skillshare/skills/，回车就行）
-#   - 要不要关联 Git remote？（填你自己的 skills 仓库地址）
-#   - 检测到哪些 target？（amp, claude, codex... 自动发现，确认就行）
-#   - 要不要创建一个示例 skill？（随意）
-
-# 3. 安装公司公共 skills
-skillshare install https://github.com/jihuanshe/skills --track
-
-# 4. 同步到所有 AI CLI
-skillshare sync
-```
-
-> **不想交互？** 一行搞定：
->
-> ```bash
-> skillshare init --source ~/.config/skillshare/skills --remote https://github.com/<你的用户名>/skills --all-targets --mode merge --subdir . --no-skill
-> ```
-
-### 第一次配置（云主机 / exe.dev VM）
-
-```bash
-# 1. 装 skillshare
-curl -fsSL https://raw.githubusercontent.com/runkids/skillshare/main/install.sh | sh
-
-# 2. 非交互初始化（指定你的个人 skills 仓库为 remote）
-skillshare init \
-  --source ~/.config/skillshare/skills \
-  --remote https://github.com/<你的用户名>/skills \
-  --targets codex \
-  --mode merge \
-  --subdir . \
-  --no-skill
-
-# 3. 装公司 skills
-skillshare install https://github.com/jihuanshe/skills --track
-
-# 4. 同步
-skillshare sync
-```
-
-关键参数说明：
-
-| 参数 | 含义 |
-| ---- | ---- |
-| `--remote <url>` | 关联 Git 仓库，让 source 目录变成 Git repo，支持 push/pull |
-| `--targets codex` | 只配一个 target（云主机一般只跑 Codex） |
-| `--mode merge` | 合并模式（保留 target 里已有的本地 skill） |
-| `--subdir .` | 仓库根目录就是 skills 目录（不用子目录） |
-| `--no-skill` | 不创建示例 skill |
-
-### 日常使用
-
-```bash
-# 公司仓库有更新？
-skillshare update _jihuanshe-skills && skillshare sync
-
-# 更新所有 tracked 仓库
-skillshare update --all && skillshare sync
-
-# 看当前状态
-skillshare status
-
-# 看有哪些更新可用
-skillshare check
-```
-
-### ⚠️ 常见坑
-
-1. **install 后忘记 sync** — `skillshare install` 只是把 skills 拉到 source，不会自动分发到各 AI CLI。必须跑 `skillshare sync`。
-2. **安全审计拦截** — install 时如果有 HIGH/CRITICAL 发现（比如我们的 github-runners 里有 sudo），audit 报告会告诉你。CRITICAL 级别会阻断安装，用 `--force` 跳过。我们仓库的 HIGH 是预期行为（Runner 管理确实需要 sudo），不用担心。
-3. **symlink vs copy** — 默认用 symlink，改 source 就等于改了所有 target。如果某个 AI CLI 不支持 symlink，用 `skillshare target <name> --mode copy`。
-4. **Git identity 未配置** — 云主机上 init 时如果没有 git config，skillshare 会用默认值。想 push 的话先配：
-
-   ```bash
-   git config --global user.name "Your Name"
-   git config --global user.email "you@example.com"
-   ```
-
-5. **CI/linting 冲突** — 如果你的 skills 仓库有 linter（biome, ruff, typos 等），install 进来的第三方 skill 可能不符合你的 lint 规则。需要在 lint 配置里 exclude 掉带 `.skillshare-meta.json` 的目录。用这个命令找到所有需要排除的目录：
-
-   ```bash
-   fd -H -t f '.skillshare-meta.json' -x dirname {} | sed 's|^\./||' | sort -u
-   ```
-
-### 实际例子：配好后长什么样
+### 配好后长什么样
 
 可以参考 [github.com/ipruning/skills](https://github.com/ipruning/skills)，这是一个已经配好的个人 skills 仓库。本地 `~/.config/skillshare/skills/` 目录就是这个 repo 的 clone，结构如下：
 
@@ -232,6 +128,104 @@ _planetscale-database-skills/
 ├── _jihuanshe-skills__linear  -> ~/.config/skillshare/skills/_jihuanshe-skills/linear
 └── ...
 ```
+
+### 首次配置：macOS
+
+**前置条件：** 已安装 [mise](https://mise.jdx.dev/) 或 Homebrew。
+
+```bash
+# 1. 装 skillshare（二选一）
+brew install skillshare
+# 或
+mise use -g github:runkids/skillshare@0.17.11
+
+# 2. 初始化（交互式，会自动检测本地已有的 AI CLI）
+skillshare init
+
+# init 会问你：
+#   - Source 目录放哪？（默认 ~/.config/skillshare/skills/，回车就行）
+#   - 要不要关联 Git remote？（填你自己的 skills 仓库地址）
+#   - 检测到哪些 target？（amp, claude, codex... 自动发现，确认就行）
+#   - 要不要创建一个示例 skill？（随意）
+
+# 3. 安装公司公共 skills
+skillshare install https://github.com/jihuanshe/skills --track
+
+# 4. 同步到所有 AI CLI
+skillshare sync
+```
+
+> **不想交互？** 一行搞定：
+>
+> ```bash
+> skillshare init --source ~/.config/skillshare/skills --remote https://github.com/<你的用户名>/skills --all-targets --mode merge --subdir . --no-skill
+> ```
+
+### 首次配置：云主机 / exe.dev VM
+
+```bash
+# 1. 装 skillshare
+curl -fsSL https://raw.githubusercontent.com/runkids/skillshare/main/install.sh | sh
+
+# 2. 非交互初始化（指定你的个人 skills 仓库为 remote）
+skillshare init \
+  --source ~/.config/skillshare/skills \
+  --remote https://github.com/<你的用户名>/skills \
+  --targets codex \
+  --mode merge \
+  --subdir . \
+  --no-skill
+
+# 3. 装公司 skills
+skillshare install https://github.com/jihuanshe/skills --track
+
+# 4. 同步
+skillshare sync
+```
+
+关键参数说明：
+
+| 参数 | 含义 |
+| ---- | ---- |
+| `--remote <url>` | 关联 Git 仓库，让 source 目录变成 Git repo，支持 push/pull |
+| `--targets codex` | 只配一个 target（云主机一般只跑 Codex） |
+| `--mode merge` | 合并模式（保留 target 里已有的本地 skill） |
+| `--subdir .` | 仓库根目录就是 skills 目录（不用子目录） |
+| `--no-skill` | 不创建示例 skill |
+
+### 日常使用
+
+```bash
+# 公司仓库有更新？
+skillshare update _jihuanshe-skills && skillshare sync
+
+# 更新所有 tracked 仓库
+skillshare update --all && skillshare sync
+
+# 看当前状态
+skillshare status
+
+# 看有哪些更新可用
+skillshare check
+```
+
+### 常见坑
+
+1. **install 后忘记 sync** — `skillshare install` 只是把 skills 拉到 source，不会自动分发到各 AI CLI。必须跑 `skillshare sync`。
+2. **安全审计拦截** — install 时如果有 HIGH/CRITICAL 发现（比如我们的 github-runners 里有 sudo），audit 报告会告诉你。CRITICAL 级别会阻断安装，用 `--force` 跳过。我们仓库的 HIGH 是预期行为（Runner 管理确实需要 sudo），不用担心。
+3. **symlink vs copy** — 默认用 symlink，改 source 就等于改了所有 target。如果某个 AI CLI 不支持 symlink，用 `skillshare target <name> --mode copy`。
+4. **Git identity 未配置** — 云主机上 init 时如果没有 git config，skillshare 会用默认值。想 push 的话先配：
+
+   ```bash
+   git config --global user.name "Your Name"
+   git config --global user.email "you@example.com"
+   ```
+
+5. **CI/linting 冲突** — 如果你的 skills 仓库有 linter（biome, ruff, typos 等），install 进来的第三方 skill 可能不符合你的 lint 规则。需要在 lint 配置里 exclude 掉带 `.skillshare-meta.json` 的目录。用这个命令找到所有需要排除的目录：
+
+   ```bash
+   fd -H -t f '.skillshare-meta.json' -x dirname {} | sed 's|^\./||' | sort -u
+   ```
 
 ## 技能清单
 
