@@ -21,33 +21,35 @@
 
 ## 用 Skillshare 分发 Skills
 
+这个仓库是**公司公共 skills 仓库**——同事通过 `skillshare install` 把它装到自己本地的 source 目录里。每个人的 source 目录是一个独立的 Git repo，里面可以同时放自己的 skill、公司的 skill、社区的 skill，然后 `skillshare sync` 一条命令分发到所有 AI CLI。
+
 ### 这套工作流牛在哪
 
-问题很简单：你有 Amp、Claude Code、Codex、OpenClaw……每个 AI CLI 都有自己的 skills 目录。你在一个地方改了，另外几个工具就不知道。更别提公司有公共 skills、你自己有私人 skills、社区还有第三方 skills——手动管理必然失控。
+问题很简单：你有 Amp、Claude Code、Codex、OpenClaw……每个 AI CLI 都有自己的 skills 目录。你在一个地方改了，另外几个工具就不知道。手动管理必然失控。
 
 [Skillshare](https://github.com/runkids/skillshare) 解决这个问题的方式极其干净：
 
 ```text
-┌─────────────────────────────────────────────────────────┐
-│  Source = Git Repo  (~/.config/skillshare/skills/)      │
-│                                                         │
-│  1. Your own skills (committed)                         │
-│  ├── demand-audit-v0/                                   │
-│  ├── vps/                                               │
-│                                                         │
-│  2. Vendored (committed + .skillshare-meta.json)        │
-│  ├── agent-browser/       <- from vercel-labs           │
-│  ├── stl/                 <- from stainless-api         │
-│                                                         │
-│  3. Dependencies (gitignored, _-prefixed, --track)      │
-│  ├── _jihuanshe-skills/   <- install --track            │
-│  │   ├── logfire/                                       │
-│  │   ├── linear/                                        │
-│  │   └── ...21 skills                                   │
-│  └── _planetscale-database-skills/                      │
-│      ├── mysql/                                         │
-│      └── postgres/                                      │
-└─────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────┐
+│  Source = Git Repo (~/.config/skillshare/skills/)      │
+│                                                        │
+│  1. Your own skills (committed)                        │
+│  ├── demand-audit-v0/                                  │
+│  ├── vps/                                              │
+│                                                        │
+│  2. Vendored (committed + .skillshare-meta.json)       │
+│  ├── agent-browser/      <- from vercel-labs           │
+│  ├── stl/                <- from stainless-api         │
+│                                                        │
+│  3. Dependencies (gitignored, _-prefixed, --track)     │
+│  ├── _jihuanshe-skills/  <- install --track            │
+│  │   ├── logfire/                                      │
+│  │   ├── linear/                                       │
+│  │   └── ...21 skills                                  │
+│  └── _planetscale-database-skills/                     │
+│      ├── mysql/                                        │
+│      └── postgres/                                     │
+└────────────────────────────────────────────────────────┘
                         │
                    skillshare sync (symlink)
                         │
@@ -107,7 +109,7 @@ skillshare sync
 > **不想交互？** 一行搞定：
 >
 > ```bash
-> skillshare init --source ~/.config/skillshare/skills --all-targets --git --no-skill
+> skillshare init --source ~/.config/skillshare/skills --remote https://github.com/<你的用户名>/skills --all-targets --mode merge --subdir . --no-skill
 > ```
 
 ### 第一次配置（云主机 / exe.dev VM）
