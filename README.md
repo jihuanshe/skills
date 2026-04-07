@@ -2,7 +2,7 @@
 
 ## 设计哲学：阿兹海默症实习生
 
-用 LLM，特别是像 Amp 这样的工具时，要把它当成「阿兹海默症的实习生」。你每天早上招了个新实习生，这小伙子看起来很聪明，但他头一天的东西全忘了，每天都是「土拨鼠之日」--醒来都是崭新一天。
+用 LLM，特别是像 Amp 这样的工具时，要把它当成「阿兹海默症的实习生」。你每天早上招了个新实习生，这小伙子看起来很聪明，但他头一天的东西全忘了，每天都是「土拨鼠之日」——醒来都是崭新一天。
 
 这样的实习生怎么用？你不能指望他记住任何隐含信息。他的工作记忆只有你当场给他的 SOP，还有他面前这台电脑。用好他，你得给一份清晰到不能再清晰的 SOP，告诉他「第一步干啥，第二步干啥」，然后再把电脑摆好，把工具链配齐。电脑也就是 LLM 强化学习的反馈环境，也可能是代码库中的命令行或者单测。
 
@@ -17,11 +17,11 @@
 
 > 先别想着「模型会不会记住什么」，它什么都记不住。你要想着的就是，我怎么提供给它一个好的工作环境，让它当天的表现最好。
 
-**这个仓库就是那堆 SOP。** 21 个技能平铺存放，每个文件夹是一个独立 Skill，包含 SKILL.md（SOP）和可选的 scripts/templates（电脑上的工具）。不做分类嵌套--分类以多种视角记录在下方，作为理解这些 skill 的索引。
+**这个仓库就是那堆 SOP。** 21 个技能平铺存放，每个文件夹是一个独立 Skill，包含 SKILL.md（SOP）和可选的 scripts/templates（电脑上的工具）。不做分类嵌套——分类以多种视角记录在下方，作为理解这些 skill 的索引。
 
 ## Skillshare 安装与使用
 
-这个仓库是**公司公共 skills 仓库**——同事通过 `skillshare install` 把它装到自己本地的 source 目录里。每个人的 source 目录是一个独立的 Git repo，里面同时放自己的 skill、公司的 skill、社区的 skill，然后 `skillshare sync` 一条命令分发到所有 AI CLI。
+这个仓库是**公司公共 skills 仓库**——你通过 `skillshare install` 把它装到自己本地的 source 目录里。每个人的 source 目录是一个独立的 Git repo，里面同时放自己的 skill、公司的 skill、社区的 skill，然后 `skillshare sync` 一条命令分发到所有 AI CLI。
 
 > **🤖 AI Agent 读者须知**
 >
@@ -89,9 +89,6 @@ Source 目录本身是一个 Git repo（`--remote` 指向你自己的 skills 仓
 
 ```text
 ~/.config/skillshare/skills/          <- git remote: github.com/ipruning/skills
-├── demand-audit-v0/                  <- own skill (committed)
-├── demand-audit-v1/                  <- own skill (committed)
-├── demand-audit-v2/                  <- own skill (committed)
 ├── prek/                             <- own skill (committed)
 ├── vps/                              <- own skill (committed)
 ├── surge-cli/                        <- own skill (committed)
@@ -129,7 +126,6 @@ _planetscale-database-skills/
 
 ```text
 ~/.config/amp/skills/
-├── demand-audit-v0 -> ~/.config/skillshare/skills/demand-audit-v0
 ├── agent-browser   -> ~/.config/skillshare/skills/agent-browser
 ├── _jihuanshe-skills__logfire -> ~/.config/skillshare/skills/_jihuanshe-skills/logfire
 ├── _jihuanshe-skills__linear  -> ~/.config/skillshare/skills/_jihuanshe-skills/linear
