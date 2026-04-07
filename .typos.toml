@@ -1,0 +1,7 @@
+[files]
+extend-exclude = [
+    "agent-browser/",
+]
+
+[default.extend-words]
+UDID = "UDID"  # Apple Unique Device Identifier

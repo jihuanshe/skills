@@ -1,19 +1,43 @@
-# AGENTS.md
+# Guidelines for AI Agents
 
-21 flat AI agent skills. Each `<name>/SKILL.md` is an SOP; `scripts/` and `templates/` are bundled tooling.
-Full inventory and categorization paradigms → see `README.md`.
+## Architecture
 
-## Conventions
+Each top-level directory is one skill. A skill contains a SKILL.md and optional supporting files. `skillshare` syncs them to AI tool config directories via symlinks.
 
-- **SKILL.md frontmatter**: YAML with `name`, `description`, `metadata.version` — required for skill discovery.
-- **Scripts**: Bash or Python (inline `uv` script metadata). Must be runnable standalone.
-- **Templates**: Example code referenced by SKILL.md via relative paths (`./templates/`, `./scripts/`).
-- **Language**: Chinese or mixed Chinese-English. Technical terms keep English.
-- **Naming**: Skill directories use `kebab-case`. No nesting — all skills are top-level siblings.
+Directories prefixed with `_` are externally synced, gitignored, and overwritten on update. Never edit them.
 
-## Editing Rules
+```text
+~/.config/skillshare/
+├── config.yaml              # Targets, sync mode, ignore rules
+└── skills/                  # This Git repo
+    ├── <skill-name>/        # Your own skills
+    ├── _<org>-skills/       # Org skills (gitignored)
+    └── _<community>/        # Community skills (gitignored)
+```
 
-- Edit SKILL.md content freely, but never remove the YAML frontmatter.
-- When adding a new skill, add it to the table in `README.md`.
-- Do not re-introduce category subdirectories; skills stay flat. Classification lives only in README.
-- Relative paths in SKILL.md (`./scripts/`, `./templates/`) must stay valid after edits.
+## Code Style
+
+4-space indent everywhere, 2-space for Markdown. LF line endings. Final newline required.
+
+- **Python** — Ruff (rules E/W/F/UP/B/SIM/I/TID, line-length 120, target py314). Format: `uv run ruff format --check .`. Lint: `uv run ruff check .`. Type-check: `uv run ty check .`.
+- **JS / JSON** — Biome (double quotes, 4-space indent). Lint: `biome ci .`.
+- **TOML** — `tombi` formatter, 4-space indent.
+- **Markdown** — `markdownlint-cli2`.
+- **Spelling** — `typos`.
+- **Pre-commit** — `prek` (see `prek.toml`).
+
+## Excluding external skills from linting
+
+Directories containing `.skillshare-meta.json` are externally synced and must be excluded from all lint configs. Find them with:
+
+```bash
+fd -H -t f '.skillshare-meta.json' -x dirname {} | sed 's|^\./||' | sort -u
+```
+
+Add each directory to all seven configs: `.typos.toml` (`[files].extend-exclude`), `.markdownlint-cli2.yaml` (`ignores`), `biome.jsonc` (`files.includes` with `!!dir/` negation), `pyproject.toml` (`[tool.ruff].exclude` and `[tool.ty.src].exclude`), `prek.toml` (top-level `exclude` regex), and `.autocorrectignore`.
+
+`_`-prefixed directories are gitignored and never checked in, so they don't need lint excludes. Only non-`_` directories with `.skillshare-meta.json` need them.
+
+## Running skillshare
+
+Always use non-interactive flags (`--force`, `--all`, `--yes`). AI agents cannot answer prompts. Always run `skillshare sync` after any mutation (`install`, `uninstall`, `update`, `collect`, `target`). Use `--json` when you need to parse output.
