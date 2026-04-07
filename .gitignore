@@ -1,5 +1,9 @@
-# Logfire Token
-logfire/mcp.json
-
 # macOS
 .DS_Store
+
+# Python
+.ruff_cache/
+.venv/
+
+# Logfire Token
+logfire/mcp.json

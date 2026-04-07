@@ -1,0 +1,7 @@
+ls:
+    .mise:
+        .bash: snake_case
+        .py: snake_case
+        .sh: snake_case
+        .yaml: snake_case
+        .zsh: snake_case
