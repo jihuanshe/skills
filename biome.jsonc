@@ -12,6 +12,7 @@
             "!**/.skillshare-meta.json",
             "!!agent-browser",
             "!!conventional-commits",
+            "!!exe.dev",
             "!!lark-base",
             "!!lark-doc",
             "!!lark-minutes",

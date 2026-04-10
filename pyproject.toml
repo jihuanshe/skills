@@ -26,6 +26,7 @@ dev = [
 exclude = [
     "agent-browser/",
     "conventional-commits/",
+    "exe.dev/",
     "lark-base/",
     "lark-doc/",
     "lark-minutes/",
@@ -73,6 +74,7 @@ unresolved-import = "warn"
 exclude = [
     "agent-browser/",
     "conventional-commits/",
+    "exe.dev/",
     "lark-base/",
     "lark-doc/",
     "lark-minutes/",
