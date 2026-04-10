@@ -1,5 +1,5 @@
 ---
-name: feishu
+name: feishu-notify
 description: 'Send messages to Feishu webhook. Triggers: notify feishu, feishu alert, feishu card.'
 metadata:
   version: '1'

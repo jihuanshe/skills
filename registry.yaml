@@ -28,7 +28,7 @@ skills:
     source: https://github.com/stainless-api/stainless-api-cli/pkg/cmd/skill/stl-cli
   - name: agent-browser
     source: https://github.com/vercel-labs/agent-browser/skills/agent-browser
-  - name: skill
+  - name: exe-dev
     source: https://github.com/boldsoftware/exe.dev/skill
   - name: skillshare
     source: https://github.com/runkids/skillshare//skills/skillshare
