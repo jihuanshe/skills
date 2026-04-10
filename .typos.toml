@@ -1,12 +1,21 @@
 [files]
 extend-exclude = [
     "agent-browser/",
+    "conventional-commits/",
     "lark-base/",
     "lark-doc/",
     "lark-minutes/",
     "lark-openapi-explorer/",
     "lark-sheets/",
     "lark-skill-maker/",
+    "skill/",
+    "skillshare/",
+    "stl-cli/",
+    "tigris-bucket-management/",
+    "tigris-object-operations/",
+    "tigris-snapshots-forking/",
+    "tigris-snapshots-recovery/",
+    "xurl/",
 ]
 
 [default.extend-words]
