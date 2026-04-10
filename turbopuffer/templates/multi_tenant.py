@@ -8,7 +8,9 @@ Demonstrates:
 
 import os
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any, TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict, cast
+
+from turbopuffer.types import RowParam
 
 import logfire
 import turbopuffer
@@ -41,7 +43,7 @@ class TenantSearchService:
             region=region,
         )
 
-    def _namespace(self, tenant_id: str) -> "Namespace":
+    def _namespace(self, tenant_id: str) -> Namespace:
         """Get namespace for tenant."""
         return self.tpuf.namespace(f"tenant-{tenant_id}")
 
@@ -72,7 +74,7 @@ class TenantSearchService:
         ):
             ns = self._namespace(tenant_id)
             result = ns.write(
-                upsert_rows=[cast(dict[str, Any], doc) for doc in documents],
+                upsert_rows=[cast(RowParam, doc) for doc in documents],
                 distance_metric="cosine_distance",
             )
             return result.rows_affected

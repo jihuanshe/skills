@@ -8,10 +8,11 @@ Demonstrates:
 """
 
 import os
-from typing import Any, TypedDict, cast
+from typing import TypedDict, cast
+
+from turbopuffer.types import RowParam
 
 import turbopuffer
-from turbopuffer.types import RowParam
 
 
 class VersionedRow(TypedDict):
@@ -77,7 +78,7 @@ def main() -> None:
         },
     ]
     ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in initial_row],
+        upsert_rows=[cast(RowParam, r) for r in initial_row],
         distance_metric="cosine_distance",
     )
 
@@ -93,7 +94,7 @@ def main() -> None:
         },
     ]
     result = ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in version_update_row],
+        upsert_rows=[cast(RowParam, r) for r in version_update_row],
         upsert_condition=("version", "Lt", {"$ref_new": "version"}),
         distance_metric="cosine_distance",
     )
@@ -109,7 +110,7 @@ def main() -> None:
         },
     ]
     result = ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in timestamp_row],
+        upsert_rows=[cast(RowParam, r) for r in timestamp_row],
         upsert_condition=(
             "Or",
             [
@@ -127,7 +128,7 @@ def main() -> None:
         {"id": 3, "vector": [0.7, 0.8, 0.9], "title": "Should Insert"},
     ]
     result = ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in insert_rows],
+        upsert_rows=[cast(RowParam, r) for r in insert_rows],
         upsert_condition=("id", "Eq", None),
         distance_metric="cosine_distance",
     )
@@ -138,7 +139,7 @@ def main() -> None:
         {"id": 4, "vector": [0.1, 0.2, 0.3], "status": "archived"},
     ]
     ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in archived_row],
+        upsert_rows=[cast(RowParam, r) for r in archived_row],
         distance_metric="cosine_distance",
     )
 
@@ -153,7 +154,7 @@ def main() -> None:
         {"id": 5, "vector": [0.1, 0.2, 0.3], "status": "draft", "title": "Draft"},
     ]
     ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in draft_row],
+        upsert_rows=[cast(RowParam, r) for r in draft_row],
         distance_metric="cosine_distance",
     )
 

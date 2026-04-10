@@ -8,10 +8,11 @@ Demonstrates:
 """
 
 import os
-from typing import Any, TypedDict, cast
+from typing import TypedDict, cast
+
+from turbopuffer.types import AttributeSchemaParam, RowParam
 
 import turbopuffer
-from turbopuffer.types import AttributeSchemaParam
 
 
 class OptimizedRow(TypedDict):
@@ -92,7 +93,7 @@ def main() -> None:
     schema = build_optimized_schema()
 
     result = ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in rows],
+        upsert_rows=[cast(RowParam, r) for r in rows],
         schema=schema,
         distance_metric="cosine_distance",
     )

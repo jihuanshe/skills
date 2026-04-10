@@ -10,11 +10,13 @@ Demonstrates the complete self-verification workflow:
 """
 
 import os
-from typing import Any, TypedDict, cast
+from typing import TypedDict, cast
+
+from turbopuffer.lib.namespace import Namespace
+from turbopuffer.types import RowParam
 
 import logfire
 import turbopuffer
-from turbopuffer.lib.namespace import Namespace
 
 
 class VerifiableRow(TypedDict):
@@ -49,7 +51,7 @@ def verify_write_complete(
 
         # Step 2: Write
         write_result = ns.write(
-            upsert_rows=[cast(dict[str, Any], doc) for doc in docs_to_write],
+            upsert_rows=[cast(RowParam, doc) for doc in docs_to_write],
             distance_metric="cosine_distance",
         )
 

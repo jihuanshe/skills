@@ -9,10 +9,11 @@ Demonstrates:
 import os
 from collections import defaultdict
 from collections.abc import Sequence
-from typing import Any, TypedDict, cast
+from typing import TypedDict, cast
+
+from turbopuffer.types import Row, RowParam
 
 import turbopuffer
-from turbopuffer.types import Row
 
 
 class SearchableRow(TypedDict):
@@ -79,7 +80,7 @@ def main() -> None:
         },
     ]
     ns.write(
-        upsert_rows=[cast(dict[str, Any], r) for r in rows],
+        upsert_rows=[cast(RowParam, r) for r in rows],
         schema={
             "content": {"type": "string", "full_text_search": True},
             "title": {"type": "string", "full_text_search": True},
