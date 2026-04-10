@@ -1,6 +1,6 @@
 ---
 name: github-runners
-description: "Manage GitHub Actions self-hosted runners: deploy, remove, check status, and troubleshoot. Triggers: runner, self-hosted, github actions runner, CI runner, setup runner, remove runner."
+description: "Manage GitHub Actions self-hosted runners: deploy, remove, check status, and troubleshoot. Triggers: runner, self-hosted, GitHub actions runner, CI runner, setup runner, remove runner."
 metadata:
   version: '1'
 ---
@@ -90,9 +90,9 @@ runs-on: [self-hosted, <LABEL>]
 Description=GitHub Actions runner shared pool
 
 [Slice]
-CPUQuota=<CORES*100>%   # 例: 16 核 → 1600%
+CPUQuota=<CORES*100>%   # 例：16 核 → 1600%
 MemoryHigh=<约 MAX 的 85%> # 软阈值，提前触发内存回收
-MemoryMax=<上限>          # 硬上限，例: 128G
+MemoryMax=<上限>          # 硬上限，例：128G
 MemorySwapMax=0           # 禁止 swap 扩张
 ```
 
