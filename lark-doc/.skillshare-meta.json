@@ -4,7 +4,7 @@
   "installed_at": "2026-04-10T17:13:34.196557+08:00",
   "repo_url": "https://github.com/larksuite/cli.git",
   "subdir": "skills/lark-doc",
-  "version": "d026741",
+  "version": "fa16fe1",
   "tree_hash": "2a163338bbd486f13763ea78f9119d4dbf3466d7",
   "file_hashes": {
     "SKILL.md": "sha256:4856a4de6a752d0031739b6d9ec9eab03d583865a8dc832c9f61bff2b3314862",

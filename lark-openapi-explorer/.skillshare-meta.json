@@ -4,7 +4,7 @@
   "installed_at": "2026-04-10T17:13:34.237661+08:00",
   "repo_url": "https://github.com/larksuite/cli.git",
   "subdir": "skills/lark-openapi-explorer",
-  "version": "d026741",
+  "version": "fa16fe1",
   "tree_hash": "b403a77f10cf342a01792241a3e77231842c438c",
   "file_hashes": {
     "SKILL.md": "sha256:ae89debc3f807f9947831b4525e1c118bc14544877c14c14aaa47298b1e863b4"
