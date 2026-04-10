@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/runkids/skillshare/main/schemas/registry.schema.json
+skills:
+  - name: agent-browser
+    source: https://github.com/vercel-labs/agent-browser.git/skills/agent-browser
+  - name: lark-base
+    source: https://github.com/larksuite/cli/skills/lark-base
+  - name: lark-doc
+    source: https://github.com/larksuite/cli/skills/lark-doc
+  - name: lark-minutes
+    source: https://github.com/larksuite/cli/skills/lark-minutes
+  - name: lark-openapi-explorer
+    source: https://github.com/larksuite/cli/skills/lark-openapi-explorer
+  - name: lark-sheets
+    source: https://github.com/larksuite/cli/skills/lark-sheets
+  - name: lark-skill-maker
+    source: https://github.com/larksuite/cli/skills/lark-skill-maker
