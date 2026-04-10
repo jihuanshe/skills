@@ -1,0 +1,12 @@
+{
+  "source": "https://github.com/larksuite/cli/skills/lark-skill-maker",
+  "type": "github-subdir",
+  "installed_at": "2026-04-10T17:13:34.29316+08:00",
+  "repo_url": "https://github.com/larksuite/cli.git",
+  "subdir": "skills/lark-skill-maker",
+  "version": "d026741",
+  "tree_hash": "f1f0673f26a0b5d2b6cf12454dd47253587f181e",
+  "file_hashes": {
+    "SKILL.md": "sha256:8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "source": "https://github.com/larksuite/cli/skills/lark-doc",
+  "type": "github-subdir",
+  "installed_at": "2026-04-10T17:13:34.196557+08:00",
+  "repo_url": "https://github.com/larksuite/cli.git",
+  "subdir": "skills/lark-doc",
+  "version": "d026741",
+  "tree_hash": "2a163338bbd486f13763ea78f9119d4dbf3466d7",
+  "file_hashes": {
+    "SKILL.md": "sha256:4856a4de6a752d0031739b6d9ec9eab03d583865a8dc832c9f61bff2b3314862",
+    "references/lark-doc-create.md": "sha256:075d79770aa9307dde1bfd4cfe7be71f02a368c334def94588ceabaadd0029b7",
+    "references/lark-doc-fetch.md": "sha256:bf985254313fcf8ff7c115fb0c081aa65c84debb4e23861ea31323f9f01a5cde",
+    "references/lark-doc-media-download.md": "sha256:d4c7f67d07b907106a037500e5809405ce74ee4b642767af3e417c5edd527277",
+    "references/lark-doc-media-insert.md": "sha256:204ba2320611d79ed75a4124336a3788afd757e01218be18de28d2e3fa0520e6",
+    "references/lark-doc-media-preview.md": "sha256:ebecf432d6ad0dbfa249cbf3dab91e7e20e25ee29e1c4874a039aa2bb8194200",
+    "references/lark-doc-search.md": "sha256:ecdd1021115449d0268d14d1d6293f1a37112c55f239ac89374dcf1d421163d5",
+    "references/lark-doc-update.md": "sha256:329ff193d30097a1529e760bdc90d0d41ed7732127f287754de912633e552242",
+    "references/lark-doc-whiteboard-update.md": "sha256:0a51de6af65a4257c84320f9cf49490d93d0f5a37cb979966206bf2e44534ff5"
+  }
+}
