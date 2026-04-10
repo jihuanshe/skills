@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import asyncio
 
-import logfire
-from openai import AsyncOpenAI
 from openai.types.responses import ResponseInputTextParam
 from openai.types.responses.response_input_param import Message
+
+import logfire
+from openai import AsyncOpenAI
 
 
 async def call_model_with_observability(

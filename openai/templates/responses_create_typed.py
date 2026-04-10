@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from openai import AsyncOpenAI
 from openai.types.responses import ResponseInputFileParam, ResponseInputTextParam
 from openai.types.responses.response_input_param import Message
 from openai.types.shared_params.reasoning import Reasoning
+
+from openai import AsyncOpenAI
 
 
 async def call_model_with_text(*, model: str, text: str) -> str:

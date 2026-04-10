@@ -7,7 +7,9 @@ A minimal example demonstrating:
 """
 
 import os
-from typing import Any, TypedDict, cast
+from typing import TypedDict, cast
+
+from turbopuffer.types import RowParam
 
 import turbopuffer
 
@@ -46,7 +48,7 @@ def main() -> None:
     ]
 
     ns.write(
-        upsert_rows=[cast(dict[str, Any], row) for row in rows],
+        upsert_rows=[cast(RowParam, row) for row in rows],
         distance_metric="cosine_distance",
     )
 

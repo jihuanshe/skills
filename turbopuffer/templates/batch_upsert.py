@@ -9,7 +9,9 @@ Demonstrates:
 import os
 from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
-from typing import TYPE_CHECKING, Any, TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict, cast
+
+from turbopuffer.types import RowParam
 
 import logfire
 import turbopuffer
@@ -36,21 +38,21 @@ def batch_documents(
 
 
 def upsert_batch(
-    ns: "Namespace",
+    ns: Namespace,
     batch: Sequence[DocumentRow],
     batch_idx: int,
 ) -> int:
     """Upsert a single batch of documents."""
     with logfire.span("turbopuffer.upsert_batch", batch_idx=batch_idx, size=len(batch)):
         result = ns.write(
-            upsert_rows=[cast(dict[str, Any], row) for row in batch],
+            upsert_rows=[cast(RowParam, row) for row in batch],
             distance_metric="cosine_distance",
         )
         return result.rows_affected
 
 
 def parallel_upsert(
-    ns: "Namespace",
+    ns: Namespace,
     documents: Sequence[DocumentRow],
     batch_size: int = 1000,
     max_workers: int = 4,

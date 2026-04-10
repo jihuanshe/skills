@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from openai import AsyncOpenAI
 from openai.types.responses import ResponseInputTextParam
 from openai.types.responses.response_input_param import Message
+
+from openai import AsyncOpenAI
 
 
 async def call_model_with_escape_hatch(*, model: str, text: str) -> str:

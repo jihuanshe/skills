@@ -1,6 +1,7 @@
-from openai import AsyncOpenAI
 from openai.types.responses import ResponseInputTextParam, ResponseTextDeltaEvent
 from openai.types.responses.response_input_param import Message
+
+from openai import AsyncOpenAI
 
 
 async def stream_response(client: AsyncOpenAI, prompt: str) -> str:
