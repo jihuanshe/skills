@@ -1,7 +1,14 @@
 [files]
 extend-exclude = [
     "agent-browser/",
+    "lark-base/",
+    "lark-doc/",
+    "lark-minutes/",
+    "lark-openapi-explorer/",
+    "lark-sheets/",
+    "lark-skill-maker/",
 ]
 
 [default.extend-words]
+nin = "nin"  # Linear API filter operator: not-in
 UDID = "UDID"  # Apple Unique Device Identifier
