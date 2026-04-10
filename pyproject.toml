@@ -24,7 +24,12 @@ dev = [
 [tool.ruff]
 exclude = [
     "agent-browser/",
-    "stl/",
+    "lark-base/",
+    "lark-doc/",
+    "lark-minutes/",
+    "lark-openapi-explorer/",
+    "lark-sheets/",
+    "lark-skill-maker/",
 ]
 indent-width = 4
 line-length = 120
@@ -56,17 +61,11 @@ unresolved-import = "warn"
 
 [tool.ty.src]
 exclude = [
-    "actionbook/",
     "agent-browser/",
-    "conventional-commits/",
-    "electron/",
-    "exe.dev/",
-    "longbridge/",
-    "skill-creator/",
-    "skillshare/",
-    "stl/",
-    "tigris-bucket-management/",
-    "tigris-object-operations/",
-    "tigris-snapshots-forking/",
-    "tigris-snapshots-recovery/",
+    "lark-base/",
+    "lark-doc/",
+    "lark-minutes/",
+    "lark-openapi-explorer/",
+    "lark-sheets/",
+    "lark-skill-maker/",
 ]
