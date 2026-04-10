@@ -24,12 +24,21 @@ dev = [
 [tool.ruff]
 exclude = [
     "agent-browser/",
+    "conventional-commits/",
     "lark-base/",
     "lark-doc/",
     "lark-minutes/",
     "lark-openapi-explorer/",
     "lark-sheets/",
     "lark-skill-maker/",
+    "skill/",
+    "skillshare/",
+    "stl-cli/",
+    "tigris-bucket-management/",
+    "tigris-object-operations/",
+    "tigris-snapshots-forking/",
+    "tigris-snapshots-recovery/",
+    "xurl/",
 ]
 indent-width = 4
 line-length = 120
@@ -62,10 +71,19 @@ unresolved-import = "warn"
 [tool.ty.src]
 exclude = [
     "agent-browser/",
+    "conventional-commits/",
     "lark-base/",
     "lark-doc/",
     "lark-minutes/",
     "lark-openapi-explorer/",
     "lark-sheets/",
     "lark-skill-maker/",
+    "skill/",
+    "skillshare/",
+    "stl-cli/",
+    "tigris-bucket-management/",
+    "tigris-object-operations/",
+    "tigris-snapshots-forking/",
+    "tigris-snapshots-recovery/",
+    "xurl/",
 ]
