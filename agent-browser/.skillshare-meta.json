@@ -1,7 +1,7 @@
 {
-  "source": "https://github.com/vercel-labs/agent-browser.git/skills/agent-browser",
+  "source": "https://github.com/vercel-labs/agent-browser/skills/agent-browser",
   "type": "github-subdir",
-  "installed_at": "2026-04-07T15:00:09.809517+08:00",
+  "installed_at": "2026-04-10T17:28:22.508219+08:00",
   "repo_url": "https://github.com/vercel-labs/agent-browser.git",
   "subdir": "skills/agent-browser",
   "version": "fa043a4",
