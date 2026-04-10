@@ -34,7 +34,7 @@ Directories containing `.skillshare-meta.json` are externally synced and must be
 fd -H -t f '.skillshare-meta.json' -x dirname {} | sed 's|^\./||' | sort -u
 ```
 
-Add each directory to all seven configs: `.typos.toml` (`[files].extend-exclude`), `.markdownlint-cli2.yaml` (`ignores`), `biome.jsonc` (`files.includes` with `!!dir/` negation), `pyproject.toml` (`[tool.ruff].exclude` and `[tool.ty.src].exclude`), `prek.toml` (top-level `exclude` regex), and `.autocorrectignore`.
+Add each directory to all seven configs: `.typos.toml` (`[files].extend-exclude`), `.markdownlint-cli2.yaml` (`ignores`), `biome.jsonc` (`files.includes` with `!!dir` negation — **no trailing slash**, e.g. `"!!xurl"` not `"!!xurl/"`), `pyproject.toml` (`[tool.ruff].exclude` and `[tool.ty.src].exclude`), `prek.toml` (top-level `exclude` regex), and `.autocorrectignore`.
 
 `_`-prefixed directories are gitignored and never checked in, so they don't need lint excludes. Only non-`_` directories with `.skillshare-meta.json` need them.
 
