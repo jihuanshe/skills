@@ -9,17 +9,15 @@
     "files": {
         "includes": [
             "**",
-            "!**/.skillshare-meta.json",
             "!!agent-browser",
             "!!conventional-commits",
-            "!!exe.dev",
+            "!!exe-dev",
             "!!lark-base",
             "!!lark-doc",
             "!!lark-minutes",
             "!!lark-openapi-explorer",
             "!!lark-sheets",
             "!!lark-skill-maker",
-            "!!skill",
             "!!skillshare",
             "!!stl-cli",
             "!!tigris-bucket-management",
