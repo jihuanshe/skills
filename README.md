@@ -45,7 +45,7 @@
 │  ├── my-code-review/                                   │
 │  ├── my-deploy-checklist/                              │
 │                                                        │
-│  2. Vendored (committed + .skillshare-meta.json)       │
+│  2. Vendored (committed, tracked in .metadata.json)    │
 │  ├── agent-browser/      <- from vercel-labs           │
 │  ├── exe.dev/            <- from boldsoftware          │
 │                                                        │
@@ -76,10 +76,10 @@ Source 目录本身是一个 Git repo（`--remote` 指向你自己的 skills 仓
 | 层                             | 例子                                                  | Git 状态                                        | 怎么更新                                          |
 | ------------------------------ | ----------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------- |
 | **你自己写的**                 | `my-code-review/`, `my-deploy-checklist/`             | ✅ committed                                    | 你自己 `git push/pull`                            |
-| **Vendored（不带 `--track`）** | `agent-browser/`, `exe.dev/`                          | ✅ committed + `.skillshare-meta.json` 记录上游 | `skillshare update` 从上游拉，更新后 `git commit` |
+| **Vendored（不带 `--track`）** | `agent-browser/`, `exe-dev/`                          | ✅ committed，`.metadata.json` 记录上游         | `skillshare update` 从上游拉，更新后 `git commit` |
 | **依赖（`--track`）**          | `_jihuanshe-skills/`, `_planetscale-database-skills/` | ❌ gitignored（`_` 前缀）                       | `skillshare update` 从上游拉，不进 git            |
 
-**Vendored 模式**（`skillshare install <url>`）：代码直接 commit 进你的 repo，相当于 fork。`.skillshare-meta.json` 记录了上游信息，`skillshare update` 依然能追踪。适合你想改、或需要离线可用的 skill。
+**Vendored 模式**（`skillshare install <url>`）：代码直接 commit 进你的 repo，相当于 fork。`.metadata.json` 记录了上游信息，`skillshare update` 依然能追踪。适合你想改、或需要离线可用的 skill。
 
 **依赖模式**（`skillshare install <url> --track`）：放在 `_` 前缀目录里，自动 gitignore。就像 `node_modules`——不 commit，但 `skillshare update` 随时拉最新。适合公司仓库、社区仓库这种你不会改的 skill。
 
@@ -141,7 +141,7 @@ _planetscale-database-skills/
 ```bash
 # macOS（二选一）
 brew install skillshare
-mise use -g github:runkids/skillshare@0.17.11
+mise use -g github:runkids/skillshare@0.19.0
 
 # 云主机 / exe.dev VM
 curl -fsSL https://raw.githubusercontent.com/runkids/skillshare/main/install.sh | sh
@@ -247,10 +247,10 @@ skillshare check
    git config --global user.email "you@example.com"
    ```
 
-5. **CI/linting 冲突** — 第三方 skill 可能不符合你的 lint 规则。在 lint 配置里 exclude 带 `.skillshare-meta.json` 的目录：
+5. **CI/linting 冲突** — 第三方 skill 可能不符合你的 lint 规则。在 lint 配置里 exclude `.metadata.json` 中记录的 vendored 目录：
 
    ```bash
-   fd -H -t f '.skillshare-meta.json' -x dirname {} | sed 's|^\./||' | sort -u
+   jq -r '.entries | keys[] | select(startswith("_") | not)' .metadata.json | sort
    ```
 
 ## 技能清单
@@ -261,7 +261,7 @@ skillshare check
 | amp-thread-digest | 从 Amp Thread 中萃取知识          |
 | amp-todo          | 执行代码中的 AMPDO 注释           |
 | fasthtml          | 用 FastHTML + MonsterUI 写 Web    |
-| feishu            | 飞书 Webhook 通知                 |
+| feishu-notify     | 飞书 Webhook 通知                 |
 | github-runners    | 管理 GHA 自托管 Runner            |
 | linear            | 查询和分析 Linear Issue           |
 | linear-plan       | 为 Linear Issue 制定实施方案      |
