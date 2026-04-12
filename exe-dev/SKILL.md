@@ -1,5 +1,5 @@
 ---
-name: exe-dev
+name: using-exe-dev
 description: Guides working with exe.dev VMs. Use when the user mentions exe.dev, exe VMs, *.exe.xyz, or tasks involving exe.dev infrastructure.
 ---
 
