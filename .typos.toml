@@ -9,6 +9,7 @@ extend-exclude = [
     "lark-openapi-explorer/",
     "lark-sheets/",
     "lark-skill-maker/",
+    "linear-cli/",
     "skillshare/",
     "stl-cli/",
     "tigris-bucket-management/",
