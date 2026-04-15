@@ -4,10 +4,10 @@
     "agent-browser": {
       "source": "https://github.com/vercel-labs/agent-browser.git/skills/agent-browser",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:00:57.44877+08:00",
+      "installed_at": "2026-04-15T18:24:00.975015+08:00",
       "repo_url": "https://github.com/vercel-labs/agent-browser.git",
       "subdir": "skills/agent-browser",
-      "version": "2114bdf",
+      "version": "db29d5f",
       "tree_hash": "67d654a553c1bd21b4cff0d9d61d75cd9a67e635",
       "file_hashes": {
         "SKILL.md": "sha256:eb4d564a7cd9f299acb0d59007ab94d121b559e143e8723203900c54654b1afe",
@@ -26,7 +26,7 @@
     "conventional-commits": {
       "source": "https://github.com/tigrisdata/skills.git/skills/conventional-commits",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:00:59.591205+08:00",
+      "installed_at": "2026-04-15T18:24:03.01926+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/conventional-commits",
       "version": "501490d",
@@ -40,7 +40,7 @@
     "exe-dev": {
       "source": "https://github.com/boldsoftware/exe.dev.git/skill",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:02.062741+08:00",
+      "installed_at": "2026-04-15T18:24:05.341501+08:00",
       "repo_url": "https://github.com/boldsoftware/exe.dev.git",
       "subdir": "skill",
       "version": "947ee80",
@@ -52,11 +52,11 @@
     "lark-base": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-base",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:05.235871+08:00",
+      "installed_at": "2026-04-15T18:24:08.761248+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-base",
-      "version": "25534d7",
-      "tree_hash": "0434ea9f8725c413e10e5866a13e12aa9d932b1c",
+      "version": "5fa68cc",
+      "tree_hash": "7b4e8633ea8056f1b04c11343a90a08559c43514",
       "file_hashes": {
         "SKILL.md": "sha256:0f2c057052860a9af8d44c70ab77b678b5bc1649a25c4bce88d27ec055b8fac2",
         "references/dashboard-block-data-config.md": "sha256:b70177e3837256961ffa59ebad5e1afb9c33da00743da596837a897ce57984db",
@@ -106,7 +106,7 @@
         "references/lark-base-record-history-list.md": "sha256:496672feedd1ffd201c164f303261c172fa23b07c9fd9d555f887b2f2813e6ea",
         "references/lark-base-record-list.md": "sha256:9e02a00b5a7182246f028df6c72d0ba25f47daa009b7f26badeefc531888dbe3",
         "references/lark-base-record-search.md": "sha256:d9b07cba01919dbdd46675cc53a531b4bd51774ead2af4d091963cb15279a972",
-        "references/lark-base-record-upload-attachment.md": "sha256:2ae0320b93f998557a9aa1fe95e2d2bd4424cbce1d154b294d1c348aefbed385",
+        "references/lark-base-record-upload-attachment.md": "sha256:273263ecdf0f8cf1afec92642d3c4d0f42e4abd6d41a3ff706534fd61d6c8b83",
         "references/lark-base-record-upsert.md": "sha256:e5b9b7e92fe256cdfc6d552bd431f1d04bc1e7fda3fd9385f0b14c38f3e269e2",
         "references/lark-base-record.md": "sha256:54a4c42b119b134709062a661722d130870007a3cbbf0abeb22a15fe5a54b8cf",
         "references/lark-base-role-create.md": "sha256:fb10e0924a7ba1a8e2a0387bf694d0018eb013490a3bc73bb0c7253f578bbdb8",
@@ -157,10 +157,10 @@
     "lark-doc": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-doc",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:05.389745+08:00",
+      "installed_at": "2026-04-15T18:24:08.928369+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-doc",
-      "version": "25534d7",
+      "version": "5fa68cc",
       "tree_hash": "a6ba2d05a89766cc23c483a1737db0e8f7bd8572",
       "file_hashes": {
         "SKILL.md": "sha256:2f233bdb504a59bcc1680f08c388b4471bc4f5cf8852ad042a8d785b4e24bfeb",
@@ -177,10 +177,10 @@
     "lark-minutes": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-minutes",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:05.536253+08:00",
+      "installed_at": "2026-04-15T18:24:08.018296+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-minutes",
-      "version": "25534d7",
+      "version": "5fa68cc",
       "tree_hash": "c7453d1bac0eafd2e5f6e2276dc21ea46abc91d9",
       "file_hashes": {
         "SKILL.md": "sha256:0d1ee5164d90c781db5350712f39717b50901d7c55a2c1a3068df645f38e98e6",
@@ -191,10 +191,10 @@
     "lark-openapi-explorer": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-openapi-explorer",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:05.674539+08:00",
+      "installed_at": "2026-04-15T18:24:08.153858+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-openapi-explorer",
-      "version": "25534d7",
+      "version": "5fa68cc",
       "tree_hash": "b403a77f10cf342a01792241a3e77231842c438c",
       "file_hashes": {
         "SKILL.md": "sha256:ae89debc3f807f9947831b4525e1c118bc14544877c14c14aaa47298b1e863b4"
@@ -203,29 +203,44 @@
     "lark-sheets": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-sheets",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:05.830569+08:00",
+      "installed_at": "2026-04-15T18:24:08.321804+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-sheets",
-      "version": "25534d7",
-      "tree_hash": "25b9e11b8aad0761bc15f34ef13a2907434dd6f8",
+      "version": "5fa68cc",
+      "tree_hash": "2b0c98adba34eb1b2a4493e6ca62410e8f2e2b31",
       "file_hashes": {
-        "SKILL.md": "sha256:5c892bdb135f545a932809da34e630e872f3aa89c49fc2aa6f062754c1893b5b",
+        "SKILL.md": "sha256:d89539cad74354b8feb022866e23c13bbf5dca849b554b6a87b03e4793a887cf",
         "references/lark-sheets-add-dimension.md": "sha256:f7c0a08bbd4786c4c909050660932fcc00d15584c2a7b4e6ac6515188771ea67",
         "references/lark-sheets-append.md": "sha256:69cac2b4cc7043e10a5e2f93aeb9bd318e9f07c985f2f71a19f5cb2e2c5a72bd",
         "references/lark-sheets-batch-set-style.md": "sha256:df5f8b3017b549a7ba02afe21c8f902b34320cbea071463242de882f6706d647",
+        "references/lark-sheets-create-filter-view-condition.md": "sha256:0448662c103fdb7275f348dc77691b51db813ceb1075973089da808f2febd049",
+        "references/lark-sheets-create-filter-view.md": "sha256:fa68646a1f359f18f5c9fa148ad525cc7f8747fe4e0ea9b0a9f3e6e8255414f8",
         "references/lark-sheets-create.md": "sha256:f0e1eeecde4bcbc594f1b2a9221468ce68e4a3f7d04145eb6c5b0c3424026841",
         "references/lark-sheets-delete-dimension.md": "sha256:573d4872ad3ac46e4718a1e5e19bfec4df2ee77cc57466c9852d31f1585b2b75",
+        "references/lark-sheets-delete-dropdown.md": "sha256:cd8fb28873ff44d25beeadcccb835b7c7884f0d43b13937dd8557cd32528e074",
+        "references/lark-sheets-delete-filter-view-condition.md": "sha256:64616c646838dc84350ef39b20bfd4a5932c3aef7798339782887a90fa270f5d",
+        "references/lark-sheets-delete-filter-view.md": "sha256:a5e1a79220df3c76acdc04b5b51e90f7f380fde86b9163ba1e08e6b7febacfe7",
         "references/lark-sheets-export.md": "sha256:96cd6be7d04cca9794031951d70d2be39a82106f4d0ffb9685a2a66687d388ff",
         "references/lark-sheets-find.md": "sha256:a9bfac4d97ded37eda9d07510d018fa6dbad75468370635f84fd4a195195e75c",
+        "references/lark-sheets-formula.md": "sha256:f99fbf8b5d681f21e7f0750c1872eeb3de02143ee6fa0255befd5cc7551951d9",
+        "references/lark-sheets-get-dropdown.md": "sha256:fb6e43662fdf22e1b4f5275bf2f48bffc500739efba7ae7c79ce50cdc9983ec1",
+        "references/lark-sheets-get-filter-view-condition.md": "sha256:eb699c3782185823a43f8b28d58a9e251283b1d8882e167b7f89cf8b841a1927",
+        "references/lark-sheets-get-filter-view.md": "sha256:44d28bb0cb3b4b5362ffb49852c28a35cc1a9e4c09bdc317a77b41b364afed56",
         "references/lark-sheets-info.md": "sha256:27936853b5f8aa8a3171a36860c1bef4ab796143a1c703511d45faabae9fa892",
         "references/lark-sheets-insert-dimension.md": "sha256:8081275801250323c6f0d5e2b540959ad8cd0b8324c7c52d51f1baa27a258b05",
+        "references/lark-sheets-list-filter-view-conditions.md": "sha256:8949b96d6aa4122b112b214a666516153d15f6720c754e59499d097c7ea25ac0",
+        "references/lark-sheets-list-filter-views.md": "sha256:3b2c946478735c5b2ca5328928a30ef9d7075b065fb32d017391934cbb14d371",
         "references/lark-sheets-merge-cells.md": "sha256:9b7242dbeb35e87a9c83053220de04dca740537e47dcfb934ad685652a4051b8",
         "references/lark-sheets-move-dimension.md": "sha256:96a99ea7787d250ab5af7c96556e4a7a693f7ab0acb5bc467cebfaf1956162dd",
         "references/lark-sheets-read.md": "sha256:1557941976ad8e380d5e495e9d4f78c1b6ff50f421a4a7eaf42e9b7cc903d405",
         "references/lark-sheets-replace.md": "sha256:f0f3bc3ec8b7c898c25cbbc5d0b47465f4cceac4630bafd70a6fd1e05310f4e6",
+        "references/lark-sheets-set-dropdown.md": "sha256:77f1c7a6eeab95b4ebf8f64c27dca332fbe21adcff203b53d4fb2a8cee83fbd1",
         "references/lark-sheets-set-style.md": "sha256:964de0efa2de72dd37723b1d278211aadd765d9bd3ff95409151333abb184f4f",
         "references/lark-sheets-unmerge-cells.md": "sha256:40d88e78ab6f59d924a2b5196b5ed1277b9799bd939052075233133422cb5181",
         "references/lark-sheets-update-dimension.md": "sha256:9a7215219cd58712373216243bad7fc57dd5ed7934c469d15fffc411b51e333c",
+        "references/lark-sheets-update-dropdown.md": "sha256:621ebf33caba009dc9165162075b2b723ae66524a7f014238f60387c8ebc7f16",
+        "references/lark-sheets-update-filter-view-condition.md": "sha256:27680410ae5dd929aed036da9af3f53b7d092974140581c87d9d6b2a8c724ac2",
+        "references/lark-sheets-update-filter-view.md": "sha256:9be08f6ee4796deded400a01ff7d6109a35c0656c4523edd9b3c5bcb17f3be26",
         "references/lark-sheets-write-image.md": "sha256:ae1da1ac0aecda931302a5ab19bd8313789fa75c643556a56aafeb5229d8c82e",
         "references/lark-sheets-write.md": "sha256:2a2480974976da97ba91b94565079e310ad62d8e34108bd9df427e46ee372448"
       }
@@ -233,10 +248,10 @@
     "lark-skill-maker": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-skill-maker",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:05.959768+08:00",
+      "installed_at": "2026-04-15T18:24:08.459097+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-skill-maker",
-      "version": "25534d7",
+      "version": "5fa68cc",
       "tree_hash": "f1f0673f26a0b5d2b6cf12454dd47253587f181e",
       "file_hashes": {
         "SKILL.md": "sha256:8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678"
@@ -245,7 +260,7 @@
     "linear-cli": {
       "source": "https://github.com/schpet/linear-cli.git/skills/linear-cli",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:08.310897+08:00",
+      "installed_at": "2026-04-15T18:24:11.20729+08:00",
       "repo_url": "https://github.com/schpet/linear-cli.git",
       "subdir": "skills/linear-cli",
       "version": "90767cb",
@@ -275,13 +290,13 @@
     "skillshare": {
       "source": "https://github.com/runkids/skillshare.git/skills/skillshare",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:00:48.121739+08:00",
+      "installed_at": "2026-04-15T18:24:15.935433+08:00",
       "repo_url": "https://github.com/runkids/skillshare.git",
       "subdir": "skills/skillshare",
-      "version": "7270859",
-      "tree_hash": "bee5c7477a921ed7f8d38c7b4e24d2cc4035cdf4",
+      "version": "cb69b78",
+      "tree_hash": "c522b7387e050ec4e8bffac827f842ef408f834c",
       "file_hashes": {
-        "SKILL.md": "sha256:ff2d6086af3296fcea472713a900c4a01730d218ba89ac00ad763d3f2f88a63f",
+        "SKILL.md": "sha256:fbf7fa13878ba1b7077d2ce1cabcf332b425e9d185a5b1dd6f239e758f776893",
         "references/TROUBLESHOOTING.md": "sha256:14855dbd2f20ad7042941959f257c79f768d103e89e55d74d8c3b3d38f9ff5ee",
         "references/audit.md": "sha256:85a31c32f17f39ce2baa5189a8004c6adec506e5fcf7d20378caa103b015fd5d",
         "references/backup.md": "sha256:96e2e8d5e2d7cfb8765c2eebb4e6d733b79258de8b3d974fca8972557f7326a6",
@@ -299,7 +314,7 @@
     "stl-cli": {
       "source": "https://github.com/stainless-api/stainless-api-cli.git/pkg/cmd/skill/stl-cli",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:00:50.703344+08:00",
+      "installed_at": "2026-04-15T18:23:55.886662+08:00",
       "repo_url": "https://github.com/stainless-api/stainless-api-cli.git",
       "subdir": "pkg/cmd/skill/stl-cli",
       "version": "6b1d87b",
@@ -311,7 +326,7 @@
     "tigris-bucket-management": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-bucket-management",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:00:59.737937+08:00",
+      "installed_at": "2026-04-15T18:24:03.162324+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-bucket-management",
       "version": "501490d",
@@ -325,7 +340,7 @@
     "tigris-object-operations": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-object-operations",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:00:59.869216+08:00",
+      "installed_at": "2026-04-15T18:24:03.301765+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-object-operations",
       "version": "501490d",
@@ -339,7 +354,7 @@
     "tigris-snapshots-forking": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-snapshots-forking",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:00.004956+08:00",
+      "installed_at": "2026-04-15T18:24:03.441095+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-snapshots-forking",
       "version": "501490d",
@@ -353,7 +368,7 @@
     "tigris-snapshots-recovery": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-snapshots-recovery",
       "type": "github-subdir",
-      "installed_at": "2026-04-13T18:01:00.155406+08:00",
+      "installed_at": "2026-04-15T18:24:03.580966+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-snapshots-recovery",
       "version": "501490d",
@@ -370,7 +385,7 @@
     "xurl": {
       "source": "https://github.com/xdevplatform/xurl.git",
       "type": "github",
-      "installed_at": "2026-04-13T18:00:53.058359+08:00",
+      "installed_at": "2026-04-15T18:23:58.288925+08:00",
       "repo_url": "https://github.com/xdevplatform/xurl.git",
       "version": "4a56f8e",
       "file_hashes": {
