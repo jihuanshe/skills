@@ -4,10 +4,10 @@
     "agent-browser": {
       "source": "https://github.com/vercel-labs/agent-browser.git/skills/agent-browser",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:14.915341+08:00",
+      "installed_at": "2026-04-20T14:15:44.175217+08:00",
       "repo_url": "https://github.com/vercel-labs/agent-browser.git",
       "subdir": "skills/agent-browser",
-      "version": "717d1b0",
+      "version": "cff1259",
       "tree_hash": "121eecacd86c0aab06aef5cd4663e80c5397cd41",
       "file_hashes": {
         "SKILL.md": "sha256:b2e54fa784581734c689611860de39916364d4e4b9cf17472b8e2afdaaa9d320"
@@ -16,7 +16,7 @@
     "conventional-commits": {
       "source": "https://github.com/tigrisdata/skills.git/skills/conventional-commits",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:16.648078+08:00",
+      "installed_at": "2026-04-20T14:15:46.601759+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/conventional-commits",
       "version": "501490d",
@@ -30,7 +30,7 @@
     "exe-dev": {
       "source": "https://github.com/boldsoftware/exe.dev.git/skill",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:18.819354+08:00",
+      "installed_at": "2026-04-20T14:15:48.780444+08:00",
       "repo_url": "https://github.com/boldsoftware/exe.dev.git",
       "subdir": "skill",
       "version": "947ee80",
@@ -42,10 +42,10 @@
     "lark-base": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-base",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:21.743967+08:00",
+      "installed_at": "2026-04-20T14:15:51.758626+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-base",
-      "version": "1262aac",
+      "version": "9acd121",
       "tree_hash": "23048512462d793a614f7ba78ad9dc84bf800716",
       "file_hashes": {
         "SKILL.md": "sha256:0b2fc1e5a24d645c35d3646766e48b017f7d038f133aaf04b056e2ccf77d6a13",
@@ -147,10 +147,10 @@
     "lark-doc": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-doc",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:21.9076+08:00",
+      "installed_at": "2026-04-20T14:15:51.917605+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-doc",
-      "version": "1262aac",
+      "version": "9acd121",
       "tree_hash": "9ca62fad4e91789dcd3f76e140ad4014f3e20a0f",
       "file_hashes": {
         "SKILL.md": "sha256:f516e46d232a923688c96ab833d378d8a281a57f550c38be9e7a5f23eef8be16",
@@ -164,13 +164,37 @@
         "references/lark-doc-whiteboard.md": "sha256:432014aa98c770133daf37079b845fc524c39097ab261da307a039c37b8af417"
       }
     },
+    "lark-im": {
+      "source": "https://github.com/larksuite/cli/skills/lark-im",
+      "type": "github-subdir",
+      "installed_at": "2026-04-20T14:17:36.675654+08:00",
+      "repo_url": "https://github.com/larksuite/cli.git",
+      "subdir": "skills/lark-im",
+      "version": "9acd121",
+      "tree_hash": "d8c0c4baf54232f89940690f675d415d28d6b5e8",
+      "file_hashes": {
+        "SKILL.md": "sha256:51ce467c6b17999c1f8d6699a7bbb0fca44955c082723f8557728e81fd998f24",
+        "references/lark-im-chat-create.md": "sha256:40e60efbefb34dc5222df562777e72326cdca5461542fbe4973b6d7575d06cf8",
+        "references/lark-im-chat-identity.md": "sha256:449708ed9be8b3b4657c685509e9b587c4f728f51b00bdeb08db20941a4135b1",
+        "references/lark-im-chat-messages-list.md": "sha256:0eebd45ca0724438e16b598799163566a0c1b3098e244fb8a34b4487148514df",
+        "references/lark-im-chat-search.md": "sha256:cc19baa260b5963e331c63641477644b3ec159333cdad89db4515938088b5611",
+        "references/lark-im-chat-update.md": "sha256:5e27243b3e230711107f1bf05b99fe282e8b23b0aaeb411e27a7fdc66f689f4a",
+        "references/lark-im-messages-mget.md": "sha256:6ee4a509ebe37849fd7b70d0981a9ce5ecb32ee7ca2100561d27dd630402d85f",
+        "references/lark-im-messages-reply.md": "sha256:24a521c92f249dafba04a73da25a78a3c5483e1e39d0d92a3211e4d171e4d424",
+        "references/lark-im-messages-resources-download.md": "sha256:7e77a6e6ca3f98d16cebbc6ac05d42adee4cf75fe26183678eb19b90cd88beb5",
+        "references/lark-im-messages-search.md": "sha256:d00a8604eec0e255e2ebd84b5465cb0b19be1fd6733d4e5735333cb93533d6cc",
+        "references/lark-im-messages-send.md": "sha256:f41bd266c0f79d1ff033096bf3f84ca1d527cd74ab735e536e35869a0b9adb73",
+        "references/lark-im-reactions.md": "sha256:97f0cd3b0d3e672f150314fc7e41534b78244af78eeecd34b00949bb765e1945",
+        "references/lark-im-threads-messages-list.md": "sha256:820573d2a8e7ce447bdc4189eda6acc635019f50b79a06b61294055f3804a5cc"
+      }
+    },
     "lark-minutes": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-minutes",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:22.057937+08:00",
+      "installed_at": "2026-04-20T14:15:52.05983+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-minutes",
-      "version": "1262aac",
+      "version": "9acd121",
       "tree_hash": "c7453d1bac0eafd2e5f6e2276dc21ea46abc91d9",
       "file_hashes": {
         "SKILL.md": "sha256:0d1ee5164d90c781db5350712f39717b50901d7c55a2c1a3068df645f38e98e6",
@@ -181,10 +205,10 @@
     "lark-openapi-explorer": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-openapi-explorer",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:21.133663+08:00",
+      "installed_at": "2026-04-20T14:15:52.197524+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-openapi-explorer",
-      "version": "1262aac",
+      "version": "9acd121",
       "tree_hash": "b403a77f10cf342a01792241a3e77231842c438c",
       "file_hashes": {
         "SKILL.md": "sha256:ae89debc3f807f9947831b4525e1c118bc14544877c14c14aaa47298b1e863b4"
@@ -193,10 +217,10 @@
     "lark-sheets": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-sheets",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:21.308037+08:00",
+      "installed_at": "2026-04-20T14:15:52.381848+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-sheets",
-      "version": "1262aac",
+      "version": "9acd121",
       "tree_hash": "e00259b12b1bd0d028f2fc76d8d01cf5c07ba211",
       "file_hashes": {
         "SKILL.md": "sha256:e046ecd84c04847266b2150911114bf5ca9a0f1123c8c9204696f8a08033cb2a",
@@ -244,10 +268,10 @@
     "lark-skill-maker": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-skill-maker",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:21.444859+08:00",
+      "installed_at": "2026-04-20T14:15:52.518252+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-skill-maker",
-      "version": "1262aac",
+      "version": "9acd121",
       "tree_hash": "f1f0673f26a0b5d2b6cf12454dd47253587f181e",
       "file_hashes": {
         "SKILL.md": "sha256:8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678"
@@ -256,7 +280,7 @@
     "linear-cli": {
       "source": "https://github.com/schpet/linear-cli.git/skills/linear-cli",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:24.082007+08:00",
+      "installed_at": "2026-04-20T14:15:55.024715+08:00",
       "repo_url": "https://github.com/schpet/linear-cli.git",
       "subdir": "skills/linear-cli",
       "version": "90767cb",
@@ -286,13 +310,13 @@
     "skillshare": {
       "source": "https://github.com/runkids/skillshare.git/skills/skillshare",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:27.904227+08:00",
+      "installed_at": "2026-04-20T14:16:00.582833+08:00",
       "repo_url": "https://github.com/runkids/skillshare.git",
       "subdir": "skills/skillshare",
-      "version": "cb69b78",
-      "tree_hash": "c522b7387e050ec4e8bffac827f842ef408f834c",
+      "version": "8f48906",
+      "tree_hash": "97725b3566f0a8246f19f43df4f2805cd993034d",
       "file_hashes": {
-        "SKILL.md": "sha256:fbf7fa13878ba1b7077d2ce1cabcf332b425e9d185a5b1dd6f239e758f776893",
+        "SKILL.md": "sha256:abe1875cd6cc73263828b2f523d18c44059d8e7f07a676320165654d59f035b4",
         "references/TROUBLESHOOTING.md": "sha256:14855dbd2f20ad7042941959f257c79f768d103e89e55d74d8c3b3d38f9ff5ee",
         "references/audit.md": "sha256:85a31c32f17f39ce2baa5189a8004c6adec506e5fcf7d20378caa103b015fd5d",
         "references/backup.md": "sha256:96e2e8d5e2d7cfb8765c2eebb4e6d733b79258de8b3d974fca8972557f7326a6",
@@ -310,7 +334,7 @@
     "stl-cli": {
       "source": "https://github.com/stainless-api/stainless-api-cli.git/pkg/cmd/skill/stl-cli",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:10.726449+08:00",
+      "installed_at": "2026-04-20T14:16:03.242211+08:00",
       "repo_url": "https://github.com/stainless-api/stainless-api-cli.git",
       "subdir": "pkg/cmd/skill/stl-cli",
       "version": "6b1d87b",
@@ -322,7 +346,7 @@
     "tigris-bucket-management": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-bucket-management",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:16.786428+08:00",
+      "installed_at": "2026-04-20T14:15:46.739884+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-bucket-management",
       "version": "501490d",
@@ -336,7 +360,7 @@
     "tigris-object-operations": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-object-operations",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:16.921451+08:00",
+      "installed_at": "2026-04-20T14:15:46.173369+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-object-operations",
       "version": "501490d",
@@ -350,7 +374,7 @@
     "tigris-snapshots-forking": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-snapshots-forking",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:17.057733+08:00",
+      "installed_at": "2026-04-20T14:15:46.318949+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-snapshots-forking",
       "version": "501490d",
@@ -364,7 +388,7 @@
     "tigris-snapshots-recovery": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-snapshots-recovery",
       "type": "github-subdir",
-      "installed_at": "2026-04-19T02:04:17.198527+08:00",
+      "installed_at": "2026-04-20T14:15:46.462266+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-snapshots-recovery",
       "version": "501490d",
@@ -381,9 +405,9 @@
     "xurl": {
       "source": "https://github.com/xdevplatform/xurl.git",
       "type": "github",
-      "installed_at": "2026-04-19T02:04:12.719371+08:00",
+      "installed_at": "2026-04-20T14:15:41.417256+08:00",
       "repo_url": "https://github.com/xdevplatform/xurl.git",
-      "version": "4a56f8e",
+      "version": "1a17984",
       "file_hashes": {
         ".github/workflows/go.yml": "sha256:41a3a47e4b17335fe4762c17364df75410c1804decfe0cca0f13dfd5314559d2",
         ".github/workflows/release.yml": "sha256:40267152df7cd30816dd873c05348152c9dbb36d0663190b546647cd5f74df2c",
@@ -391,12 +415,13 @@
         ".goreleaser.yaml": "sha256:30920e806284c508f426b0117ac46eecf0c4865853e3b72b98d517cb4fda49c8",
         ".vscode/launch.json": "sha256:d1018ec2c015982590cd0b584bf9886755181429e26347ba2be47135503c2762",
         ".vscode/settings.json": "sha256:6d5e361db687eb09acc33ac0a1ca34b809da01bbdec5761ac5572cd130d3edea",
+        "CHANGELOG.md": "sha256:706e5435e5bc8fce28adb15ca8b1246ca3b5c9b44979180934eb6c92a2f7ce56",
         "LICENSE": "sha256:9c39e3209fd7705ca497ee8e436a8cb28abcecb919e0c8a435acae864ee3d8a6",
         "Makefile": "sha256:ccefb5ff905a79e94d19d3f6c1fed1fa3e9718dbfe98e3cf9d9d33bcf543c1b3",
-        "README.md": "sha256:cf8f042d75aa8098dea9d30979d52075ea37226751c00ed262d2c519ad3facb4",
-        "SKILL.md": "sha256:b13b46965518316058ee2d4cebd32009efa732d42a51bea5d3dabe558382b269",
-        "api/client.go": "sha256:11e5762303cb226352d6cf666b5a076ad394974dba8e1fe47669f3cf7c0f3243",
-        "api/client_test.go": "sha256:f52993e4f0ce6d7e1a549ef7c542b930955edb2ac3a724e69cee0758cb5f7e27",
+        "README.md": "sha256:dfffbe8e6036102fbb006b94f212e20553d7670e3411f8bb109b36f38c0a97e9",
+        "SKILL.md": "sha256:55456e2ff6dbc41f39208eb1f9223b51c880b146b84c0dfcc2efb0df7e9d39c4",
+        "api/client.go": "sha256:1085b132db5c2f687b5984206e6865656f603a5196292d215c8014a2bd3b120a",
+        "api/client_test.go": "sha256:d75970cf8e287deeaf6e3875d166a43359d2360ec67003fa9876d96cf6948844",
         "api/endpoints.go": "sha256:b100a7435a200386e36c88982d8a23a059bef9d10c257f647d0f8c8cee6bf73a",
         "api/endpoints_test.go": "sha256:56624f944d5f4c0510a0df798e24a8ccbfd188c1bb9a6ac8cf637053edb6168c",
         "api/execute.go": "sha256:620464e06f33c32b2a9d671045d558c5964aa70f1ceec7628ccceb2c2e0a5c93",
@@ -406,17 +431,19 @@
         "api/shortcuts_test.go": "sha256:bf6729690b3fb8ca6e1e58fba0281ca16e343a3a5a8cde5971d4a97fd5bc73a2",
         "assets/callback.png": "sha256:faf89dd1cbd0a95402fb2c36774cdc967d1eb201689d610cc0b13804c76bb9b9",
         "assets/setup.png": "sha256:9a32109c6a2ceebca434e1bcfc9f2bceb31e72796f4d86d963f9ec66225e4c03",
-        "auth/auth.go": "sha256:59a59233caff2db499218127fe2b79d211d4cab342a8051e6739bd2f662bde2e",
-        "auth/auth_test.go": "sha256:a9ffff14871f9613d0314a6e57e8875b162f9a4e0854c006463523a0324728f8",
-        "auth/listener.go": "sha256:d6e1bd3001e4a734a87194652382070c2596617039e20f7134f9233dc59576e5",
-        "cli/auth.go": "sha256:8d94fcfc3e8133d1498ae08fdc715711751aa780bcd60312728be2d73b3cf02c",
+        "auth/auth.go": "sha256:0473f6ae03ed5a171d4d44cbf329f7b3ba2672ed1e1afccf2b6544c02f2108be",
+        "auth/auth_test.go": "sha256:3cc68bb1d76b3d5184ae84b9c551d98e03666e6d301343fd8a6570e022401a8f",
+        "auth/listener.go": "sha256:ba43d06337c4ef8e51c21c18a6be0222fcb4cb33c5b41e14053b939fa6f5515f",
+        "cli/auth.go": "sha256:0203024e48d8c8c26b8e618d145df06735cb0ed51095bb91f678c8b9c1cb17a2",
         "cli/media.go": "sha256:1cfa66e7cf50ef3aea9d44b2ac7884e7acb2ae10b179c87db596311c51d9fb4d",
         "cli/picker.go": "sha256:90d38c330a1d9dc7091e3096d640e3aa5ba3be06482738520387002681cfaf8a",
         "cli/root.go": "sha256:c1f8a9b68ef32554ff86456c3f0d9d554e8446ab1d90c4c320a9dc5258162ba8",
-        "cli/shortcuts.go": "sha256:6a63302980c6505cc73a252e3f2766de6dd059922327d2eb04ed0783c1900d26",
+        "cli/shortcuts.go": "sha256:1c1482608003da9b309da3e1c1edb04236ea7c420392745b3b15b6deb8aaf116",
+        "cli/shortcuts_test.go": "sha256:90b775cd4c665bda056d0f5e3259933b173d87bc3da9c2d5865c9fa87b69885d",
         "cli/version.go": "sha256:e4ac1832adc68a88c5c5b17150d6891082888ad52f819ceb365056c8454f8dc6",
-        "cli/webhook.go": "sha256:f2029f27c77d11f65b1cf16cece44b30a94df0b40dff533c9b9058592e3e82b2",
-        "config/config.go": "sha256:54c63323cbdf45d2ac80bd253fce3b8984236235203858981a324e7f22a22dc7",
+        "cli/webhook.go": "sha256:09d5c28799fb1a8a218ae5b7c752374277fdb89b4182700bc557739d599c5188",
+        "config/config.go": "sha256:34f574c5c49bd832b98b7cb53ac4532939bd311ce7a8b342192883a7a9b416df",
+        "config/config_test.go": "sha256:a1d43a7c07f125495e9fff39571d0adf32a2e5ce84274246410fb402a8c885ae",
         "errors/errors.go": "sha256:ed1f044db0fc26095511a455d4e32f9f9ed0d799ab6887598ae648fe1377601c",
         "go.mod": "sha256:625e6d5e899dc672a7782e24c4b6e33be32653dfc1c74b0bed180c17674dabb4",
         "go.sum": "sha256:543300fab15e5b0631d653872037661bd537133bd8508c5bec462bdf8b2a3f04",
@@ -425,8 +452,8 @@
         "npm/cli.js": "sha256:509c8a0843dd99f0cd050e45f75f69b9d0d71f043e71d18b10d09adb2db9c208",
         "npm/install.js": "sha256:a58938138deef6ab03abf351b343ca00b02c84f322573eb4446e875dd11d853f",
         "npm/package.json": "sha256:924920fcd4d9103baf59d69c21d4726b6c1ad722e8f579ecb546e3d4b5ca265c",
-        "store/tokens.go": "sha256:ffea8db594ebabc0c71ff41d333b6ee22fe9cda1649a4ec25a31522e525269c6",
-        "store/tokens_test.go": "sha256:c0970f7cefb1ccb81acd5c7c9e118a6cbae936383936cafabd54d6fbacbd8b98",
+        "store/tokens.go": "sha256:21f6fbb4383ac4dd79951eba76bc5202aded0b04b1350b5b98dbd8ec23baa22c",
+        "store/tokens_test.go": "sha256:c30058ffb890f1a184137555aefb4ddd650f7f4524f60cae6807b8f078749ddf",
         "utils/utils.go": "sha256:78f32e0c63e1981ae5235c0c54c5e0de8f8941b18d1defdfebe98fac4725b0bb",
         "version/version.go": "sha256:b73a881381adde0322a4950eabbfe09c566f7266bb7c80687a0b794330c399aa"
       }
