@@ -27,18 +27,6 @@
         "metadata.json": "sha256:39493e2598b2431a0cff73ff250fd345a5dab0ad24a346f601b51c40ae24ba7b"
       }
     },
-    "exe-dev": {
-      "source": "https://github.com/boldsoftware/exe.dev.git/skill",
-      "type": "github-subdir",
-      "installed_at": "2026-04-20T14:15:48.780444+08:00",
-      "repo_url": "https://github.com/boldsoftware/exe.dev.git",
-      "subdir": "skill",
-      "version": "947ee80",
-      "tree_hash": "237a4637865f5ec5a267b072391a9a065b63c5a2",
-      "file_hashes": {
-        "SKILL.md": "sha256:506043b61d6fb86ad063806e6a17dd7cb0858f8b6049a7498b101d4798912403"
-      }
-    },
     "lark-base": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-base",
       "type": "github-subdir",

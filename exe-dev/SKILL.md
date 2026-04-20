@@ -1,5 +1,5 @@
 ---
-name: using-exe-dev
+name: exe-dev
 description: Guides working with exe.dev VMs. Use when the user mentions exe.dev, exe VMs, *.exe.xyz, or tasks involving exe.dev infrastructure.
 ---
 
@@ -9,8 +9,8 @@ exe.dev provides Linux VMs with persistent disks, instant HTTPS, and built-in au
 
 ## Documentation
 
-- Docs index: https://exe.dev/docs.md
-- All docs in one page (big!): https://exe.dev/docs/all.md
+- Docs index: <https://exe.dev/docs.md>
+- All docs in one page (big!): <https://exe.dev/docs/all.md>
 
 The index is organized for progressive discovery: start there and follow links as needed.
 

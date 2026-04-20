@@ -6,7 +6,6 @@ globs:
 ignores:
     - "agent-browser/"
     - "conventional-commits/"
-    - "exe-dev/"
     - "lark-base/"
     - "lark-doc/"
     - "lark-im/"
