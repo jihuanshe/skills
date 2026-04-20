@@ -214,6 +214,18 @@
         "SKILL.md": "sha256:ae89debc3f807f9947831b4525e1c118bc14544877c14c14aaa47298b1e863b4"
       }
     },
+    "lark-shared": {
+      "source": "https://github.com/larksuite/cli/skills/lark-shared",
+      "type": "github-subdir",
+      "installed_at": "2026-04-20T15:04:06.152802+08:00",
+      "repo_url": "https://github.com/larksuite/cli.git",
+      "subdir": "skills/lark-shared",
+      "version": "9acd121",
+      "tree_hash": "998037f84c858b3ba97014be206fc092ef6bacdd",
+      "file_hashes": {
+        "SKILL.md": "sha256:42823555351a813a4c0d232e6b25ba576ff3692139762b0d024636b585f85406"
+      }
+    },
     "lark-sheets": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-sheets",
       "type": "github-subdir",
