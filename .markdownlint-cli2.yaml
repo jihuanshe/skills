@@ -12,6 +12,7 @@ ignores:
     - "lark-im/"
     - "lark-minutes/"
     - "lark-openapi-explorer/"
+    - "lark-shared/"
     - "lark-sheets/"
     - "lark-skill-maker/"
     - "linear-cli/"
