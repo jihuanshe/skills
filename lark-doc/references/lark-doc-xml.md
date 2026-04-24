@@ -86,14 +86,14 @@ p, h1-h9, ul, ol, li, table, thead, tbody, tr, th, td, blockquote, pre, code, hr
 
 # 六、美化系统
 - 颜色优先使用命名色，也可写 `rgb(r,g,b)` / `rgba(r,g,b,a)`。**基础色（6 色）**：gray, red, orange, yellow, green, blue
-  | 属性 | 支持的命名色 |
+  | 属性 | 支持的命名色 |                                                                                                                                                                                                        
   |-|-|
   | 文字颜色 `<span text-color>` | 基础色 |
   | 高亮框字色 `<callout text-color>` | 基础色 |
-  | 高亮框边框 `<callout border-color>` | 基础色 |
-  | 文字背景 `<span background-color>` | 基础色 + `light-{色}` + `medium-gray` |
-  | 高亮框填充 `<callout background-color>` | `gray` + `light-{色}` + `medium-{色}` |
-  | 单元格背景 `<th/td background-color>` | 同文字背景 |
+  | 高亮框边框 `<callout border-color>` | 基础色 |                                                                                                                                                                                 
+  | 文字背景 `<span background-color>` | 基础色 + `light-{色}` + `medium-gray` |                                                                                                                                                   
+  | 高亮框填充 `<callout background-color>` | `gray` + `light-{色}` + `medium-{色}` |                                                                                                                                              
+  | 单元格背景 `<th/td background-color>` | 同文字背景 |                                                                                                                                                                           
   | 按钮背景 `<button background-color>` | 同文字背景 |
 - 常用 emoji： 💡(默认)✅❌⚠️📝❓❗👍❤️📌🏁⭐
 

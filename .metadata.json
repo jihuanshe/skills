@@ -4,7 +4,7 @@
     "agent-browser": {
       "source": "https://github.com/vercel-labs/agent-browser.git/skills/agent-browser",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:38.490996+08:00",
+      "installed_at": "2026-04-24T10:57:32.902987+08:00",
       "repo_url": "https://github.com/vercel-labs/agent-browser.git",
       "subdir": "skills/agent-browser",
       "version": "57405f9",
@@ -16,7 +16,7 @@
     "conventional-commits": {
       "source": "https://github.com/tigrisdata/skills.git/skills/conventional-commits",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:40.264241+08:00",
+      "installed_at": "2026-04-24T10:57:34.804012+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/conventional-commits",
       "version": "501490d",
@@ -30,10 +30,10 @@
     "lark-base": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-base",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:44.500898+08:00",
+      "installed_at": "2026-04-24T10:57:19.815001+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-base",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "c0a64dbb31b0003ff86ef5037bb272d8d4ba9e58",
       "file_hashes": {
         "SKILL.md": "sha256:003460a659e44acc6c83a7adf286255f40147d01c7c97bbcfc38ab8960d06d92",
@@ -136,10 +136,10 @@
     "lark-doc": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-doc",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:44.690392+08:00",
+      "installed_at": "2026-04-24T10:57:20.01123+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-doc",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "f5b51a37713d1a350f4c964b3b587c1f121e5523",
       "file_hashes": {
         "SKILL.md": "sha256:984c2bf71bb1d51be2f27ce751a0fe23febe26b271ebcbf7968e72cbf9607e65",
@@ -161,10 +161,10 @@
     "lark-im": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-im",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:44.886233+08:00",
+      "installed_at": "2026-04-24T10:57:20.207771+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-im",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "770ae80a5c514304345ac5bda01e3a19fb91eaf5",
       "file_hashes": {
         "SKILL.md": "sha256:51ce467c6b17999c1f8d6699a7bbb0fca44955c082723f8557728e81fd998f24",
@@ -185,10 +185,10 @@
     "lark-minutes": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-minutes",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:43.484859+08:00",
+      "installed_at": "2026-04-24T10:57:20.366855+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-minutes",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "f07632656273c1749d95c50b96998af104752e4a",
       "file_hashes": {
         "SKILL.md": "sha256:c08322b9c3629dd15dff3771d483aeaf95dc37c4217d6d058c63334ca998b604",
@@ -199,10 +199,10 @@
     "lark-openapi-explorer": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-openapi-explorer",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:43.640556+08:00",
+      "installed_at": "2026-04-24T10:57:18.924468+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-openapi-explorer",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "b403a77f10cf342a01792241a3e77231842c438c",
       "file_hashes": {
         "SKILL.md": "sha256:ae89debc3f807f9947831b4525e1c118bc14544877c14c14aaa47298b1e863b4"
@@ -211,10 +211,10 @@
     "lark-shared": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-shared",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:43.792939+08:00",
+      "installed_at": "2026-04-24T10:57:19.095711+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-shared",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "998037f84c858b3ba97014be206fc092ef6bacdd",
       "file_hashes": {
         "SKILL.md": "sha256:42823555351a813a4c0d232e6b25ba576ff3692139762b0d024636b585f85406"
@@ -223,10 +223,10 @@
     "lark-sheets": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-sheets",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:43.985887+08:00",
+      "installed_at": "2026-04-24T10:57:19.300003+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-sheets",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "e00259b12b1bd0d028f2fc76d8d01cf5c07ba211",
       "file_hashes": {
         "SKILL.md": "sha256:e046ecd84c04847266b2150911114bf5ca9a0f1123c8c9204696f8a08033cb2a",
@@ -274,10 +274,10 @@
     "lark-skill-maker": {
       "source": "https://github.com/larksuite/cli.git/skills/lark-skill-maker",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:44.151701+08:00",
+      "installed_at": "2026-04-24T10:57:19.466872+08:00",
       "repo_url": "https://github.com/larksuite/cli.git",
       "subdir": "skills/lark-skill-maker",
-      "version": "e42033f",
+      "version": "6f444c5",
       "tree_hash": "f1f0673f26a0b5d2b6cf12454dd47253587f181e",
       "file_hashes": {
         "SKILL.md": "sha256:8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678"
@@ -286,7 +286,7 @@
     "linear-cli": {
       "source": "https://github.com/schpet/linear-cli.git/skills/linear-cli",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:46.933558+08:00",
+      "installed_at": "2026-04-24T10:57:22.612339+08:00",
       "repo_url": "https://github.com/schpet/linear-cli.git",
       "subdir": "skills/linear-cli",
       "version": "b3b9960",
@@ -316,7 +316,7 @@
     "skillshare": {
       "source": "https://github.com/runkids/skillshare.git/skills/skillshare",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:50.788037+08:00",
+      "installed_at": "2026-04-24T10:57:26.437033+08:00",
       "repo_url": "https://github.com/runkids/skillshare.git",
       "subdir": "skills/skillshare",
       "version": "0c2981d",
@@ -340,7 +340,7 @@
     "stl-cli": {
       "source": "https://github.com/stainless-api/stainless-api-cli.git/pkg/cmd/skill/stl-cli",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:52.953091+08:00",
+      "installed_at": "2026-04-24T10:57:28.599548+08:00",
       "repo_url": "https://github.com/stainless-api/stainless-api-cli.git",
       "subdir": "pkg/cmd/skill/stl-cli",
       "version": "6b1d87b",
@@ -352,7 +352,7 @@
     "tigris-bucket-management": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-bucket-management",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:40.440679+08:00",
+      "installed_at": "2026-04-24T10:57:34.952641+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-bucket-management",
       "version": "501490d",
@@ -366,7 +366,7 @@
     "tigris-object-operations": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-object-operations",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:40.607341+08:00",
+      "installed_at": "2026-04-24T10:57:35.106322+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-object-operations",
       "version": "501490d",
@@ -380,7 +380,7 @@
     "tigris-snapshots-forking": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-snapshots-forking",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:40.797833+08:00",
+      "installed_at": "2026-04-24T10:57:35.257939+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-snapshots-forking",
       "version": "501490d",
@@ -394,7 +394,7 @@
     "tigris-snapshots-recovery": {
       "source": "https://github.com/tigrisdata/skills.git/skills/tigris-snapshots-recovery",
       "type": "github-subdir",
-      "installed_at": "2026-04-24T08:54:40.986667+08:00",
+      "installed_at": "2026-04-24T10:57:34.654224+08:00",
       "repo_url": "https://github.com/tigrisdata/skills.git",
       "subdir": "skills/tigris-snapshots-recovery",
       "version": "501490d",
@@ -411,7 +411,7 @@
     "xurl": {
       "source": "https://github.com/xdevplatform/xurl.git",
       "type": "github",
-      "installed_at": "2026-04-24T08:54:55.029198+08:00",
+      "installed_at": "2026-04-24T10:57:30.630174+08:00",
       "repo_url": "https://github.com/xdevplatform/xurl.git",
       "version": "1a17984",
       "file_hashes": {
